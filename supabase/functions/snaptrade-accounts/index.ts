@@ -109,7 +109,12 @@ serve(async (req) => {
 
   const getErrorStatus = (err: unknown): number | undefined => {
     const anyErr = err as any;
-    return anyErr?.response?.status ?? anyErr?.status;
+    return (
+      anyErr?.response?.status ??
+      anyErr?.response?.statusCode ??
+      anyErr?.status ??
+      anyErr?.statusCode
+    );
   };
 
   const withRetry = async <T>(
@@ -166,8 +171,9 @@ serve(async (req) => {
     );
 
     // === Step 2: For each account, get holdings and details ===
-    const accountsWithData = await Promise.all(
-      accounts.map(async (account) => {
+    // Process accounts sequentially to avoid burst concurrency against SnapTrade.
+    const accountsWithData = [];
+    for (const account of accounts) {
         const fetchHoldings = async () => {
           try {
             const holdingsRes = await withRetry(
@@ -178,7 +184,7 @@ serve(async (req) => {
                   userSecret,
                   accountId: account.id,
                 }),
-              { retries: 4, baseDelayMs: 500, retryOn: [425, 429] }
+              { retries: 6, baseDelayMs: 1000, retryOn: [425, 429, 500, 502, 503, 504] }
             );
             return holdingsRes.data;
           } catch (error) {
@@ -202,7 +208,7 @@ serve(async (req) => {
                   userSecret,
                   accountId: account.id,
                 }),
-              { retries: 4, baseDelayMs: 500, retryOn: [425, 429] }
+              { retries: 4, baseDelayMs: 800, retryOn: [425, 429, 500, 502, 503, 504] }
             );
             return detailsRes.data;
           } catch (error) {
@@ -216,7 +222,7 @@ serve(async (req) => {
           }
         };
 
-        // Fetch holdings and details in parallel without failing the entire request
+        // Keep per-account parallel fetch, but process accounts one-by-one.
         const [holdingsData, detailsData] = await Promise.all([
           fetchHoldings(),
           fetchDetails(),
@@ -233,15 +239,14 @@ serve(async (req) => {
          * This structure makes it easy for the frontend to display all relevant account info
          * and holdings in a single, organized object per account.
          */
-        return {
+        accountsWithData.push({
           id: account.id,
           name: account.name,
           type: account.type,
           details: detailsData,
           holdings: holdingsData,
-        };
-      })
-    );
+        });
+    }
 
     // === Step 3: Return the combined data model ===
     return new Response(JSON.stringify({ accounts: accountsWithData }), {
