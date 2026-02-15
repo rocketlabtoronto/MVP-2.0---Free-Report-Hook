@@ -555,6 +555,7 @@ export default function BrokeragesAndAccounts() {
                               account.accountNumber || "N/A"
                             }`}
                             primaryTypographyProps={{ variant: "body2", fontWeight: 600 }}
+                            secondaryTypographyProps={{ component: "div" }}
                             secondary={
                               <Box display="flex" flexDirection="column" gap={0.4}>
                                 <Typography variant="caption" color="text.secondary">

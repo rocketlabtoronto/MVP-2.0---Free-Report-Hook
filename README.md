@@ -66,11 +66,36 @@ npm install
 npm start
 ```
 
+## Service Layer Convention
+- Service files in `src/services` must end with `Service.js`.
+- Current files:
+	- `encryptionService.js`
+	- `parseBrokerageCsvService.js`
+	- `snaptradeBrokerAllowlistService.js`
+	- `snaptradeMappingService.js`
+	- `supabaseService.js`
+
 ## Build & Deploy
 ```
 npm run build
 ```
 Deploy the `build/` output to your static hosting provider.
+
+## Supabase Edge Functions (Deploy)
+```
+supabase login
+supabase link --project-ref <project_ref>
+supabase functions deploy
+supabase functions list
+```
+
+Delete remote functions that do not exist locally:
+```powershell
+$local = Get-ChildItem .\supabase\functions -Directory | Select-Object -ExpandProperty Name
+$remote = (supabase functions list --output json | ConvertFrom-Json) | Select-Object -ExpandProperty name
+$toDelete = $remote | Where-Object { $_ -notin $local }
+foreach ($fn in $toDelete) { supabase functions delete $fn }
+```
 
 ## Operational Notes
 - If password reset calls fail with `Failed to fetch`, check Edge Function CORS and OPTIONS handling.

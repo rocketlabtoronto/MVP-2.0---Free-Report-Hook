@@ -1,5 +1,15 @@
 # SnapTrade Cole’s Notes (One‑Page Manual)
 
+## Dashboard Implementation (Current)
+- Frontend calls Supabase Edge Functions instead of calling SnapTrade directly.
+- Main Edge Functions used by the app:
+  - `snaptrade-register-user`
+  - `login-user`
+  - `get-users`
+  - `snaptrade-accounts`
+- Frontend mapping/normalization happens in `src/services/snaptradeMappingService.js`.
+- Brokerage options surfaced in UI come from `src/services/snaptradeBrokerAllowlistService.js`.
+
 ## What SnapTrade Does
 SnapTrade provides brokerage connection, accounts, holdings, and transactions for end users. You authenticate your app with **clientId + consumerKey**, and each user with **userId + userSecret**.
 
@@ -34,6 +44,12 @@ SnapTrade provides brokerage connection, accounts, holdings, and transactions fo
   - All SnapTrade calls go through your backend.
 4. **Store userSecret safely**
   - DB in prod, localStorage only for dev.
+
+### Supabase Edge Function Secrets (required)
+- `SNAPTRADE_CLIENT_ID`
+- `SNAPTRADE_CONSUMER_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
 ---
 
@@ -234,3 +250,24 @@ Recommendation: normalize data in UI by checking multiple nested paths.
 - [ ] Portal generated and user connected.
 - [ ] Accounts list returns data.
 - [ ] Holdings fetched per account.
+
+---
+
+## Deploying Edge Functions (Dashboard Ops)
+From project root:
+
+```bash
+supabase login
+supabase link --project-ref <project_ref>
+supabase functions deploy
+supabase functions list
+```
+
+Delete remote functions that do not exist locally:
+
+```powershell
+$local = Get-ChildItem .\supabase\functions -Directory | Select-Object -ExpandProperty Name
+$remote = (supabase functions list --output json | ConvertFrom-Json) | Select-Object -ExpandProperty name
+$toDelete = $remote | Where-Object { $_ -notin $local }
+foreach ($fn in $toDelete) { supabase functions delete $fn }
+```

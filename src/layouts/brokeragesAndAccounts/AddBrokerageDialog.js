@@ -10,9 +10,9 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { parseBrokerageCsv } from "services/parseBrokerageCsv";
+import { parseBrokerageCsv } from "services/parseBrokerageCsvService";
 import { useAppStore } from "../../stores/store";
-import { SNAPTRADE_BROKER_ALLOWLIST } from "services/snaptradeBrokerAllowlist";
+import { SNAPTRADE_BROKER_ALLOWLIST } from "services/snaptradeBrokerAllowlistService";
 
 export default function AddBrokerageDialog({ open, onClose, onSnapTradeSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null);

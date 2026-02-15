@@ -116,7 +116,7 @@ function IncomeStatement() {
                             </CustomTypography>
                           )}
                         </Box>
-                        <CustomTypography variant="caption" color="text.secondary">
+                        <CustomTypography variant="caption" color="text" sx={{ color: "text.secondary" }}>
                           {marketMessage}
                         </CustomTypography>
                       </Box>

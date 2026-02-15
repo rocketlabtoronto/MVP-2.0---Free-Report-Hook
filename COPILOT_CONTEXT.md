@@ -31,7 +31,7 @@
 - Login/Reset: `layouts/login` or `layouts/sendPasswordReset` → Supabase tables + Edge Functions → UI feedback.
 - SnapTrade connect: UI action → `src/services/supabaseService.js` (Edge Function `login-user`, `get-users`, `snaptrade-register-user`) → Supabase Edge Functions.
 - Financials fetch: UI → `supabaseService.getFinancials()` → Supabase REST `/rest/v1/financials`.
-- CSV import: UI file upload → `parseBrokerageCsv()` → normalized table data → store/state.
+- CSV import: UI file upload → `parseBrokerageCsvService.parseBrokerageCsv()` → normalized table data → store/state.
 
 ## Flow traces (end-to-end)
 ### 1) Auth + password reset
@@ -48,7 +48,7 @@
 - Connect modal: `SnapTradeConnectModal`.
 - Registration check: `supabaseService.getSnapTradeUser()` → Edge Function `get-users`.
 - Register if missing: `supabaseService.registerUser()` → Edge Function `snaptrade-register-user` → save `snapusersecret` in `users` table.
-- Login link: PoC direct browser call to SnapTrade API (env `REACT_APP_SNAPTRADE_CLIENT_ID`, `REACT_APP_SNAPTRADE_CONSUMER_KEY`).
+- Login link: `supabaseService.getSnapTradeLoginLink()` → Edge Function `login-user`.
 - Account/holdings Edge Function available: `supabase/functions/snaptrade-accounts` (returns accounts + holdings).
 
 ## Conventions & patterns
@@ -58,7 +58,7 @@
 - Data access via `src/services/*` using `fetch` + Supabase REST/Edge Functions.
 - Global state via Zustand in `src/stores/*`.
 - Environment variables use `REACT_APP_*` (CRA convention).
-- Components: PascalCase filenames; utilities/services: camelCase filenames.
+- Components: PascalCase filenames; utilities: camelCase filenames; service files end with `Service.js`.
 - Prefer explicit `res.ok` checks and surface meaningful errors to UI.
 
 ## Config, secrets, and environment wiring
@@ -87,7 +87,9 @@
 - `src/layouts/balanceSheet/BalanceSheet` (core reporting view).
 - `src/layouts/incomeStatement/IncomeStatement` (core reporting view).
 - `src/stores/store.js` (main app state beyond auth).
-- `src/services/parseBrokerageCsv.js` (manual import logic).
+- `src/services/parseBrokerageCsvService.js` (manual import logic).
+- `src/services/snaptradeMappingService.js` (SnapTrade accounts/holdings normalization).
+- `src/services/snaptradeBrokerAllowlistService.js` (allowlisted broker slugs shown in UI).
 - `supabase/functions/*` (Edge Function handlers).
 - `src/layouts/login/login.jsx`, `src/layouts/sendPasswordReset/sendPasswordReset.jsx`, `src/layouts/setPassword/setPassword.tsx` (auth flows).
 

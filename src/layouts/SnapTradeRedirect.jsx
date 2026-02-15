@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "stores/useAuthStore";
 import { useAppStore } from "stores/store";
 import { supabase } from "../supabaseClient";
-import { mapSnapTradeAccountsToSpreadsheet } from "services/snaptradeMapping";
+import { mapSnapTradeAccountsToSpreadsheet } from "services/snaptradeMappingService";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
