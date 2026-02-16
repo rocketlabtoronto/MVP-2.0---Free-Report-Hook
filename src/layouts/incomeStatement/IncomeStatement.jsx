@@ -11,47 +11,13 @@ import useAggregatedIncomeStatement from "../incomeStatement/useAggregatedIncome
 import DashboardLayout from "ui/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "ui/Navbars/DashboardNavbar";
 import { useAuthStore } from "stores/useAuthStore";
-import { supabase } from "../../supabaseClient";
 
 function IncomeStatement() {
   const [selectedAccountId, setSelectedAccountId] = useState(null);
   const { loading, aggregatedData, allAccountsWithLogos } =
     useAggregatedIncomeStatement(selectedAccountId);
   const user = useAuthStore((state) => state.user);
-  const [isSubscribed, setIsSubscribed] = useState(false);
-
-  useEffect(() => {
-    let active = true;
-
-    const loadSubscriptionStatus = async () => {
-      const email = user?.email;
-      if (!email) {
-        if (active) setIsSubscribed(false);
-        return;
-      }
-
-        const { data, error } = await supabase
-          .schema("public")
-          .from("users")
-        .select("is_subscribed")
-        .eq("email", email)
-        .maybeSingle();
-
-      if (!active) return;
-      if (error) {
-        setIsSubscribed(false);
-        return;
-      }
-
-      setIsSubscribed(Boolean(data?.is_subscribed));
-    };
-
-    loadSubscriptionStatus();
-
-    return () => {
-      active = false;
-    };
-  }, [user?.email]);
+  const isLoggedIn = Boolean(user?.email);
 
   // Auto-select first account when available
   useEffect(() => {
@@ -179,7 +145,7 @@ function IncomeStatement() {
             loading={loading}
             data={aggregatedData}
             height="calc(100vh - 420px)"
-            paywall={{ enabled: hasRows, isSubscribed, registerPath: "/billing" }}
+            paywall={{ enabled: hasRows && !isLoggedIn, registerPath: "/billing" }}
           />
         </Card>
       </CustomBox>

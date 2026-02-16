@@ -153,7 +153,7 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
     return row;
   });
 
-  const shouldApplyPaywall = Boolean(paywall?.enabled) && !Boolean(paywall?.isSubscribed);
+  const shouldApplyPaywall = Boolean(paywall?.enabled);
 
   return (
     <>
@@ -241,7 +241,6 @@ ProRataTable.propTypes = {
   }),
   paywall: PropTypes.shape({
     enabled: PropTypes.bool,
-    isSubscribed: PropTypes.bool,
     registerPath: PropTypes.string,
   }),
 };
