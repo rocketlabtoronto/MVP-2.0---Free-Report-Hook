@@ -16,6 +16,7 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import Button from "@mui/material/Button";
 import CustomBox from "components/CustomBox";
 import DashboardLayout from "ui/LayoutContainers/DashboardLayout";
@@ -109,6 +110,7 @@ export default function BrokeragesAndAccounts() {
   const [snapTradeSuccess, setSnapTradeSuccess] = useState(false);
   const [calculatedBalances, setCalculatedBalances] = useState({});
   const [balancesLoading, setBalancesLoading] = useState(false);
+  const [canConnectBrokerage, setCanConnectBrokerage] = useState(false);
 
   // Clear old dummy data from localStorage on component mount
   useEffect(() => {
@@ -161,6 +163,33 @@ export default function BrokeragesAndAccounts() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const getBrokerageAccountCount = (brokerageName) => {
+    const normalize = (value) => String(value || "").trim().toLowerCase();
+    const target = normalize(brokerageName);
+    const manualCount = Array.isArray(useAppStore.getState().brokeragesAndAccounts)
+      ? useAppStore
+          .getState()
+          .brokeragesAndAccounts.filter((item) => normalize(String(item?.Account || "").split(" - ")[0]) === target)
+          .length
+      : 0;
+    const accountsCount = Array.isArray(useAppStore.getState().accounts)
+      ? useAppStore.getState().accounts.filter((item) => normalize(item?.brokerageName) === target).length
+      : 0;
+    const snapCount = Array.isArray(useAppStore.getState().snapTradeAccounts)
+      ? useAppStore.getState().snapTradeAccounts.filter((item) => normalize(item?.brokerageName) === target).length
+      : 0;
+    return manualCount + accountsCount + snapCount;
+  };
+
+  const handleUnlinkBrokerage = (brokerageName) => {
+    const beforeCount = getBrokerageAccountCount(brokerageName);
+    unlinkBrokerage(brokerageName);
+    const afterCount = getBrokerageAccountCount(brokerageName);
+    if (beforeCount > afterCount) {
+      setCanConnectBrokerage(true);
+    }
+  };
 
   const allowedMarkets = new Set(["NASDAQ", "NYSE"]);
   const normalizeMarket = (market) => String(market || "").trim().toUpperCase();
@@ -341,7 +370,28 @@ export default function BrokeragesAndAccounts() {
   const brokerages = Object.values(groupedByBrokerage);
 
   const formattedConnectedAt = snapTradeLastConnectedAt
-    ? new Date(snapTradeLastConnectedAt).toLocaleString()
+    ? new Date(snapTradeLastConnectedAt).toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : null;
+
+  const relativeConnectedAt = snapTradeLastConnectedAt
+    ? (() => {
+        const connectedDate = new Date(snapTradeLastConnectedAt);
+        const diffMs = Date.now() - connectedDate.getTime();
+        if (Number.isNaN(diffMs) || diffMs < 0) return "Just now";
+        const minutes = Math.floor(diffMs / 60000);
+        if (minutes < 1) return "Just now";
+        if (minutes < 60) return `${minutes} min ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} hr${hours > 1 ? "s" : ""} ago`;
+        const days = Math.floor(hours / 24);
+        return `${days} day${days > 1 ? "s" : ""} ago`;
+      })()
     : null;
 
   const computeSummary = (accounts) => {
@@ -378,12 +428,6 @@ export default function BrokeragesAndAccounts() {
     <DashboardLayout>
       <DashboardNavbar />
       <CustomBox py={3}>
-        {formattedConnectedAt && (
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Last connected to SnapTrade: {formattedConnectedAt}
-          </Typography>
-        )}
-
         {/* Main Content */}
         {brokerages.length === 0 ? (
           // Enhanced Empty State
@@ -516,132 +560,281 @@ export default function BrokeragesAndAccounts() {
             </Paper>
           </Box>
         ) : (
-          brokerages.map((brokerage, index) => {
-            const { linkedCount, totalCount, linkedBalance } = computeSummary(brokerage.accounts);
-            return (
-              <Accordion key={`${brokerage.name}-${index}`}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Box display="flex" flexDirection="column" width="100%">
-                    <Box display="flex" alignItems="center" gap={1}>
-                      <img
-                        src={brokerage.logo}
-                        alt={`${brokerage.name} logo`}
-                        style={{ height: 48 }}
-                      />
-                      <Typography variant="h6">{brokerage.name}</Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      {linkedCount} of {totalCount} accounts linked
-                    </Typography>
-                  </Box>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {brokerage.accounts.map((account) => {
-                      const isAvailable = account.isAvailable !== false;
-                      const marketMessage = isAvailable
-                        ? "Supported by The Stock Owner Report (NYSE/NASDAQ)"
-                        : `Unsupported market: ${
-                            account.disallowedMarkets?.length
-                              ? account.disallowedMarkets.join(", ")
-                              : "Unsupported market"
-                          }`;
-                      return (
-                        <ListItem
-                          key={account.id}
-                          divider
-                          sx={{
-                            opacity: isAvailable ? 1 : 0.6,
-                            backgroundColor: isAvailable ? "transparent" : "#f7f7f7",
-                            borderRadius: 2,
-                          }}
-                        >
-                          <Checkbox
-                            checked={account.included}
-                            onChange={() => toggleInclude(account.id)}
-                            disabled={!isAvailable}
-                          />
-                          <ListItemText
-                            primary={`${account.accountType} | #${
-                              account.accountNumber || "N/A"
-                            }`}
-                            primaryTypographyProps={{ variant: "body2", fontWeight: 600 }}
-                            secondaryTypographyProps={{ component: "div" }}
-                            secondary={
-                              <Box display="flex" flexDirection="column" gap={0.4}>
-                                <Typography variant="caption" color="text.secondary">
-                                  Equities Value (Stocks & ETFs Only):{" "}
-                                  {balancesLoading
-                                    ? "Calculating..."
-                                    : account.equitiesValue != null
-                                    ? `$${Math.round(account.equitiesValue).toLocaleString()}`
-                                    : "N/A"}
-                                </Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                  Holdings: {account.validHoldingsCount || account.holdings?.length || 0} (
-                                  {account.holdings?.length || 0} total)
-                                </Typography>
-                                <Typography
-                                  variant="caption"
-                                  color={isAvailable ? "text.secondary" : "text.secondary"}
-                                  fontWeight={500}
-                                >
-                                  {marketMessage}
-                                </Typography>
-                              </Box>
-                            }
-                          />
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                  <Box mt={1} display="flex" gap={1}>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => unlinkBrokerage(brokerage.name)}
+          <Paper
+            elevation={0}
+            sx={{
+              borderRadius: 2.5,
+              border: "1px solid",
+              borderColor: "divider",
+              boxShadow: (theme) => `0 12px 28px ${theme.palette.grey[300]}40`,
+              overflow: "hidden",
+              backgroundColor: "background.paper",
+            }}
+          >
+            {formattedConnectedAt && (
+              <>
+                <Box
+                  sx={{
+                    px: { xs: 1.5, sm: 2.25 },
+                    py: 0.85,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 1.25,
+                    flexWrap: "wrap",
+                    background: (theme) =>
+                      `linear-gradient(90deg, ${theme.palette.primary.main}08, ${theme.palette.common.white})`,
+                    borderLeft: "4px solid",
+                    borderLeftColor: "primary.main",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Box
                       sx={{
-                        backgroundColor: "#fff",
-                        color: "#000",
-                        borderColor: "#000",
-                        fontWeight: 500,
-                        "&:hover": {
-                          backgroundColor: "#f5f5f5",
-                          borderColor: "#000",
-                          color: "#000",
-                        },
+                        width: 24,
+                        height: 24,
+                        borderRadius: "50%",
+                        display: "grid",
+                        placeItems: "center",
+                        backgroundColor: "primary.light",
+                        color: "primary.main",
                       }}
                     >
-                      Unlink Brokerage
-                    </Button>
+                      <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
+                    </Box>
+                    <Box>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: "text.secondary",
+                          letterSpacing: 0.8,
+                          textTransform: "uppercase",
+                          fontWeight: 700,
+                          lineHeight: 1.1,
+                          fontSize: 11,
+                        }}
+                      >
+                        SnapTrade Sync
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.primary", fontWeight: 500, lineHeight: 1.15, fontSize: 12.5 }}
+                      >
+                        Last connected {relativeConnectedAt}
+                      </Typography>
+                    </Box>
                   </Box>
-                </AccordionDetails>
-              </Accordion>
-            );
-          })
-        )}
-        {brokerages.length > 0 && (
-          <Box mt={2} display="flex" justifyContent="flex-end">
-            <Button
-              variant="outlined"
-              onClick={handleOpen}
-              sx={{
-                backgroundColor: "#fff",
-                color: "#000",
-                borderColor: "#000",
-                fontWeight: 500,
-                fontSize: 16,
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  borderColor: "#000",
-                  color: "#000",
-                },
-                minWidth: 200,
-              }}
+
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "text.secondary", fontWeight: 600, fontSize: 11, letterSpacing: 0.2 }}
+                  >
+                    {formattedConnectedAt}
+                  </Typography>
+                </Box>
+                <Divider />
+              </>
+            )}
+
+            {brokerages.map((brokerage, index) => {
+              const { linkedCount, totalCount, linkedBalance } = computeSummary(brokerage.accounts);
+              return (
+                <Accordion
+                  key={`${brokerage.name}-${index}`}
+                  disableGutters
+                  elevation={0}
+                  square
+                  sx={{
+                    "&:before": { display: "none" },
+                    borderTop: index === 0 ? "none" : "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    sx={{
+                      px: { xs: 1.5, sm: 2.25 },
+                      py: 0.1,
+                      minHeight: 46,
+                      "& .MuiAccordionSummary-content": { my: 0 },
+                    }}
+                  >
+                    <Box display="flex" flexDirection="column" width="100%">
+                      <Box display="flex" alignItems="center" gap={0.75}>
+                        <img
+                          src={brokerage.logo}
+                          alt={`${brokerage.name} logo`}
+                          style={{ height: 34 }}
+                        />
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ fontWeight: 700, lineHeight: 1.1, letterSpacing: 0.08, fontSize: 24 }}
+                        >
+                          {brokerage.name}
+                        </Typography>
+                      </Box>
+                      <Box display="flex" gap={1} flexWrap="wrap" mt={0.1}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ fontWeight: 600, lineHeight: 1.1 }}
+                        >
+                          {linkedCount} of {totalCount} accounts linked
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ fontWeight: 700, lineHeight: 1.1 }}
+                        >
+                          Linked value: ${Math.round(linkedBalance).toLocaleString()}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2.25 }, pb: 0.4, pt: 0 }}>
+                    <List sx={{ py: 0 }}>
+                      {brokerage.accounts.map((account) => {
+                        const isAvailable = account.isAvailable !== false;
+                        const marketMessage = isAvailable
+                          ? "Supported by The Stock Owner Report (NYSE/NASDAQ)"
+                          : `Unsupported market: ${
+                              account.disallowedMarkets?.length
+                                ? account.disallowedMarkets.join(", ")
+                                : "Unsupported market"
+                            }`;
+                        return (
+                          <ListItem
+                            key={account.id}
+                            divider
+                            sx={{
+                              opacity: isAvailable ? 1 : 0.6,
+                              backgroundColor: isAvailable ? "background.paper" : "grey.100",
+                              borderRadius: 1.5,
+                              border: "1px solid",
+                              borderColor: "divider",
+                              mb: 0.25,
+                              px: 0.75,
+                              py: 0.2,
+                            }}
+                          >
+                            <Checkbox
+                              checked={account.included}
+                              onChange={() => toggleInclude(account.id)}
+                              disabled={!isAvailable}
+                              size="small"
+                              sx={{ mr: 0.35, p: 0.5 }}
+                            />
+                            <ListItemText
+                              primary={`${account.accountType} | #${
+                                account.accountNumber || "N/A"
+                              }`}
+                              primaryTypographyProps={{ variant: "body2", fontWeight: 700, fontSize: 14 }}
+                              secondaryTypographyProps={{ component: "div" }}
+                              secondary={
+                                <Box display="flex" flexDirection="column" gap={0}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ fontSize: 11.5, lineHeight: 1.25 }}
+                                  >
+                                    Equities Value (Stocks & ETFs Only):{" "}
+                                    {balancesLoading
+                                      ? "Calculating..."
+                                      : account.equitiesValue != null
+                                      ? `$${Math.round(account.equitiesValue).toLocaleString()}`
+                                      : "N/A"}
+                                  </Typography>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ fontSize: 11.5, lineHeight: 1.25 }}
+                                  >
+                                    Holdings: {account.validHoldingsCount || account.holdings?.length || 0} (
+                                    {account.holdings?.length || 0} total)
+                                  </Typography>
+                                  <Typography
+                                    variant="caption"
+                                    color={isAvailable ? "text.secondary" : "text.secondary"}
+                                    fontWeight={600}
+                                    sx={{ fontSize: 11.5, lineHeight: 1.25 }}
+                                  >
+                                    {marketMessage}
+                                  </Typography>
+                                </Box>
+                              }
+                            />
+                          </ListItem>
+                        );
+                      })}
+                    </List>
+                    <Box mt={0.15} display="flex" gap={0.75}>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleUnlinkBrokerage(brokerage.name)}
+                        sx={{
+                          textTransform: "none",
+                          borderRadius: 1.5,
+                          backgroundColor: "background.paper",
+                          color: "text.primary",
+                          borderColor: "divider",
+                          fontWeight: 600,
+                          fontSize: 11.5,
+                          px: 1.2,
+                          py: 0.2,
+                          "&:hover": {
+                            backgroundColor: "grey.100",
+                            borderColor: "text.secondary",
+                            color: "text.primary",
+                          },
+                        }}
+                      >
+                        Unlink Brokerage
+                      </Button>
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })}
+
+            <Box
+              mt={0.25}
+              pt={0.4}
+              pb={1.2}
+              px={{ xs: 1.5, sm: 2.25 }}
+              display="flex"
+              justifyContent="flex-end"
             >
-              Connect Another Brokerage
-            </Button>
-          </Box>
+              <Button
+                variant="contained"
+                onClick={handleOpen}
+                disabled={!canConnectBrokerage}
+                sx={{
+                  background: (theme) =>
+                    `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  textTransform: "none",
+                  borderRadius: 1.5,
+                  px: 2,
+                  py: 0.6,
+                  "&:hover": {
+                    background: (theme) =>
+                      `linear-gradient(90deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
+                  },
+                  minWidth: 175,
+                  "&.Mui-disabled": {
+                    background: "#c4c9d4",
+                    color: "#ffffff",
+                    opacity: 0.85,
+                  },
+                }}
+              >
+                Connect Brokerage
+              </Button>
+            </Box>
+          </Paper>
         )}
       </CustomBox>
       <AddBrokerageDialog

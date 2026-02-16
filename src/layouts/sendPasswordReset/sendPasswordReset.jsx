@@ -13,7 +13,6 @@ export default function SendPasswordReset() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [debugInfo, setDebugInfo] = useState(null);
   const inputStyle = {
     width: "100%",
     padding: "10px",
@@ -22,10 +21,6 @@ export default function SendPasswordReset() {
     marginBottom: 12,
     fontSize: 15,
   };
-
-  const functionUrl = SUPABASE_URL
-    ? `${SUPABASE_URL}/functions/v1/send-password-reset-link-email`
-    : null;
 
   const validateEmail = (email) => {
     // Simple regex for email validation
@@ -51,12 +46,6 @@ export default function SendPasswordReset() {
     }
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
       setError("Missing Supabase environment variables.");
-      setDebugInfo({
-        stage: "preflight",
-        message: "SUPABASE_URL or SUPABASE_ANON_KEY is missing.",
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY: SUPABASE_ANON_KEY ? `${SUPABASE_ANON_KEY.slice(0, 8)}...` : null,
-      });
       return;
     }
     setLoading(true);
@@ -71,38 +60,8 @@ export default function SendPasswordReset() {
         cache: "no-store",
       };
 
-      console.log("🚀 Edge Function Call - sendPasswordReset:");
-      console.log("URL:", url);
-      console.log("Config:", requestConfig);
-      console.log("SUPABASE_URL:", SUPABASE_URL);
-      console.log("SUPABASE_ANON_KEY:", SUPABASE_ANON_KEY);
-
-      setDebugInfo({
-        stage: "request",
-        url,
-        requestConfig,
-        functionUrl,
-        origin: window?.location?.origin,
-        online: navigator?.onLine,
-      });
-
       const res = await fetch(url, requestConfig);
       const { responseText, data } = await parseResponse(res);
-
-      const debugPayload = {
-        status: res.status,
-        ok: res.ok,
-        headers: Object.fromEntries(res.headers.entries()),
-        rawBody: responseText,
-        parsedBody: data,
-      };
-      setDebugInfo(debugPayload);
-
-      console.log("Response status:", res.status);
-      console.log("Response ok:", res.ok);
-      console.log("Response headers:", Object.fromEntries(res.headers.entries()));
-      console.log("Response raw body:", responseText);
-      console.log("Response parsed body:", data);
 
       if (!res.ok || (data && data.error)) {
         setError((data && data.error) || `Supabase error: ${res.status}`);
@@ -112,15 +71,6 @@ export default function SendPasswordReset() {
       }
     } catch (err) {
       const isFailedToFetch = err?.message?.includes("Failed to fetch");
-      let probe = null;
-      if (isFailedToFetch) {
-        try {
-          await fetch(`${SUPABASE_URL}/auth/v1/health`, { mode: "no-cors", cache: "no-store" });
-          probe = "no-cors probe succeeded (opaque response)";
-        } catch (probeErr) {
-          probe = `no-cors probe failed: ${probeErr?.message || probeErr}`;
-        }
-      }
 
       setError(
         isFailedToFetch
@@ -128,25 +78,6 @@ export default function SendPasswordReset() {
           : "Network error. Please try again later." + err
       );
       setSuccess(false);
-      setDebugInfo({
-        stage: "fetch-error",
-        error: {
-          name: err?.name,
-          message: err?.message,
-          stack: err?.stack,
-        },
-        request: {
-          url: `${SUPABASE_URL}/functions/v1/send-password-reset-link-email`,
-          mode: "cors",
-          credentials: "omit",
-          cache: "no-store",
-        },
-        origin: window?.location?.origin,
-        online: navigator?.onLine,
-        probe,
-        hint:
-          "If this is local dev, ensure the Edge Function sets Access-Control-Allow-Origin and handles OPTIONS.",
-      });
     }
     setLoading(false);
   };
@@ -200,30 +131,6 @@ export default function SendPasswordReset() {
         >
           {loading ? "Sending..." : "Send Password Reset"}
         </button>
-      )}
-      {functionUrl && (
-        <div style={{ marginTop: 8, fontSize: 12 }}>
-          Debug URL:{" "}
-          <a href={functionUrl} target="_blank" rel="noreferrer">
-            {functionUrl}
-          </a>
-        </div>
-      )}
-      {debugInfo && (
-        <pre
-          style={{
-            marginTop: 16,
-            padding: 12,
-            background: "#f6f8fa",
-            borderRadius: 6,
-            fontSize: 12,
-            color: "#344767",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
-          }}
-        >
-          {JSON.stringify(debugInfo, null, 2)}
-        </pre>
       )}
     </AuthPageLayout>
   );
