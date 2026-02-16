@@ -1,11 +1,11 @@
 # COPILOT_CONTEXT
 
 ## 10-line product summary
-1. A React dashboard for “The Stock Owner’s Report” that delivers portfolio insights to authenticated users.
+1. A React dashboard for “The Stock Owner’s Report” with a public-first navigation model.
 2. The UI is built on Custom Dashboard Material UI components with a green brand theme.
-3. Auth and user sessions are managed with Supabase Auth and stored in Zustand.
+3. Auth/session context is held in Zustand stores (`useAuthStore`, `useAppStore`).
 4. Data and workflows come from Supabase REST endpoints and Edge Functions.
-5. SnapTrade integration supports brokerage linking and account retrieval.
+5. SnapTrade integration supports brokerage linking and account/holdings sync.
 6. Financial statements (balance sheet/income statement) are core reporting views.
 7. Manual CSV uploads supplement brokerage data when needed.
 8. Billing, login, and password reset flows are supported via dedicated routes.
@@ -15,10 +15,10 @@
 ## Repo map (high-level components)
 - `src/index.js`: App bootstrap (ReactDOM, router, controller provider).
 - `src/App.js`: Global layout, theme, routes, auth session hydration.
-- `src/routes.js`: Route table and auth/brokerage guards.
+- `src/routes.js`: Route table (currently public-first, no guard wrappers).
 - `src/layouts/`: Screen-level layouts (brokerages, balance sheet, income statement, billing, auth flows).
 - `src/pages/`: Static/legal pages and “Owner’s Manual”.
-- `src/components/`: Shared UI, auth guards, UI primitives (Custom*).
+- `src/components/`: Shared UI primitives and helper components.
 - `src/services/`: API/service layer (Supabase REST + Edge Functions, CSV parsing, encryption).
 - `src/stores/`: Zustand stores for auth and application state.
 - `src/context/`: Custom UI controller and theme state.
@@ -27,17 +27,17 @@
 - `public/` + `build/`: Static assets (build/ is generated output).
 
 ## Key flows (request → service → data)
-- Auth bootstrap: `src/App.js` → `supabase.auth.getSession()` → `useAuthStore.setUser()` → `RequireAuth` gates routes.
-- Login/Reset: `layouts/login` or `layouts/sendPasswordReset` → Supabase tables + Edge Functions → UI feedback.
-- SnapTrade connect: UI action → `src/services/supabaseService.js` (Edge Function `login-user`, `get-users`, `snaptrade-register-user`) → Supabase Edge Functions.
+- Auth bootstrap: `src/App.js` → session/user hydration into `useAuthStore`.
+- Login/Reset: `layouts/login` and password reset pages → Supabase tables + Edge Functions.
+- SnapTrade connect: UI action → `src/services/supabaseService.js` (`snaptrade-register-user-v2`, `login-user`) → SnapTrade portal → redirect sync.
 - Financials fetch: UI → `supabaseService.getFinancials()` → Supabase REST `/rest/v1/financials`.
 - CSV import: UI file upload → `parseBrokerageCsvService.parseBrokerageCsv()` → normalized table data → store/state.
 
 ## Flow traces (end-to-end)
 ### 1) Auth + password reset
 - Login: `src/layouts/login/login.jsx` → Supabase `users` table (password_hash) → `services/encryptionService` (decrypt) → `useAuthStore.setUser()` → redirect to `/brokeragesAndAccounts`.
-- Password reset request: `src/layouts/sendPasswordReset/sendPasswordReset.jsx` → Edge Function `send-password-reset-link-email` → calls `send_password_setup_link` → stores token in `password_reset_tokens` → Resend email.
-- Set password: `src/layouts/setPassword/setPassword.tsx` → validate token in `password_reset_tokens` → encrypt + update `users.password_hash` → delete token → redirect to `/login`.
+- Password reset request: `src/layouts/sendPasswordReset/sendPasswordReset.jsx` → `send-password-reset-link-email` → `create-and-get-tokenized-url` → Postmark email.
+- Set password: `src/layouts/setPassword/setPassword.jsx` → `set-password-with-token` with `{ token, passwordHash }` → token validation/update/delete → redirect to `/login`.
 
 ### 2) Manual CSV upload → holdings → statements
 - `AddBrokerageDialog` parses CSV via `parseBrokerageCsv()`.
@@ -46,15 +46,14 @@
 
 ### 3) SnapTrade connect → accounts/holdings
 - Connect modal: `SnapTradeConnectModal`.
-- Registration check: `supabaseService.getSnapTradeUser()` → Edge Function `get-users`.
-- Register if missing: `supabaseService.registerUser()` → Edge Function `snaptrade-register-user` → save `snapusersecret` in `users` table.
-- Login link: `supabaseService.getSnapTradeLoginLink()` → Edge Function `login-user`.
-- Account/holdings Edge Function available: `supabase/functions/snaptrade-accounts` (returns accounts + holdings).
+- Register transient SnapTrade user: `supabaseService.registerUser()` → `snaptrade-register-user-v2`.
+- Login link: `supabaseService.getSnapTradeLoginLink()` → `login-user`.
+- Redirect sync: `SnapTradeRedirect.jsx` → `snaptrade-accounts` → mapped holdings/accounts persisted in store.
 
 ## Conventions & patterns
 - React 18 + CRA (`react-scripts`).
 - MUI + Custom components; keep UI primitives in `src/components/Custom*`.
-- Routes are declarative in `src/routes.js` and guarded via `RequireAuth` / `RequireBrokerageConnected`.
+- Routes are declarative in `src/routes.js`; current runtime model is public-first.
 - Data access via `src/services/*` using `fetch` + Supabase REST/Edge Functions.
 - Global state via Zustand in `src/stores/*`.
 - Environment variables use `REACT_APP_*` (CRA convention).
@@ -64,7 +63,7 @@
 ## Config, secrets, and environment wiring
 - `.env` (not committed): `REACT_APP_SUPABASE_URL`, `REACT_APP_SUPABASE_ANON_KEY`, `REACT_APP_DISABLE_SNAPTRADE`.
 - SnapTrade (PoC client): `REACT_APP_SNAPTRADE_CLIENT_ID`, `REACT_APP_SNAPTRADE_CONSUMER_KEY` (client-side only; move to Edge Function for production).
-- Edge Functions: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SNAPTRADE_CLIENT_ID`, `SNAPTRADE_CONSUMER_KEY`, `RESEND_API_KEY`.
+- Edge Functions: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SNAPTRADE_CLIENT_ID`, `SNAPTRADE_CONSUMER_KEY`, `POSTMARK_SERVER_TOKEN`, optional `APP_BASE_URL`/`SET_PASSWORD_PATH`.
 - `src/supabaseClient.ts`: Initializes Supabase client from env vars.
 - `supabase/config.toml`: Local Supabase stack configuration.
 - `genezio.yaml`: Deployment build instructions.
@@ -77,7 +76,7 @@
 
 ## Pinned entrypoints/config/docs (open first)
 - Entrypoints: `src/index.js`, `src/App.js`, `src/routes.js`.
-- State & auth: `src/stores/useAuthStore.js`, `src/components/RequireAuth.jsx`.
+- State & auth: `src/stores/useAuthStore.js`, `src/stores/store.js`.
 - Services: `src/services/supabaseService.js`, `src/supabaseClient.ts`.
 - Config: `package.json`, `tsconfig.json`, `genezio.yaml`, `supabase/config.toml`.
 - Docs: `README.md`, `CHANGELOG.md`, `ISSUE_TEMPLATE.md`.
@@ -91,7 +90,7 @@
 - `src/services/snaptradeMappingService.js` (SnapTrade accounts/holdings normalization).
 - `src/services/snaptradeBrokerAllowlistService.js` (allowlisted broker slugs shown in UI).
 - `supabase/functions/*` (Edge Function handlers).
-- `src/layouts/login/login.jsx`, `src/layouts/sendPasswordReset/sendPasswordReset.jsx`, `src/layouts/setPassword/setPassword.tsx` (auth flows).
+- `src/layouts/login/login.jsx`, `src/layouts/sendPasswordReset/sendPasswordReset.jsx`, `src/layouts/setPassword/setPassword.jsx` (auth flows).
 
 ## Copilot prompt to request a repo map
 Use this in Copilot Chat:
@@ -105,3 +104,8 @@ Use this in Copilot Chat:
 ## Guidance for Copilot
 - Treat this file as the source of truth for architecture and conventions.
 - Prefer minimal, surgical edits and keep UI/style consistent with Custom/MUI patterns.
+
+## Current access/paywall rule
+- In balance sheet and income statement, paywall applies only when: `hasRows && !isLoggedIn`.
+- Logged-in users see full records with no blur.
+- Guests see first 5 rows plus blurred remainder and billing CTA.

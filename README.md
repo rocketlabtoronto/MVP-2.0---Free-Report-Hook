@@ -1,95 +1,86 @@
 # The Stock Owner's Report – Dashboard
 
-## Business Overview
-The Dashboard provides authenticated users with access to portfolio insights, reporting, and account management. It is designed to support subscription-driven access to analytics and investor reporting.
+## Current Product Model (Workflow #3)
+- The dashboard is public-first: core routes are accessible without auth guards.
+- Landing route is `/brokeragesAndAccounts`.
+- SnapTrade connect flow is available to visitors.
+- Financial statement paywall is guest-only:
+  - guests see first 5 rows + blurred remainder + CTA to `/billing`
+  - logged-in users see full rows (no blur, no paywall)
 
-**Primary goals**
-- Deliver timely, trustworthy portfolio insights.
-- Reduce support burden with self-service account actions.
-- Provide a clear path to onboarding and retention.
+## Tech Stack
+- Frontend: React (CRA) + MUI + AG Grid
+- State: Zustand (`useAuthStore`, `useAppStore`)
+- Backend: Supabase Postgres + Edge Functions
+- Integrations: SnapTrade + Postmark + Stripe webhook
 
-**Target users**
-- Retail investors and advisors who need portfolio visibility.
-- Internal support/admin staff for account triage.
+## Key Runtime Flows
 
-**Success metrics**
-- Activation rate (first report generated).
-- Retention (weekly/monthly active users).
-- Support deflection (self-service password resets, profile updates).
+### SnapTrade connect
+1. UI opens connect modal and creates transient GUID `userId`.
+2. Calls `functions/v1/snaptrade-register-user-v2`.
+3. Receives `userSecret` and keeps it in local persisted state (not DB).
+4. Calls `functions/v1/login-user` to get a connection portal URL.
+5. Redirect flow (`/snapTradeRedirect`) invokes `functions/v1/snaptrade-accounts` and persists accounts/holdings locally.
+6. Stores `snapTradeLastConnectedAt` timestamp for in-panel status display.
 
-## Technology Overview
-This is a React-based web application that integrates with Supabase for authentication, edge functions, and backend services.
+### Password reset / set password
+1. `/send-password-reset` calls `functions/v1/send-password-reset-link-email`.
+2. That function calls `functions/v1/create-and-get-tokenized-url` and sends email via Postmark.
+3. `/set-password?token=...` encrypts password client-side and calls `functions/v1/set-password-with-token`.
+4. Token is validated/consumed server-side and `users.password_hash` is updated.
 
-**Key components**
-- **Frontend:** React (Create React App)
-- **Backend services:** Supabase (Auth, Edge Functions, Storage, Database)
-- **Deployment:** Static hosting + environment-based configuration
+### Stripe connection
+1. User starts checkout from the billing flow.
+2. Stripe handles payment and redirects using the Checkout session success/cancel URLs configured for the product.
+3. Supabase Edge Function `functions/v1/stripe-webhook` processes Stripe webhook events.
+4. Webhook updates subscription state in the `users` table (`is_subscribed`, interval, and payment timestamps).
+5. Webhook sends activation/onboarding email when required by the event flow.
 
-**Primary integrations**
-- Supabase Auth for account management and password resets.
-- Supabase Edge Functions for server-side workflows.
-
-## Architecture
-- **UI Layer:** React components and layouts.
-- **API Layer:** Supabase REST/Edge Functions.
-- **Data Layer:** Supabase Postgres.
-
-**Data flow**
-1. User triggers an action in the UI.
-2. UI calls Supabase Auth or Edge Functions.
-3. Responses are rendered with user-friendly messaging and optional debug data.
-
-## Security & Compliance
-- Environment variables are used for Supabase configuration.
-- Use of anon keys only (no service role keys in client).
-- Password resets are handled via Supabase Auth or Edge Function.
-
-**Recommendations**
-- Restrict CORS for Edge Functions to trusted origins.
-- Rotate anon keys and update environment variables as needed.
-- Enable rate limiting on sensitive endpoints.
+Current implementation note:
+- The activation link used in webhook email content is currently production-domain based (`stockownerreport.com`).
+- If you need environment-specific links (local/staging/prod), move this to an environment-driven variable in the webhook function.
 
 ## Configuration
-Create a `.env` file in the Dashboard root with:
-```
+Create `.env` in project root:
+
+```env
 REACT_APP_SUPABASE_URL=<your-supabase-url>
 REACT_APP_SUPABASE_ANON_KEY=<your-supabase-anon-key>
 REACT_APP_SNAPTRADE_CLIENT_ID=<your-snaptrade-client-id>
 REACT_APP_SNAPTRADE_CONSUMER_KEY=<your-snaptrade-consumer-key>
 ```
 
-If you add or update env vars, restart the dev server so React can re-read them.
+Supabase Edge Function secrets for Stripe webhook should include Stripe API/signing variables used by `stripe-webhook`.
+
+Restart dev server after env changes.
 
 ## Development
-```
+
+```bash
 npm install
 npm start
 ```
 
-## Service Layer Convention
-- Service files in `src/services` must end with `Service.js`.
-- Current files:
-	- `encryptionService.js`
-	- `parseBrokerageCsvService.js`
-	- `snaptradeBrokerAllowlistService.js`
-	- `snaptradeMappingService.js`
-	- `supabaseService.js`
+## Build
 
-## Build & Deploy
-```
+```bash
 npm run build
 ```
-Deploy the `build/` output to your static hosting provider.
 
-## Supabase Edge Functions (Deploy)
-```
+Deploy the `build/` directory to static hosting.
+
+## Supabase Edge Functions
+
+```bash
 supabase login
 supabase link --project-ref <project_ref>
 supabase functions deploy
 supabase functions list
 ```
 
-Delete remote functions that do not exist locally:
+Delete remote functions that are no longer local:
+
 ```powershell
 $local = Get-ChildItem .\supabase\functions -Directory | Select-Object -ExpandProperty Name
 $remote = (supabase functions list --output json | ConvertFrom-Json) | Select-Object -ExpandProperty name
@@ -97,12 +88,12 @@ $toDelete = $remote | Where-Object { $_ -notin $local }
 foreach ($fn in $toDelete) { supabase functions delete $fn }
 ```
 
-## Operational Notes
-- If password reset calls fail with `Failed to fetch`, check Edge Function CORS and OPTIONS handling.
-- Use the on-screen debug panel (in the password reset view) to inspect response status and raw body.
-- Environment debug route: open `/environment-debug` to see the current `REACT_APP_` variables in the browser.
+## Security & Ops Notes
+- Keep service-role keys server-side only (Edge Functions).
+- CORS allowlists are enforced in password reset and set-password functions.
+- `set-password-with-token` preflight must allow `x-client-info` for Supabase browser invokes.
+- Use Supabase Edge logs for debugging (`edge-function` service).
 
 ## Support
-- Primary support: howard@stockownerreport.com
-- Use application logs and Supabase logs for incident triage.
+- Contact: howard@stockownerreport.com
 

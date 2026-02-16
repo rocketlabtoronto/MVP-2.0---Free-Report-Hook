@@ -1,69 +1,75 @@
-# Public Dashboard + SnapTrade Connect (Workflow #3)
+# Login / Connect / Access Model (Current)
 
-This document describes the implemented login/connect/monetization behavior for the public dashboard model.
+This file tracks the current runtime behavior for login, SnapTrade connect, and gated statement views.
 
 ## Runtime Rules
+- App is public-first; core routes are accessible without route guards.
+- Landing screen is `/brokeragesAndAccounts`.
+- SnapTrade connect is available to guests.
+- Login state is derived from `useAuthStore(state => state.user)`.
 
-- The default landing page is `/brokeragesAndAccounts` (public dashboard).
-- SnapTrade connect is open to all visitors (no auth guard required).
-- Route guards are removed (`RequireAuth`, `RequireBrokerageConnected`).
-- No route-level `isAuthenticated` checks are used for SnapTrade connectivity.
-
-## SnapTrade Registration + Login (v2)
+## SnapTrade Connect (Workflow #3)
 
 ### Frontend
+- `src/layouts/brokeragesAndAccounts/SnapTradeConnectModal.js`
+  - creates transient GUID `userId`
+  - calls `supabaseService.registerUser(userId)`
+  - stores transient `snapTradeUserId` + `snapUserSecret` in local store
+  - requests portal link via `supabaseService.getSnapTradeLoginLink(...)`
 
-- File: `src/layouts/brokeragesAndAccounts/SnapTradeConnectModal.js`
-  - Generates a transient GUID userId (`crypto.randomUUID()` fallback included).
-  - Calls `supabaseService.registerUser(userId)`.
-  - Stores transient `snapTradeUserId` + `snapUserSecret` in local persisted store only.
-  - Calls `supabaseService.getSnapTradeLoginLink(userId, userSecret, redirectURI, ...)`.
+- `src/services/supabaseService.js`
+  - `registerUser` → `functions/v1/snaptrade-register-user-v2`
+  - login link → `functions/v1/login-user`
 
-- File: `src/services/supabaseService.js`
-  - `registerUser` now targets `functions/v1/snaptrade-register-user-v2`.
+### Redirect/Sync
+- `src/layouts/SnapTradeRedirect.jsx`
+  - invokes `functions/v1/snaptrade-accounts`
+  - maps/persists accounts and holdings into Zustand app store
+  - updates `snapTradeLastConnectedAt`
 
-### Edge Functions
+## Brokerages Panel UX
+- Brokerages page shows a compact in-panel SnapTrade sync header when timestamp exists.
+- Primary connect CTA label is now **Connect Brokerage**.
+- CTA is disabled by default and becomes enabled only after a successful `Unlink Brokerage` action.
 
-- File: `supabase/functions/snaptrade-register-user-v2/index.ts`
-  - Calls `registerSnapTradeUser({ userId })` where `userId` is the transient GUID.
-  - Does not write SnapTrade secrets to the database.
+## Balance Sheet / Income Statement Paywall Rule
+Unified rule (current):
 
-- File: `supabase/functions/login-user/index.ts`
-  - Uses `userSecret` passed from frontend (Workflow #3 path).
-  - Keeps legacy fallback to `users.snapusersecret` only if `userSecret` is omitted.
-  - Calls `loginSnapTradeUser(...)` with unchanged login semantics.
+`paywallEnabled = hasRows && !isLoggedIn`
 
-## Redirect + Local Continuity
+Meaning:
+- Logged-in user: no blur, no paywall banner.
+- Guest: first 5 rows visible, rows 6+ blurred, CTA to `/billing`.
 
-- File: `src/layouts/SnapTradeRedirect.jsx`
-  - Uses local `snapTradeUserId` + `snapUserSecret` to fetch accounts once.
-  - No fetch from `users.snapusersecret`.
-  - Hydrates holdings/accounts into persisted local store.
-  - Writes `snapTradeLastConnectedAt` timestamp.
+Implementation:
+- `src/layouts/balanceSheet/BalanceSheet.jsx`
+- `src/layouts/incomeStatement/IncomeStatement.jsx`
+- `src/layouts/balanceSheet/ProRataTable.jsx`
 
-- File: `src/stores/store.js`
-  - Persists holdings/accounts and `snapTradeLastConnectedAt` in localStorage.
-  - Supports continuity on refresh/return by reading persisted local data.
+## Password Reset / Set Password
 
-## Paywall Behavior
+### Request reset
+- `src/layouts/sendPasswordReset/sendPasswordReset.jsx`
+- calls `functions/v1/send-password-reset-link-email`
+- UI debug panel/URL output removed (production-style view)
 
-- File: `src/layouts/brokeragesAndAccounts/index.js`
-  - Shows `Last connected to SnapTrade: <timestamp>` when available.
-  - Builds a consolidated positions list sorted by market value.
-  - If not subscribed:
-    - First 5 positions shown fully.
-    - Positions 6..N shown as blurred/locked rows.
-    - Persistent CTA: “Want to see all equity holdings? Get Started and register.”
-  - If subscribed (`users.is_subscribed = true`): all rows are shown unblurred.
+### Set password
+- `src/layouts/setPassword/setPassword.jsx`
+- reads `token` from query string
+- encrypts password client-side
+- invokes `functions/v1/set-password-with-token`
 
-## Secrets/Storage Constraints
+### Backend reset functions
+- `send-password-reset-link-email`
+  - validates origin + CORS
+  - delegates link generation to `create-and-get-tokenized-url`
+  - sends email via Postmark
+- `set-password-with-token`
+  - validates token in `password_reset_tokens`
+  - updates `users.password_hash`
+  - deletes consumed/expired token
+  - includes preflight CORS with `x-client-info` allow header
 
-- Workflow #3 does not require storing SnapTrade `userSecret` in `users`.
-- `snapusersecret` is not used by the Workflow #3 frontend flow.
-- Stripe secret keys are not stored in `users`.
-
-## Subscription Linkage
-
-- Subscription validation uses the `users` table active-subscription flag (`is_subscribed`).
-- In-scope workflow columns remain:
-  - `id`, `email`, `phone`, `stripe_client_id`, `is_subscribed`, `subscription_interval`, `last_payment_at`, `created_at`, `password_hash`.
+## Data/Secret Notes
+- Workflow #3 does not require DB persistence of SnapTrade `userSecret` for the main frontend flow.
+- Service role keys remain server-side only.
