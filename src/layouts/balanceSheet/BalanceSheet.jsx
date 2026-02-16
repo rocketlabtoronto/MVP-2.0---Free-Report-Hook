@@ -31,6 +31,7 @@ function BalanceSheet() {
       }
 
       const { data, error } = await supabase
+        .schema("public")
         .from("users")
         .select("is_subscribed")
         .eq("email", email)

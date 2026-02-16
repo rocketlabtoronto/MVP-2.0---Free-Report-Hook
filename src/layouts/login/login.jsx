@@ -29,7 +29,12 @@ function Login() {
     setError("");
     try {
       // Fetch user by email
-      const { data, error } = await supabase.from("users").select("*").eq("email", email).single();
+      const { data, error } = await supabase
+        .schema("public")
+        .from("users")
+        .select("*")
+        .eq("email", email)
+        .single();
       if (error || !data || !data.password_hash) {
         setError("Invalid email or password.");
         setLoading(false);

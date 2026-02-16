@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AuthPageLayout from "components/AuthPageLayout";
 import { supabase } from "../../supabaseClient";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { encrypt } from "../../services/encryptionService";
 
 export default function SetPassword() {
-  // Disable menu/sidebar when this page is active
+  // Hide sidebar/navbar while on this page
   useEffect(() => {
-    // Hide left menu bar and top navbar if present
     const sidebar = document.getElementById("sidenav-main");
     const navbar = document.getElementById("navbar-main");
     if (sidebar) sidebar.style.display = "none";
@@ -17,13 +16,22 @@ export default function SetPassword() {
       if (navbar) navbar.style.display = "";
     };
   }, []);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Read token from URL querystring (react-router safe)
+  const token = useMemo(() => {
+    return new URLSearchParams(location.search).get("token")?.trim() ?? "";
+  }, [location.search]);
+
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [email, setEmail] = useState<string | null>(null);
-  const navigate = useNavigate();
+
+  /** @type {React.CSSProperties} */
   const inputStyle = {
     width: "100%",
     padding: "10px",
@@ -31,122 +39,111 @@ export default function SetPassword() {
     border: "1px solid #e0e0e0",
   };
 
-  const token = new URLSearchParams(window.location.search).get("token");
+  const handleSetPassword = async () => {
+    console.log("[SetPassword] Step 1 - Clicked Set Password");
 
-  useEffect(() => {
+    // Step 2: Basic checks
     if (!token) {
-      setError("Missing or invalid token.");
+      console.error("[SetPassword] Step 2 - Missing token");
+      setError("Missing or invalid password reset link.");
       return;
     }
 
-    (async () => {
-      const { data, error } = await supabase
-        .from("password_reset_tokens")
-        .select("*")
-        .eq("token", token)
-        .single();
-
-      if (error || !data || new Date(data.expires_at) < new Date()) {
-        setError("Token is invalid or expired.");
-      } else {
-        setEmail(data.email);
-      }
-    })();
-  }, [token]);
-
-  const handleSetPassword = async () => {
-    // Password strength validation
+    // Step 3: Password strength validation
+    console.log("[SetPassword] Step 3 - Validating password rules");
     const passwordErrors = [];
     if (password.length < 8) passwordErrors.push("Password must be at least 8 characters.");
-    if (!/[A-Z]/.test(password))
-      passwordErrors.push("Password must contain at least one uppercase letter.");
-    if (!/[a-z]/.test(password))
-      passwordErrors.push("Password must contain at least one lowercase letter.");
+    if (!/[A-Z]/.test(password)) passwordErrors.push("Password must contain at least one uppercase letter.");
+    if (!/[a-z]/.test(password)) passwordErrors.push("Password must contain at least one lowercase letter.");
     if (!/[0-9]/.test(password)) passwordErrors.push("Password must contain at least one number.");
     if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password))
       passwordErrors.push("Password must contain at least one special character.");
 
     if (passwordErrors.length > 0) {
+      console.error("[SetPassword] Step 3 - Password validation failed", { passwordErrors });
       setError(passwordErrors.join("\n"));
       return;
     }
+
     if (password !== confirm) {
+      console.error("[SetPassword] Step 3 - Passwords do not match");
       setError("Passwords do not match.");
       return;
     }
+
     setLoading(true);
     setError(null);
 
-    const passwordHash = await encrypt(password);
-    console.log("Password:", password);
-    console.log("EncryptedPassword:", passwordHash);
+    try {
+      // Step 4: Hash/encrypt password (client-side)
+      console.log("[SetPassword] Step 4 - Encrypting password");
+      const passwordHash = await encrypt(password);
 
-    if (!email)
-    {
-      setError("Missing email associated with this token.");
-      return;
-    }
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({ password_hash: passwordHash })
-      .eq("email", email);
+      // Step 5: Send token + hash to Edge Function (server-side validation + update)
+      // IMPORTANT: This avoids browser SELECT/UPDATE on protected tables.
+      console.log("[SetPassword] Step 5 - Calling Edge Function set-password-with-token");
+      const { data, error } = await supabase.functions.invoke("set-password-with-token", {
+        body: { token, passwordHash },
+      });
 
-      if (!token) {
-        setError("Missing reset token.");
+      console.log("[SetPassword] Step 6 - Edge Function responded", { data, error });
+
+      if (error) {
+        console.error("[SetPassword] Step 6 - Edge Function error", error);
+        setError(error.message || "Could not set password.");
         return;
       }
-      if (updateError) {
-        setError(updateError.message);
-      } else {
-        await supabase.from("password_reset_tokens").delete().eq("token", token);
-        setSuccess(true);
-        setTimeout(() => navigate("/login"), 2000);
+
+      if (!data?.success) {
+        console.error("[SetPassword] Step 6 - Edge Function returned failure", data);
+        setError(data?.error || "Token is invalid or expired.");
+        return;
       }
-    setLoading(false);
+
+      // Step 7: Success
+      console.log("[SetPassword] Step 7 - Password set successfully");
+      setSuccess(true);
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (e) {
+      console.error("[SetPassword] Catch - Unhandled error", e);
+      setError(e?.message ?? "Unexpected error setting password.");
+    } finally {
+      setLoading(false);
+      console.log("[SetPassword] Final - Done");
+    }
   };
 
-  const showForm = !error && !!email;
-  // Only show info/error page if token is invalid/expired (i.e. no email)
-  const showInfoPage = !email;
+  // If token is missing, show the info/error page
+  const showInfoPage = !token;
+
   return (
-    <AuthPageLayout logoPosition="outside" logoStyle={{ border: "2px solid #eee" }}>
+    <AuthPageLayout showLogo={false} cardStyle={{ maxWidth: 520, padding: 28 }}>
       {showInfoPage ? (
         <div
           style={{
-            marginBottom: 16,
+            marginBottom: 8,
             textAlign: "left",
-            padding: "24px 20px 20px 20px",
-            borderRadius: 12,
-            background: "#f6f9fc",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-            border: "1px solid #e0e5ec",
+            padding: "20px",
+            borderRadius: 10,
+            background: "#fff",
+            border: "1px solid #e8edf3",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", marginBottom: 12 }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ marginRight: 10 }}>
-              <circle cx="12" cy="12" r="12" fill="#f44336" />
-              <path d="M12 7v5" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-              <circle cx="12" cy="16" r="1" fill="#fff" />
-            </svg>
-            <span style={{ fontWeight: 600, fontSize: 18, color: "#222" }}>
-              {error || "Invalid or expired password reset link."}
-            </span>
+          <div style={{ fontWeight: 700, fontSize: 24, color: "#344767", marginBottom: 12 }}>
+            Password Reset Link
           </div>
-          <div style={{ fontSize: 15, color: "#344767", lineHeight: 1.7, marginBottom: 8 }}>
-            You have reached this page because you clicked a password setup or activation link.
+          <div style={{ fontSize: 16, color: "#d32f2f", fontWeight: 600, marginBottom: 14 }}>
+            {error || "Missing or invalid password reset link."}
+          </div>
+
+          <div style={{ fontSize: 15, color: "#344767", lineHeight: 1.65 }}>
+            You have reached this page because you clicked a password setup or reset link.
             <br />
-            This may be for setting your password for the first time, or for resetting your
-            password.
             <br />
-            <br />
-            <span style={{ color: "#d32f2f", fontWeight: 500 }}>
-              For your security, password setup and reset links are valid for 30 minutes and can
-              only be used once. If your link is missing, invalid, or expired, you will need to
-              request a new one.
+            <span style={{ fontWeight: 600 }}>
+              For your security, links are valid for 30 minutes and can only be used once. If your link is
+              missing or expired, you will need to request a new one.
             </span>
-            <br />
-            <br />
-            <span style={{ fontWeight: 600, color: "#222" }}>What to do next</span>
             <br />
             <br />
             Please use the&nbsp;
@@ -156,30 +153,21 @@ export default function SetPassword() {
             >
               Send Password Reset
             </a>
-            &nbsp;link to request a new password setup or reset link. If you need assistance,
-            please contact our support team at:<br></br>
+            &nbsp;page to request a new link.
+            <br />
+            <br />
+            Support:{" "}
             <a href="mailto:support@stockownerreport.com" style={{ textDecoration: "underline" }}>
               support@stockownerreport.com
             </a>
-            .<br />
-            <br />
-            <span style={{ fontWeight: 500 }}>
-              Thank you for helping us keep your account secure.
-            </span>
           </div>
         </div>
       ) : (
         <>
-          <h2
-            style={{
-              fontWeight: "bold",
-              color: "#344767",
-              marginBottom: 16,
-              textAlign: "center",
-            }}
-          >
+          <h2 style={{ fontWeight: "bold", color: "#344767", marginBottom: 16, textAlign: "center" }}>
             Set Your Password
           </h2>
+
           {success ? (
             <div style={{ color: "#388e3c", textAlign: "center" }}>
               Password set successfully! Redirecting to login...
@@ -195,6 +183,7 @@ export default function SetPassword() {
                   style={inputStyle}
                 />
               </div>
+
               <div style={{ marginBottom: 24 }}>
                 <input
                   type="password"
@@ -204,6 +193,7 @@ export default function SetPassword() {
                   style={inputStyle}
                 />
               </div>
+
               {error && (
                 <div
                   style={{
@@ -217,6 +207,7 @@ export default function SetPassword() {
                   {error}
                 </div>
               )}
+
               <button
                 style={{
                   width: "100%",
@@ -227,10 +218,10 @@ export default function SetPassword() {
                   fontWeight: "bold",
                   fontSize: "16px",
                   border: "none",
-                  cursor: loading || !email ? "not-allowed" : "pointer",
+                  cursor: loading ? "not-allowed" : "pointer",
                 }}
                 onClick={handleSetPassword}
-                disabled={loading || !email}
+                disabled={loading}
               >
                 {loading ? "Saving..." : "Set Password"}
               </button>

@@ -152,7 +152,7 @@ export default function SendPasswordReset() {
   };
 
   return (
-    <AuthPageLayout>
+    <AuthPageLayout showLogo={false}>
       <h4 style={{ fontWeight: "bold", color: "#344767", marginBottom: 16 }}>
         Request a Password Reset
       </h4>
