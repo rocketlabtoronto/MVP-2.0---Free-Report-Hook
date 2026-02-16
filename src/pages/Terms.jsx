@@ -247,8 +247,8 @@ export default function Terms() {
             </CustomTypography>
             <CustomTypography variant="caption" color="text" paragraph sx={{ lineHeight: 1.7 }}>
               Questions about these Terms may be directed to:{" "}
-              <Link href="mailto:support@stockownerreport.com">
-                support@stockownerreport.com
+              <Link href="mailto:howard@stockownerreport.com">
+                howard@stockownerreport.com
               </Link>
             </CustomTypography>
             <CustomTypography variant="caption" color="text" sx={{ lineHeight: 1.7 }}>

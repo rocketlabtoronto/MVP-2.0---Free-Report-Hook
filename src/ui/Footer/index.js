@@ -28,7 +28,7 @@ function Footer({ company = { href: "#", name: "Company" }, links = [] }) {
     >
       <CustomTypography variant="button" fontWeight="regular" color="white" sx={{ lineHeight: 1 }}>
         © {new Date().getFullYear()} LookThroughProfits, Inc. | 169 Madison Ave STE 38180, New York,
-        NY 10016 | support@stockownerreport.com
+        NY 10016 | howard@stockownerreport.com
       </CustomTypography>
 
       {[

@@ -163,7 +163,7 @@ export default function SendPasswordReset() {
         <br />
         <br />
         If you’re setting your password for the first time, use the same process. For assistance,
-        contact <b>support@stockownerreport.com</b>.
+        contact <b>howard@stockownerreport.com</b>.
       </div>
       <input
         type="email"

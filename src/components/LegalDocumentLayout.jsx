@@ -10,7 +10,7 @@ import Link from "@mui/material/Link";
 
 const COMPANY_NAME = "LookThroughProfits, Inc.";
 const COMPANY_ADDRESS = "169 Madison Ave STE 38180, New York, NY 10016, USA";
-const SUPPORT_EMAIL = "support@stockownerreport.com";
+const SUPPORT_EMAIL = "howard@stockownerreport.com";
 
 export default function LegalDocumentLayout({ title, effectiveDate, children }) {
   return (

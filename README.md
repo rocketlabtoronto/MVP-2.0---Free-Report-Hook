@@ -103,6 +103,6 @@ foreach ($fn in $toDelete) { supabase functions delete $fn }
 - Environment debug route: open `/environment-debug` to see the current `REACT_APP_` variables in the browser.
 
 ## Support
-- Primary support: support@stockownerreport.com
+- Primary support: howard@stockownerreport.com
 - Use application logs and Supabase logs for incident triage.
 

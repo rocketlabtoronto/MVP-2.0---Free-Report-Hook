@@ -157,8 +157,8 @@ export default function SetPassword() {
             <br />
             <br />
             Support:{" "}
-            <a href="mailto:support@stockownerreport.com" style={{ textDecoration: "underline" }}>
-              support@stockownerreport.com
+            <a href="mailto:howard@stockownerreport.com" style={{ textDecoration: "underline" }}>
+              howard@stockownerreport.com
             </a>
           </div>
         </div>

@@ -201,8 +201,8 @@ export default function Privacy() {
             </CustomTypography>
             <CustomTypography variant="caption" color="text" paragraph sx={{ lineHeight: 1.7 }}>
               Requests can be made to{" "}
-              <Link href="mailto:support@stockownerreport.com">
-                support@stockownerreport.com
+              <Link href="mailto:howard@stockownerreport.com">
+                howard@stockownerreport.com
               </Link>
               .
             </CustomTypography>
@@ -252,8 +252,8 @@ export default function Privacy() {
             </CustomTypography>
             <CustomTypography variant="caption" color="text" paragraph sx={{ lineHeight: 1.7 }}>
               If you have any questions or concerns about this Privacy Policy, contact us at:{" "}
-              <Link href="mailto:support@stockownerreport.com">
-                support@stockownerreport.com
+              <Link href="mailto:howard@stockownerreport.com">
+                howard@stockownerreport.com
               </Link>
             </CustomTypography>
             <CustomTypography variant="caption" color="text" sx={{ lineHeight: 1.7 }}>
