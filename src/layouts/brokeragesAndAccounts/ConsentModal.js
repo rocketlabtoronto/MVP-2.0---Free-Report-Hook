@@ -211,31 +211,51 @@ export default function ConsentModal({ open, onAccept, onCancel }) {
       </DialogContent>
 
       <DialogActions
-        sx={{ flexDirection: "column", alignItems: "stretch", gap: 0.5, px: 3, py: 2 }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          gap: 1.5,
+          px: 3,
+          py: 2,
+          borderTop: "1px solid #d6d9de",
+        }}
       >
+        <Button
+          variant="text"
+          onClick={handleCancel}
+          sx={{
+            fontWeight: 600,
+            textTransform: "none",
+            color: "#6b7280",
+            fontSize: 13,
+            px: 2,
+            "&:hover": { background: "none", color: "#0d1b2a" },
+          }}
+        >
+          Cancel
+        </Button>
         <Button
           variant="contained"
           disabled={!allChecked}
           onClick={handleAccept}
-          sx={{ fontWeight: 700, py: 1.1, textTransform: "none" }}
-          fullWidth
+          sx={{
+            backgroundColor: "#0d1b2a",
+            color: "#fff",
+            fontWeight: 600,
+            px: 3.5,
+            py: 1.1,
+            fontSize: 13,
+            borderRadius: 0,
+            textTransform: "uppercase",
+            letterSpacing: 1.2,
+            boxShadow: "none",
+            "&:hover": { backgroundColor: "#1a3a5c", boxShadow: "none" },
+            "&:disabled": { backgroundColor: "#9ca3af", color: "#fff" },
+          }}
         >
           I Accept &amp; Continue
-        </Button>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ textAlign: "center", lineHeight: 1.5 }}
-        >
-          You can disconnect at any time. Local dashboard data can be cleared from your device.
-        </Typography>
-        <Button
-          variant="text"
-          onClick={handleCancel}
-          sx={{ fontWeight: 600, textTransform: "none", color: "text.secondary" }}
-          fullWidth
-        >
-          Cancel
         </Button>
       </DialogActions>
     </Dialog>
