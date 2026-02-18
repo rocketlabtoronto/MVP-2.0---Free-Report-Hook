@@ -26,7 +26,6 @@ function BalanceSheet() {
     }
   }, [allAccountsWithLogos, selectedAccountId]);
 
-  const selectedAcc = (allAccountsWithLogos || []).find((a) => a.id === selectedAccountId);
   const handleSelect = (id) => setSelectedAccountId(id);
 
   return (
@@ -60,25 +59,7 @@ function BalanceSheet() {
 
             {/* Account selector */}
             {allAccountsWithLogos.length > 0 && (
-              <CustomBox mb={1.5}>
-                <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
-                  <CustomTypography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 2.5, color: "#9ca3af", textTransform: "uppercase" }}>
-                    Accounts
-                  </CustomTypography>
-                  {selectedAcc && (
-                    <Box display="flex" alignItems="center" gap={1}>
-                      <img src={selectedAcc.logo} alt="selected account" style={{ height: 18 }} />
-                      <CustomTypography variant="caption" color="text">
-                        Viewing: {selectedAcc.brokerageName}
-                      </CustomTypography>
-                      {selectedAcc.accountNumber && (
-                        <CustomTypography variant="caption" color="text">
-                          #{selectedAcc.accountNumber}
-                        </CustomTypography>
-                      )}
-                    </Box>
-                  )}
-                </Box>
+              <CustomBox mb={1}>
                 <Box display="flex" flexWrap="wrap" gap={0.75}>
                   {allAccountsWithLogos.map((acc) => {
                     const isAvailable = acc.isAvailable !== false;

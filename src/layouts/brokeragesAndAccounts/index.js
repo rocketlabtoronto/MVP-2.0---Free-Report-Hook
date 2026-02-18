@@ -765,16 +765,13 @@ export default function BrokeragesAndAccounts() {
                 <Box
                   sx={{
                     px: { xs: 1.5, sm: 2.25 },
-                    py: 0.12,
+                    py: 0.35,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     gap: 0.6,
                     flexWrap: "nowrap",
-                    background: (theme) =>
-                      `linear-gradient(90deg, ${theme.palette.primary.main}08, ${theme.palette.common.white})`,
-                    borderLeft: "4px solid",
-                    borderLeftColor: "primary.main",
+                    backgroundColor: "#ffffff",
                   }}
                 >
                   <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
@@ -782,19 +779,16 @@ export default function BrokeragesAndAccounts() {
                       sx={{
                         width: 20,
                         height: 20,
-                        borderRadius: 1,
                         display: "grid",
                         placeItems: "center",
-                        background: (theme) =>
-                          `linear-gradient(135deg, ${theme.palette.primary.main}22, ${theme.palette.info.main}22)`,
-                        color: "primary.dark",
+                        color: "#9CA3AF",
                       }}
                     >
                       <ScheduleRoundedIcon sx={{ fontSize: 12.5 }} />
                     </Box>
                     <Typography
                       variant="body2"
-                      sx={{ color: "text.primary", fontWeight: 700, lineHeight: 1.08, fontSize: 13 }}
+                      sx={{ color: "#111827", fontWeight: 600, lineHeight: 1.2, fontSize: 12.5 }}
                     >
                       SnapTrade Sync • Last connected {relativeConnectedAt}
                     </Typography>
@@ -802,7 +796,7 @@ export default function BrokeragesAndAccounts() {
 
                   <Typography
                     variant="caption"
-                    sx={{ color: "text.secondary", fontWeight: 600, fontSize: 11, letterSpacing: 0.08 }}
+                    sx={{ color: "#6B7280", fontWeight: 600, fontSize: 10.5, letterSpacing: 0.06 }}
                   >
                     {formattedConnectedAt}
                   </Typography>
