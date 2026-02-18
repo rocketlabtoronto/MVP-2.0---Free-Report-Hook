@@ -99,11 +99,21 @@ export default function SendPasswordReset() {
         type="email"
         placeholder="Email address"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value.slice(0, 36))}
+        inputProps={{ maxLength: 36 }}
         fullWidth
         variant="outlined"
-        size="small"
-        sx={{ mb: 1.5 }}
+        sx={{
+          mb: 1.5,
+          "& .MuiOutlinedInput-root": {
+            minHeight: 46,
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "1.1rem",
+            lineHeight: 1.5,
+            py: 1.1,
+          },
+        }}
       />
       {error && (
         <CustomTypography variant="caption" color="error" sx={{ mb: 1.5, textAlign: "left", display: "block" }}>

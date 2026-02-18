@@ -71,7 +71,7 @@ function BalanceSheet() {
 
             {/* Account selector */}
             {allAccountsWithLogos.length > 0 && (
-              <CustomBox mb={2}>
+              <CustomBox mb={1.5}>
                 <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
                   <CustomTypography variant="h6" fontWeight="medium">
                     Accounts
@@ -90,54 +90,79 @@ function BalanceSheet() {
                     </Box>
                   )}
                 </Box>
-                <Box display="flex" flexWrap="wrap" gap={1.5}>
+                <Box display="flex" flexWrap="wrap" gap={0.75}>
                   {allAccountsWithLogos.map((acc) => {
                     const isAvailable = acc.isAvailable !== false;
-                    const marketMessage = isAvailable
-                      ? "Supported by The Stock Owner Report (NYSE/NASDAQ)"
-                      : `Unsupported market: ${
+                    const unsupportedMessage = !isAvailable
+                      ? `Unsupported market: ${
                           acc.disallowedMarkets?.length
                             ? acc.disallowedMarkets.join(", ")
                             : "Unsupported market"
-                        }`;
+                        }`
+                      : null;
                     return (
                       <Box
                         key={acc.id}
                         onClick={() => (isAvailable ? handleSelect(acc.id) : null)}
                         display="flex"
                         alignItems="center"
-                        gap={1}
+                        gap={0.75}
                         sx={{
                           border:
                             selectedAccountId === acc.id ? "2px solid #344767" : "1px solid #eee",
                           borderRadius: 2,
-                          px: 1.5,
-                          py: 1,
+                          px: 1,
+                          py: 0.45,
+                          minHeight: 34,
+                          minWidth: { xs: "100%", md: 220 },
+                          maxWidth: { xs: "100%", md: 420 },
                           backgroundColor: selectedAccountId === acc.id ? "#eef2ff" : "#fafbfc",
                           cursor: isAvailable ? "pointer" : "not-allowed",
                           opacity: isAvailable ? 1 : 0.6,
                         }}
                         title={`${acc.brokerageName} #${acc.accountNumber}`}
                       >
-                        <img
-                          src={acc.logo}
-                          alt={`${acc.brokerageName} logo`}
-                          style={{ height: 22 }}
-                        />
-                        <Box display="flex" flexDirection="column">
-                          <Box display="flex" alignItems="center" gap={0.5}>
-                            <CustomTypography variant="button" color="text" sx={{ fontWeight: 600 }}>
-                              {acc.brokerageName}
-                            </CustomTypography>
-                            {acc.accountNumber && (
-                              <CustomTypography variant="caption" color="text">
-                                #{acc.accountNumber}
-                              </CustomTypography>
-                            )}
-                          </Box>
-                          <CustomTypography variant="caption" color="text" sx={{ color: "text.secondary" }}>
-                            {marketMessage}
+                        <img src={acc.logo} alt={`${acc.brokerageName} logo`} style={{ height: 14 }} />
+                        <Box display="flex" alignItems="center" gap={0.45} sx={{ minWidth: 0 }}>
+                          <CustomTypography
+                            variant="button"
+                            color="text"
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: 13,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              maxWidth: { xs: "100%", md: 180 },
+                            }}
+                          >
+                            {acc.brokerageName}
                           </CustomTypography>
+                          {acc.accountNumber && (
+                            <CustomTypography
+                              variant="caption"
+                              color="text"
+                              sx={{ fontSize: 11.5, whiteSpace: "nowrap" }}
+                            >
+                              #{acc.accountNumber}
+                            </CustomTypography>
+                          )}
+                          {unsupportedMessage && (
+                            <CustomTypography
+                              variant="caption"
+                              color="text"
+                              sx={{
+                                color: "text.secondary",
+                                fontSize: 11,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                maxWidth: { xs: "100%", md: 165 },
+                              }}
+                            >
+                              {unsupportedMessage}
+                            </CustomTypography>
+                          )}
                         </Box>
                       </Box>
                     );
