@@ -173,16 +173,26 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
           }}
         >
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            Want to see all equity holdings? Get Started and register.
+            Want to see all equity holdings? Register for full access or log in to your account.
           </Typography>
-          <Button
-            variant="contained"
-            component="a"
-            href={paywall?.registerPath || "/billing"}
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            Get Started
-          </Button>
+          <Box sx={{ display: "flex", gap: 1, flexShrink: 0 }}>
+            <Button
+              variant="outlined"
+              component="a"
+              href="/login"
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              Log In
+            </Button>
+            <Button
+              variant="contained"
+              component="a"
+              href={paywall?.registerPath || "/billing"}
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              Get Started
+            </Button>
+          </Box>
         </Box>
       )}
 

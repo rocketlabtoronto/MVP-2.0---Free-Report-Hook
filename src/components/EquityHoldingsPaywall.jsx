@@ -119,15 +119,24 @@ export default function EquityHoldingsPaywall({ sx = {} }) {
         }}
       >
         <Typography variant="body2" sx={{ fontWeight: 500 }}>
-          Want to see all equity holdings? Get Started and register.
+          Want to see all equity holdings? Register for full access or log in to your account.
         </Typography>
-        <Button
-          variant="contained"
-          onClick={() => navigate("/billing")}
-          sx={{ textTransform: "none", fontWeight: 600 }}
-        >
-          Get Started
-        </Button>
+        <Box sx={{ display: "flex", gap: 1, flexShrink: 0 }}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/login")}
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          >
+            Log In
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/billing")}
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          >
+            Get Started
+          </Button>
+        </Box>
       </Box>
 
       <Box sx={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 1, mb: 1 }}>
