@@ -145,8 +145,7 @@ function IncomeStatement() {
 
           <CustomTypography
             variant="body2"
-            color="text"
-            sx={{ mb: 2, display: "block", lineHeight: 1.5 }}
+            sx={{ mb: 2, display: "block", fontSize: 14, fontWeight: 400, color: "#4B5563", lineHeight: 1.7 }}
           >
             This table shows your proportionate share of each company’s income statement.
             Proportionate Share of the Income Statement shows the portion of a company’s revenue,

@@ -736,10 +736,10 @@ export default function BrokeragesAndAccounts() {
                       borderRight: i % 2 === 0 ? { xs: "none", sm: "1px solid #d6d9de" } : "none",
                     }}
                   >
-                    <Typography sx={{ fontSize: 11, fontWeight: 700, color: "#0d1b2a", letterSpacing: 0.3, mb: 0.5 }}>
+                    <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: 0.2, mb: 0.5 }}>
                       {heading}
                     </Typography>
-                    <Typography sx={{ fontSize: 12.5, color: "#6b7280", lineHeight: 1.7 }}>
+                    <Typography sx={{ fontSize: 14, color: "#4B5563", lineHeight: 1.7 }}>
                       {body}
                     </Typography>
                   </Box>
@@ -1083,10 +1083,10 @@ export default function BrokeragesAndAccounts() {
                     borderRight: i % 2 === 0 ? { xs: "none", sm: "1px solid #d6d9de" } : "none",
                   }}
                 >
-                  <Typography sx={{ fontSize: 11, fontWeight: 700, color: "#0d1b2a", letterSpacing: 0.3, mb: 0.5 }}>
+                  <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: 0.2, mb: 0.5 }}>
                     {heading}
                   </Typography>
-                  <Typography sx={{ fontSize: 12.5, color: "#6b7280", lineHeight: 1.7 }}>
+                  <Typography sx={{ fontSize: 14, color: "#4B5563", lineHeight: 1.7 }}>
                     {body}
                   </Typography>
                 </Box>
