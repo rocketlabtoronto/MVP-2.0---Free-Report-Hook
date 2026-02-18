@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 import Button from "@mui/material/Button";
 import CustomBox from "components/CustomBox";
 import DashboardLayout from "ui/LayoutContainers/DashboardLayout";
@@ -427,7 +427,7 @@ export default function BrokeragesAndAccounts() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <CustomBox py={3}>
+      <CustomBox py={1}>
         {/* Main Content */}
         {brokerages.length === 0 ? (
           // Enhanced Empty State
@@ -553,7 +553,7 @@ export default function BrokeragesAndAccounts() {
           <Paper
             elevation={0}
             sx={{
-              borderRadius: 2.5,
+              borderRadius: 2,
               border: "1px solid",
               borderColor: "divider",
               boxShadow: (theme) => `0 12px 28px ${theme.palette.grey[300]}40`,
@@ -566,63 +566,49 @@ export default function BrokeragesAndAccounts() {
                 <Box
                   sx={{
                     px: { xs: 1.5, sm: 2.25 },
-                    py: 0.85,
+                    py: 0.12,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    gap: 1.25,
-                    flexWrap: "wrap",
+                    gap: 0.6,
+                    flexWrap: "nowrap",
                     background: (theme) =>
                       `linear-gradient(90deg, ${theme.palette.primary.main}08, ${theme.palette.common.white})`,
                     borderLeft: "4px solid",
                     borderLeftColor: "primary.main",
                   }}
                 >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
                     <Box
                       sx={{
-                        width: 24,
-                        height: 24,
-                        borderRadius: "50%",
+                        width: 20,
+                        height: 20,
+                        borderRadius: 1,
                         display: "grid",
                         placeItems: "center",
-                        backgroundColor: "primary.light",
-                        color: "primary.main",
+                        background: (theme) =>
+                          `linear-gradient(135deg, ${theme.palette.primary.main}22, ${theme.palette.info.main}22)`,
+                        color: "primary.dark",
                       }}
                     >
-                      <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
+                      <ScheduleRoundedIcon sx={{ fontSize: 12.5 }} />
                     </Box>
-                    <Box>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: "text.secondary",
-                          letterSpacing: 0.8,
-                          textTransform: "uppercase",
-                          fontWeight: 700,
-                          lineHeight: 1.1,
-                          fontSize: 11,
-                        }}
-                      >
-                        SnapTrade Sync
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "text.primary", fontWeight: 500, lineHeight: 1.15, fontSize: 12.5 }}
-                      >
-                        Last connected {relativeConnectedAt}
-                      </Typography>
-                    </Box>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.primary", fontWeight: 700, lineHeight: 1.08, fontSize: 13 }}
+                    >
+                      SnapTrade Sync • Last connected {relativeConnectedAt}
+                    </Typography>
                   </Box>
 
                   <Typography
                     variant="caption"
-                    sx={{ color: "text.secondary", fontWeight: 600, fontSize: 11, letterSpacing: 0.2 }}
+                    sx={{ color: "text.secondary", fontWeight: 600, fontSize: 11, letterSpacing: 0.08 }}
                   >
                     {formattedConnectedAt}
                   </Typography>
                 </Box>
-                <Divider />
+                <Divider sx={{ my: 0 }} />
               </>
             )}
 
@@ -638,50 +624,56 @@ export default function BrokeragesAndAccounts() {
                     "&:before": { display: "none" },
                     borderTop: index === 0 ? "none" : "1px solid",
                     borderColor: "divider",
+                    "&.Mui-expanded": { margin: 0 },
                   }}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     sx={{
                       px: { xs: 1.5, sm: 2.25 },
-                      py: 0.1,
-                      minHeight: 46,
+                      py: 0,
+                      minHeight: 34,
+                      "&.Mui-expanded": { minHeight: 34 },
                       "& .MuiAccordionSummary-content": { my: 0 },
+                      "& .MuiAccordionSummary-content.Mui-expanded": { my: 0 },
                     }}
                   >
-                    <Box display="flex" flexDirection="column" width="100%">
-                      <Box display="flex" alignItems="center" gap={0.75}>
-                        <img
-                          src={brokerage.logo}
-                          alt={`${brokerage.name} logo`}
-                          style={{ height: 34 }}
-                        />
-                        <Typography
-                          variant="h6"
-                          sx={{ fontWeight: 700, lineHeight: 1.15, letterSpacing: 0.08 }}
-                        >
-                          {brokerage.name}
-                        </Typography>
-                      </Box>
-                      <Box display="flex" gap={1} flexWrap="wrap" mt={0.1}>
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          sx={{ fontWeight: 600, lineHeight: 1.1 }}
-                        >
-                          {linkedCount} of {totalCount} accounts linked
-                        </Typography>
+                    <Box display="flex" alignItems="center" gap={0.7} width="100%" sx={{ minWidth: 0 }}>
+                      <img src={brokerage.logo} alt={`${brokerage.name} logo`} style={{ height: 16 }} />
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontWeight: 700,
+                          lineHeight: 1.2,
+                          letterSpacing: 0.03,
+                          fontSize: 16,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          maxWidth: { xs: 120, sm: "none" },
+                        }}
+                      >
+                        {brokerage.name}
+                      </Typography>
+                      <Box display="flex" gap={0.75} flexWrap="wrap" sx={{ minWidth: 0 }}>
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontWeight: 700, lineHeight: 1.1 }}
+                          sx={{ fontWeight: 600, lineHeight: 1.1, fontSize: 12 }}
                         >
-                          Linked value: ${Math.round(linkedBalance).toLocaleString()}
+                          {linkedCount} of {totalCount} linked
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ fontWeight: 700, lineHeight: 1.1, fontSize: 12 }}
+                        >
+                          Value: ${Math.round(linkedBalance).toLocaleString()}
                         </Typography>
                       </Box>
                     </Box>
                   </AccordionSummary>
-                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2.25 }, pb: 0.4, pt: 0 }}>
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2.25 }, pb: 0.2, pt: 0 }}>
                     <List sx={{ py: 0 }}>
                       {brokerage.accounts.map((account) => {
                         const isAvailable = account.isAvailable !== false;
@@ -702,9 +694,10 @@ export default function BrokeragesAndAccounts() {
                               borderRadius: 1.5,
                               border: "1px solid",
                               borderColor: "divider",
-                              mb: 0.25,
+                              mb: 0.2,
                               px: 0.75,
-                              py: 0.2,
+                              py: 0.12,
+                              minHeight: 0,
                             }}
                           >
                             <Checkbox
@@ -720,12 +713,13 @@ export default function BrokeragesAndAccounts() {
                               }`}
                               primaryTypographyProps={{ variant: "body2", fontWeight: 700, fontSize: 14 }}
                               secondaryTypographyProps={{ component: "div" }}
+                              sx={{ my: 0 }}
                               secondary={
                                 <Box display="flex" flexDirection="column" gap={0}>
                                   <Typography
                                     variant="caption"
                                     color="text.secondary"
-                                    sx={{ fontSize: 11.5, lineHeight: 1.25 }}
+                                    sx={{ fontSize: 12, lineHeight: 1.25 }}
                                   >
                                     Equities Value (Stocks & ETFs Only):{" "}
                                     {balancesLoading
@@ -737,7 +731,7 @@ export default function BrokeragesAndAccounts() {
                                   <Typography
                                     variant="caption"
                                     color="text.secondary"
-                                    sx={{ fontSize: 11.5, lineHeight: 1.25 }}
+                                    sx={{ fontSize: 12, lineHeight: 1.25 }}
                                   >
                                     Holdings: {account.validHoldingsCount || account.holdings?.length || 0} (
                                     {account.holdings?.length || 0} total)
@@ -746,7 +740,7 @@ export default function BrokeragesAndAccounts() {
                                     variant="caption"
                                     color={isAvailable ? "text.secondary" : "text.secondary"}
                                     fontWeight={600}
-                                    sx={{ fontSize: 11.5, lineHeight: 1.25 }}
+                                    sx={{ fontSize: 12, lineHeight: 1.25 }}
                                   >
                                     {marketMessage}
                                   </Typography>
@@ -757,7 +751,7 @@ export default function BrokeragesAndAccounts() {
                         );
                       })}
                     </List>
-                    <Box mt={0.15} display="flex" gap={0.75}>
+                    <Box mt={0.05} display="flex" gap={0.75}>
                       <Button
                         variant="outlined"
                         size="small"
@@ -769,9 +763,9 @@ export default function BrokeragesAndAccounts() {
                           color: "text.primary",
                           borderColor: "divider",
                           fontWeight: 600,
-                          fontSize: 11.5,
+                          fontSize: 11,
                           px: 1.2,
-                          py: 0.2,
+                          py: 0.1,
                           "&:hover": {
                             backgroundColor: "grey.100",
                             borderColor: "text.secondary",
@@ -788,9 +782,9 @@ export default function BrokeragesAndAccounts() {
             })}
 
             <Box
-              mt={0.25}
-              pt={0.4}
-              pb={1.2}
+              mt={0.15}
+              pt={0.2}
+              pb={0.75}
               px={{ xs: 1.5, sm: 2.25 }}
               display="flex"
               justifyContent="flex-end"
