@@ -37,20 +37,35 @@ function BalanceSheet() {
         <Card
           sx={{
             p: 3,
-            background: "#fff",
+            background: "background.paper",
             overflowX: "hidden",
             overflowY: "auto",
             borderRadius: 3,
-            boxShadow: 3,
+            boxShadow: 6,
+            border: "1px solid",
+            borderColor: "divider",
             width: "100%",
             maxWidth: "100%",
             height: "calc(100vh - 180px)",
             maxHeight: "calc(100vh - 180px)",
             display: "flex",
             flexDirection: "column",
+            position: "relative",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: (theme) =>
+                `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            },
           }}
         >
-            <CustomTypography variant="h4" fontWeight="bold" gutterBottom>
+            <CustomTypography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 1.5 }}>
               Balance Sheet
             </CustomTypography>
 

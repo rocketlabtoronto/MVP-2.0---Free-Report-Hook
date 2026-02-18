@@ -9,12 +9,13 @@ function StockOwnersReportManual() {
   const accentColor = "#1a4b8f";
   const containerStyle = {
     backgroundColor: "#ffffff",
-    boxShadow: "0 20px 50px rgba(15, 23, 42, 0.08)",
+    boxShadow: "0 24px 54px rgba(15, 23, 42, 0.12)",
     borderRadius: "20px",
     border: "1px solid rgba(15, 23, 42, 0.06)",
+    borderTop: "4px solid #1a4b8f",
     fontFamily: "inherit",
-    lineHeight: 1.5,
-    fontSize: 14,
+    lineHeight: 1.45,
+    fontSize: 15,
     color: "#111827",
   };
 
@@ -22,30 +23,30 @@ function StockOwnersReportManual() {
     fontFamily: "inherit",
     fontWeight: 700,
     color: "#111827",
-    lineHeight: 1.2,
-    marginBottom: 16,
+    lineHeight: 1.15,
+    marginBottom: 12,
   };
 
   const bodyStyle = {
     fontFamily: "inherit",
-    fontSize: 14,
+    fontSize: 15,
     color: "#475569",
-    lineHeight: 1.5,
-    marginBottom: 16,
+    lineHeight: 1.42,
+    marginBottom: 12,
   };
 
   const sectionDivider = {
     borderTop: "1px solid #e2e8f0",
-    paddingTop: 24,
-    marginTop: 24,
+    paddingTop: 18,
+    marginTop: 18,
   };
 
   const highlightBox = {
     backgroundColor: "#eef3ff",
-    padding: 16,
-    margin: "16px 0",
+    padding: 14,
+    margin: "12px 0",
     borderLeft: `4px solid ${accentColor}`,
-    fontSize: 14,
+    fontSize: 15,
     fontStyle: "italic",
     color: accentColor,
     borderRadius: 12,
@@ -55,22 +56,22 @@ function StockOwnersReportManual() {
     backgroundColor: "#f8fafc",
     border: "1px solid #e2e8f0",
     borderRadius: 16,
-    padding: 20,
-    margin: "20px 0",
+    padding: 16,
+    margin: "16px 0",
   };
 
   const listStyle = {
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 6,
+    marginBottom: 6,
     marginLeft: 0,
     listStyle: "none",
     paddingLeft: 0,
   };
 
   const listItemStyle = {
-    marginBottom: 8,
+    marginBottom: 6,
     position: "relative",
-    paddingLeft: 24,
+    paddingLeft: 22,
   };
 
   const bulletStyle = {
@@ -87,11 +88,13 @@ function StockOwnersReportManual() {
 
   const SectionTitle = ({ children, style }) => (
     <CustomTypography
-      variant="h3"
+      variant="h4"
       style={{
         ...headingStyle,
         fontSize: 22,
-        marginBottom: 16,
+        marginBottom: 12,
+        paddingLeft: 10,
+        borderLeft: `3px solid ${accentColor}`,
         ...style,
       }}
     >
@@ -149,10 +152,10 @@ function StockOwnersReportManual() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <CustomBox py={3}>
+      <CustomBox py={2}>
         <CustomBox
             px={{ xs: 2, sm: 3, md: 4 }}
-            py={4}
+        py={3}
             maxWidth={820}
           width="100%"
           mr="auto"
@@ -167,14 +170,14 @@ function StockOwnersReportManual() {
           `}</style>
           {/* Hero Section */}
           <CustomTypography
-            variant="h1"
+            variant="h4"
             style={{
               ...headingStyle,
               fontSize: 30,
               fontWeight: 700,
-              marginBottom: 20,
+              marginBottom: 16,
               borderBottom: "3px solid #1a4b8f",
-              paddingBottom: 16,
+              paddingBottom: 12,
             }}
           >
             The Stock Owner&apos;s Report: Proportionate Share Earnings — Investing Like a Business Owner, Not

@@ -440,23 +440,13 @@ export default function BrokeragesAndAccounts() {
                 borderRadius: 4,
                 position: "relative",
                 overflow: "hidden",
+                border: "1px solid",
+                borderColor: "divider",
+                boxShadow: 4,
                 background: (theme) =>
                   `linear-gradient(135deg, ${theme.palette.primary.main}08, ${theme.palette.primary.dark}10)`,
               }}
             >
-              {/* subtle background accent */}
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: -60,
-                  right: -80,
-                  width: 300,
-                  height: 300,
-                  borderRadius: "50%",
-                  background: (theme) => `${theme.palette.primary.main}14`,
-                  filter: "blur(6px)",
-                }}
-              />
               <Stack spacing={4} position="relative">
                 <Typography
                   variant="body2"
@@ -667,8 +657,8 @@ export default function BrokeragesAndAccounts() {
                           style={{ height: 34 }}
                         />
                         <Typography
-                          variant="subtitle1"
-                          sx={{ fontWeight: 700, lineHeight: 1.1, letterSpacing: 0.08, fontSize: 24 }}
+                          variant="h6"
+                          sx={{ fontWeight: 700, lineHeight: 1.15, letterSpacing: 0.08 }}
                         >
                           {brokerage.name}
                         </Typography>

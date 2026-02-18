@@ -1,5 +1,8 @@
 import { useState } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import AuthPageLayout from "components/AuthPageLayout";
+import CustomTypography from "components/CustomTypography";
 const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.REACT_APP_SUPABASE_ANON_KEY;
 const headers = {
@@ -13,14 +16,6 @@ export default function SendPasswordReset() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const inputStyle = {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #e0e0e0",
-    marginBottom: 12,
-    fontSize: 15,
-  };
 
   const validateEmail = (email) => {
     // Simple regex for email validation
@@ -84,10 +79,14 @@ export default function SendPasswordReset() {
 
   return (
     <AuthPageLayout showLogo={false}>
-      <h4 style={{ fontWeight: "bold", color: "#344767", marginBottom: 16 }}>
+      <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2 }}>
         Request a Password Reset
-      </h4>
-      <div style={{ fontSize: 15, color: "#344767", marginBottom: 18, textAlign: "left" }}>
+      </CustomTypography>
+      <CustomTypography
+        variant="caption"
+        color="text"
+        sx={{ fontSize: 15, mb: 2.25, textAlign: "left", lineHeight: 1.6, display: "block" }}
+      >
         Enter the email address associated with your account. If an account exists, we’ll send you an
         email with a link to reset your password. Please check your inbox and follow the instructions
         provided.
@@ -95,42 +94,37 @@ export default function SendPasswordReset() {
         <br />
         If you’re setting your password for the first time, use the same process. For assistance,
         contact <b>howard@stockownerreport.com</b>.
-      </div>
-      <input
+      </CustomTypography>
+      <TextField
         type="email"
         placeholder="Email address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        style={inputStyle}
+        fullWidth
+        variant="outlined"
+        size="small"
+        sx={{ mb: 1.5 }}
       />
       {error && (
-        <div style={{ color: "#d32f2f", marginBottom: 12, textAlign: "left", fontSize: 14 }}>
+        <CustomTypography variant="caption" color="error" sx={{ mb: 1.5, textAlign: "left", display: "block" }}>
           {error}
-        </div>
+        </CustomTypography>
       )}
       {success ? (
-        <div style={{ color: "#388e3c", marginBottom: 12, textAlign: "left", fontSize: 14 }}>
+        <CustomTypography variant="caption" color="success" sx={{ mb: 1.5, textAlign: "left", display: "block" }}>
           If your email is registered, a password reset link has been sent. Please check your
           inbox.
-        </div>
+        </CustomTypography>
       ) : (
-        <button
-          style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "6px",
-            background: "#5e72e4",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "16px",
-            border: "none",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ py: 1.1, fontWeight: 700 }}
           onClick={handleSend}
           disabled={loading}
         >
           {loading ? "Sending..." : "Send Password Reset"}
-        </button>
+        </Button>
       )}
     </AuthPageLayout>
   );

@@ -21,11 +21,35 @@ export default function LegalDocumentLayout({ title, effectiveDate, children }) 
           <Card
             sx={{
               p: { xs: 3, md: 4 },
-              background: "#fff",
+              background: "background.paper",
               borderRadius: 3,
-              boxShadow: 3,
+              boxShadow: 6,
+              border: "1px solid",
+              borderColor: "divider",
               maxWidth: 960,
               width: "100%",
+              position: "relative",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "4px",
+                background: (theme) =>
+                  `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
+                borderTopLeftRadius: "12px",
+                borderTopRightRadius: "12px",
+              },
+              "& .MuiTypography-caption": {
+                fontSize: "0.9375rem",
+                lineHeight: 1.55,
+                color: "text.primary",
+              },
+              "& .MuiTypography-h6": {
+                fontSize: "1.25rem",
+                lineHeight: 1.3,
+              },
             }}
           >
             <CustomTypography variant="h4" fontWeight="bold" color="text" gutterBottom>

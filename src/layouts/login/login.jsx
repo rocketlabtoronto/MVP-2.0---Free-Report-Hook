@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
 import { supabase } from "../../supabaseClient";
 import { decrypt } from "../../services/encryptionService";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import AuthPageLayout from "components/AuthPageLayout";
+import CustomTypography from "components/CustomTypography";
 const logo = "/logos/logo_image.jpg";
 
 function Login() {
@@ -14,14 +18,6 @@ function Login() {
   const [success, setSuccess] = useState(false);
   const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
-  const inputStyle = {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #e0e0e0",
-    marginBottom: 12,
-    fontSize: 15,
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -64,92 +60,69 @@ function Login() {
 
   return (
     <AuthPageLayout logoSrc={logo} cardStyle={{ padding: 16 }}>
-      <h2
-        style={{
-          fontWeight: "bold",
-          color: "#344767",
-          marginBottom: 16,
-          textAlign: "center",
-        }}
-      >
+      <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2, textAlign: "center" }}>
         Login
-      </h2>
+      </CustomTypography>
       {success ? (
-        <div style={{ color: "#388e3c", textAlign: "center" }}>
+        <CustomTypography variant="caption" color="success" sx={{ textAlign: "center", display: "block" }}>
           Login successful! Redirecting...
-        </div>
+        </CustomTypography>
       ) : (
         <>
           <form onSubmit={handleLogin}>
-            <div style={{ marginBottom: 16 }}>
-              <input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={inputStyle}
-                required
-              />
-            </div>
-            <div style={{ marginBottom: 24 }}>
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={inputStyle}
-                required
-              />
-            </div>
+            <TextField
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              fullWidth
+              variant="outlined"
+              size="small"
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              fullWidth
+              variant="outlined"
+              size="small"
+              sx={{ mb: 3 }}
+            />
             {error && (
-              <div
-                style={{
-                  color: "#d32f2f",
-                  marginBottom: 12,
-                  textAlign: "left",
-                  fontSize: 14,
-                  whiteSpace: "pre-line",
-                }}
+              <CustomTypography
+                variant="caption"
+                color="error"
+                sx={{ mb: 1.5, textAlign: "left", whiteSpace: "pre-line", display: "block" }}
               >
                 {error}
-              </div>
+              </CustomTypography>
             )}
-            <button
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "6px",
-                background: "#5e72e4",
-                color: "white",
-                fontWeight: "bold",
-                fontSize: "16px",
-                border: "none",
-                cursor: loading ? "not-allowed" : "pointer",
-              }}
+            <Button
               type="submit"
+              variant="contained"
+              fullWidth
               disabled={loading}
+              sx={{ py: 1.1, fontWeight: 700 }}
             >
               {loading ? "Logging in..." : "Login"}
-            </button>
+            </Button>
           </form>
-          <div style={{ textAlign: "center", marginTop: 18, fontSize: 15 }}>
-            <span style={{ color: "#344767" }}>Forgot your password?&nbsp;</span>
-            <a
-              href="/send-password-reset"
-              style={{ color: "#5e72e4", textDecoration: "underline", fontWeight: 500 }}
-            >
+          <CustomTypography variant="caption" color="text" sx={{ textAlign: "center", mt: 2.25 }}>
+            Forgot your password?&nbsp;
+            <Link href="/send-password-reset" sx={{ color: "primary.main", textDecoration: "underline", fontWeight: 600 }}>
               Send Password Reset
-            </a>
-          </div>
-          <div style={{ textAlign: "center", marginTop: 12, fontSize: 15 }}>
-            <span style={{ color: "#344767" }}>Don&apos;t have an account?&nbsp;</span>
-            <a
-              href="/billing"
-              style={{ color: "#5e72e4", textDecoration: "underline", fontWeight: 500 }}
-            >
+            </Link>
+          </CustomTypography>
+          <CustomTypography variant="caption" color="text" sx={{ textAlign: "center", mt: 1.5 }}>
+            Don&apos;t have an account?&nbsp;
+            <Link href="/billing" sx={{ color: "primary.main", textDecoration: "underline", fontWeight: 600 }}>
               Sign Up
-            </a>
-          </div>
+            </Link>
+          </CustomTypography>
         </>
       )}
     </AuthPageLayout>

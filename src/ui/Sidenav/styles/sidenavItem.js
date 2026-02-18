@@ -27,21 +27,20 @@ function item(theme, ownerState) {
     display: miniSidenav ? "block" : "flex",
     alignItems: "center",
     width: "100%",
-    padding: `${pxToRem(12)} ${pxToRem(18)}`,
-    margin: `${pxToRem(4)} ${pxToRem(12)}`,
-    borderRadius: borderRadius.lg,
+    padding: `${pxToRem(9)} ${pxToRem(16)}`,
+    margin: `${pxToRem(1)} ${pxToRem(10)}`,
+    borderRadius: borderRadius.md,
     cursor: "pointer",
     userSelect: "none",
     whiteSpace: "nowrap",
     boxShadow: active && darkSidenav ? xxl : "none",
-    transition: transitions.create(["background-color", "transform"], {
+    transition: transitions.create(["background-color"], {
       easing: transitions.easing.easeInOut,
       duration: transitions.duration.shorter,
     }),
 
     "&:hover": {
       background: rgba(palette[sidenavColor ?? "info"].main, 0.08),
-      transform: "translateY(-1px)",
     },
 
     [breakpoints.up("xl")]: {
@@ -113,8 +112,9 @@ function itemText(theme, ownerState) {
     "& span": {
       color: "inherit",
       fontWeight: active ? fontWeightMedium : fontWeightRegular,
-      fontSize: size.sm,
-      letterSpacing: "0.2px",
+      fontSize: pxToRem(15),
+      fontFamily: '"Segoe UI", "Helvetica Neue", "Arial", sans-serif',
+      letterSpacing: "0.15px",
       lineHeight: 0,
     },
   };

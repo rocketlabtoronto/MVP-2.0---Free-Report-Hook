@@ -7,6 +7,7 @@ import DashboardNavbar from "ui/Navbars/DashboardNavbar";
 
 // Custom Dashboard 2 MUI components
 import CustomBox from "components/CustomBox";
+import CustomTypography from "components/CustomTypography";
 
 // Custom Dashboard 2 MUI components
 
@@ -24,14 +25,32 @@ function Billing() {
           <Card
             sx={{
               p: 3,
-              background: "#fff",
+              background: "background.paper",
               overflow: "visible",
               borderRadius: 3,
-              boxShadow: 3,
+              boxShadow: 6,
+              border: "1px solid",
+              borderColor: "divider",
               maxWidth: 400,
               width: "100%",
+              position: "relative",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "4px",
+                background: (theme) =>
+                  `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
+                borderTopLeftRadius: "12px",
+                borderTopRightRadius: "12px",
+              },
             }}
           >
+            <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2 }}>
+              Billing
+            </CustomTypography>
             <BillingInformation
               userSession={userSession}
             />

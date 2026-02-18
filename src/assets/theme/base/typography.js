@@ -7,13 +7,13 @@ import pxToRem from "assets/theme/functions/pxToRem";
 const { dark } = colors;
 
 const baseProperties = {
-  fontFamily: '"Poppins", "Helvetica", "Arial", sans-serif',
+  fontFamily: '"Source Serif 4", "Baskerville", "Georgia", "Times New Roman", serif',
   fontWeightLight: 300,
   fontWeightRegular: 400,
   fontWeightMedium: 600,
   fontWeightBold: 700,
   fontSizeXXS: pxToRem(10.4),
-  fontSizeXS: pxToRem(12),
+  fontSizeXS: pxToRem(14),
   fontSizeSM: pxToRem(14),
   fontSizeMD: pxToRem(16),
   fontSizeLG: pxToRem(18),
@@ -21,16 +21,18 @@ const baseProperties = {
 };
 
 const baseHeadingProperties = {
-  fontFamily: '"Adamina", "Poppins", "Helvetica", "Arial", sans-serif',
+  fontFamily: baseProperties.fontFamily,
   color: dark.main,
-  fontWeight: baseProperties.fontWeightMedium,
+  fontWeight: baseProperties.fontWeightBold,
+  letterSpacing: "0.004em",
 };
 
 const baseDisplayProperties = {
-  fontFamily: '"Adamina", "Poppins", "Helvetica", "Arial", sans-serif',
+  fontFamily: baseProperties.fontFamily,
   color: dark.main,
-  fontWeight: baseProperties.fontWeightLight,
+  fontWeight: baseProperties.fontWeightRegular,
   lineHeight: 1.2,
+  letterSpacing: "0.006em",
 };
 
 const typography = {
@@ -59,8 +61,8 @@ const typography = {
   },
 
   h4: {
-    fontSize: pxToRem(24),
-    lineHeight: 1.375,
+    fontSize: pxToRem(26),
+    lineHeight: 1.32,
     ...baseHeadingProperties,
   },
 
@@ -71,8 +73,8 @@ const typography = {
   },
 
   h6: {
-    fontSize: pxToRem(16),
-    lineHeight: 1.625,
+    fontSize: pxToRem(18),
+    lineHeight: 1.4,
     ...baseHeadingProperties,
   },
 
@@ -109,14 +111,14 @@ const typography = {
     fontSize: baseProperties.fontSizeSM,
     fontWeight: baseProperties.fontWeightBold,
     lineHeight: 1.5,
-    textTransform: "uppercase",
+    textTransform: "none",
   },
 
   caption: {
     fontFamily: baseProperties.fontFamily,
     fontSize: baseProperties.fontSizeXS,
     fontWeight: baseProperties.fontWeightRegular,
-    lineHeight: 1.25,
+    lineHeight: 1.4,
   },
 
   overline: {

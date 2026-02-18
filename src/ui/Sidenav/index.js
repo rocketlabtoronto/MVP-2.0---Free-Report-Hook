@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
+import Button from "@mui/material/Button";
 
 // Custom Dashboard 2 MUI components
 import CustomTypography from "components/CustomTypography";
@@ -113,23 +114,14 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       <List sx={{ mt: 1, px: 1 }}>{renderRoutes}</List>
       <div style={{ flexGrow: 1 }} />
       <div style={{ padding: "12px 16px", marginTop: "auto" }}>
-        <button
+        <Button
           onClick={handleSignOut}
-          style={{
-            width: "100%",
-            background: "#1a4b8f",
-            color: "#fff",
-            border: "1px solid rgba(15, 23, 42, 0.08)",
-            borderRadius: 12,
-            padding: "12px 14px",
-            fontSize: 14,
-            fontWeight: 600,
-            boxShadow: "0 10px 24px rgba(15, 23, 42, 0.12)",
-            cursor: "pointer",
-          }}
+          variant="contained"
+          fullWidth
+          sx={{ py: 1.1, fontWeight: 700, borderRadius: 1.5 }}
         >
           Sign Out
-        </button>
+        </Button>
       </div>
     </SidenavRoot>
   );

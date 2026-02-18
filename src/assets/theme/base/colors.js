@@ -5,8 +5,9 @@ const colors = {
   },
 
   text: {
-    main: "#3b4a5c",
-    focus: "#3b4a5c",
+    main: "#1f2937",
+    focus: "#111827",
+    secondary: "#334155",
   },
 
   transparent: {
@@ -60,8 +61,8 @@ const colors = {
   },
 
   dark: {
-    main: "#344767",
-    focus: "#344767",
+    main: "#1e293b",
+    focus: "#0f172a",
   },
 
   grey: {

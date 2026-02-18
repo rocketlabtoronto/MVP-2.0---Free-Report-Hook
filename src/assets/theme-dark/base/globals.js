@@ -2,6 +2,7 @@
 import colors from "assets/theme-dark/base/colors";
 
 const { info, dark, background } = colors;
+const boardroomFontFamily = '"Source Serif 4", "Baskerville", "Georgia", "Times New Roman", serif';
 
 const globals = {
   html: {
@@ -10,6 +11,7 @@ const globals = {
   body: {
     backgroundColor: background.default,
     color: dark.main,
+    fontFamily: boardroomFontFamily,
   },
   "*, *::before, *::after": {
     margin: 0,
@@ -24,6 +26,16 @@ const globals = {
   },
   "a.link:hover, .link:hover, a.link:focus, .link:focus": {
     color: `${info.main} !important`,
+  },
+  ".ag-theme-alpine, .ag-theme-alpine .ag-root-wrapper": {
+    fontFamily: boardroomFontFamily,
+  },
+  ".ag-theme-alpine": {
+    "--ag-font-family": boardroomFontFamily,
+    "--ag-header-height": "52px",
+    "--ag-row-height": "48px",
+    "--ag-font-size": "15px",
+    "--ag-header-font-weight": "600",
   },
   hr: {
     borderBottom: 0,

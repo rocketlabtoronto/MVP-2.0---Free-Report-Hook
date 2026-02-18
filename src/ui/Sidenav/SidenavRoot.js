@@ -10,7 +10,7 @@ export default styled(Drawer)(({ theme, ownerState }) => {
   const { white, background, transparent } = palette;
   const { xxl } = boxShadows;
   const { pxToRem } = functions;
-  const softShadow = "0 18px 48px rgba(15, 23, 42, 0.12)";
+  const softShadow = "0 10px 28px rgba(15, 23, 42, 0.10)";
 
   let bgColor;
 
@@ -72,7 +72,7 @@ export default styled(Drawer)(({ theme, ownerState }) => {
       boxShadow: softShadow,
       border: "none",
       backgroundColor: bgColor,
-      borderRadius: pxToRem(20),
+      borderRadius: pxToRem(14),
       margin: `${pxToRem(16)} 0 ${pxToRem(16)} ${pxToRem(16)}`,
 
       ...(miniSidenav ? drawerCloseStyles() : drawerOpenStyles()),

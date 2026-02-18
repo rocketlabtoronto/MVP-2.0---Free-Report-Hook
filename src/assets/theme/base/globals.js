@@ -1,6 +1,7 @@
 import colors from "assets/theme/base/colors";
 
 const { info, dark, background } = colors;
+const boardroomFontFamily = '"Source Serif 4", "Baskerville", "Georgia", "Times New Roman", serif';
 
 const globals = {
   html: {
@@ -9,6 +10,7 @@ const globals = {
   body: {
     backgroundColor: background.default,
     color: dark.main,
+    fontFamily: boardroomFontFamily,
   },
   "*, *::before, *::after": {
     margin: 0,
@@ -25,10 +27,10 @@ const globals = {
     color: `${info.main} !important`,
   },
   ".ag-theme-alpine, .ag-theme-alpine .ag-root-wrapper": {
-    fontFamily: '"Poppins", "Helvetica", "Arial", sans-serif',
+    fontFamily: boardroomFontFamily,
   },
   ".ag-theme-alpine": {
-    "--ag-font-family": '"Poppins", "Helvetica", "Arial", sans-serif',
+    "--ag-font-family": boardroomFontFamily,
     "--ag-header-background-color": "#f8fafc",
     "--ag-header-foreground-color": "#1f2937",
     "--ag-header-column-separator-color": "#e2e8f0",
@@ -37,9 +39,9 @@ const globals = {
     "--ag-odd-row-background-color": "#ffffff",
     "--ag-row-border-color": "#eef2f7",
     "--ag-cell-horizontal-padding": "16px",
-    "--ag-header-height": "48px",
-    "--ag-row-height": "44px",
-    "--ag-font-size": "14px",
+    "--ag-header-height": "52px",
+    "--ag-row-height": "48px",
+    "--ag-font-size": "15px",
     "--ag-header-font-weight": "600",
   },
   ".ag-theme-alpine .ag-root-wrapper": {

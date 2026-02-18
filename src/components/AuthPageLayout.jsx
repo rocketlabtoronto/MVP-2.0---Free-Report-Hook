@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useTheme } from "@mui/material/styles";
 
 const baseWrapperStyle = {
   display: "flex",
@@ -7,15 +8,13 @@ const baseWrapperStyle = {
   alignItems: "center",
   justifyContent: "center",
   minHeight: "100vh",
-  background: "#27ae60",
+  padding: 24,
 };
 
 const baseCardStyle = {
-  background: "white",
   borderRadius: 16,
-  boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
-  padding: 32,
-  maxWidth: 400,
+  padding: 28,
+  maxWidth: 440,
   width: "100%",
 };
 
@@ -38,6 +37,18 @@ export default function AuthPageLayout({
   logoPosition,
   showLogo,
 }) {
+  const theme = useTheme();
+  const themedWrapperStyle = {
+    background: `linear-gradient(145deg, ${theme.palette.grey[100]} 0%, ${theme.palette.background.default} 55%, ${theme.palette.primary.light}22 100%)`,
+  };
+  const themedCardStyle = {
+    background: theme.palette.background.paper,
+    border: `1px solid ${theme.palette.divider}`,
+    boxShadow: theme.shadows[8],
+    position: "relative",
+    overflow: "hidden",
+  };
+
   const logo = showLogo ? (
     <div style={{ marginBottom: 24, textAlign: "center" }}>
       <img
@@ -53,9 +64,19 @@ export default function AuthPageLayout({
   ) : null;
 
   return (
-    <div style={{ ...baseWrapperStyle, ...wrapperStyle }}>
+    <div style={{ ...baseWrapperStyle, ...themedWrapperStyle, ...wrapperStyle }}>
       {logoPosition === "outside" && logo}
-      <div style={{ ...baseCardStyle, ...cardStyle }}>
+      <div style={{ ...baseCardStyle, ...themedCardStyle, ...cardStyle }}>
+        <div
+          style={{
+            height: 4,
+            width: "100%",
+            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
+        />
         {logoPosition === "inside" && logo}
         {children}
       </div>

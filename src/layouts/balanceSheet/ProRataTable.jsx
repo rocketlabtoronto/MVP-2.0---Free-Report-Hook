@@ -114,13 +114,13 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
           background: "#fff9c4",
           fontWeight: "bold",
           textAlign: moneyColumnNames.includes(col.name) ? "right" : undefined,
-          fontSize: 12,
+          fontSize: 14,
         };
       }
       if (moneyColumnNames.includes(col.name)) {
-        return { textAlign: "right", fontSize: 12 };
+        return { textAlign: "right", fontSize: 14 };
       }
-      return { fontSize: 12 };
+      return { fontSize: 14 };
     },
   }));
 
@@ -192,7 +192,7 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
           columnDefs={columnDefs}
           pagination={false}
           pinnedBottomRowData={[totalRow]}
-          rowHeight={32}
+          rowHeight={38}
           tooltipShowDelay={200}
           tooltipHideDelay={2000}
           enableBrowserTooltips
@@ -214,12 +214,12 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
           }}
           onFirstDataRendered={autoSizeAllColumns}
           onGridSizeChanged={scheduleResize}
-          headerHeight={32}
+          headerHeight={40}
           defaultColDef={{
             wrapHeaderText: false,
             autoHeaderHeight: false,
             suppressMenu: true,
-            cellStyle: { fontSize: 12 },
+            cellStyle: { fontSize: 14 },
           }}
         />
       </div>

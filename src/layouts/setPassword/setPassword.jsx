@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
 import AuthPageLayout from "components/AuthPageLayout";
+import CustomTypography from "components/CustomTypography";
 import { supabase } from "../../supabaseClient";
 import { useLocation, useNavigate } from "react-router-dom";
 import { encrypt } from "../../services/encryptionService";
@@ -30,14 +34,6 @@ export default function SetPassword() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
-  /** @type {React.CSSProperties} */
-  const inputStyle = {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #e0e0e0",
-  };
 
   const handleSetPassword = async () => {
     console.log("[SetPassword] Step 1 - Clicked Set Password");
@@ -129,14 +125,18 @@ export default function SetPassword() {
             border: "1px solid #e8edf3",
           }}
         >
-          <div style={{ fontWeight: 700, fontSize: 24, color: "#344767", marginBottom: 12 }}>
+          <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 1.5 }}>
             Password Reset Link
-          </div>
-          <div style={{ fontSize: 16, color: "#d32f2f", fontWeight: 600, marginBottom: 14 }}>
+          </CustomTypography>
+          <CustomTypography variant="body2" color="error" fontWeight="medium" sx={{ mb: 1.75 }}>
             {error || "Missing or invalid password reset link."}
-          </div>
+          </CustomTypography>
 
-          <div style={{ fontSize: 15, color: "#344767", lineHeight: 1.65 }}>
+          <CustomTypography
+            variant="caption"
+            color="text"
+            sx={{ fontSize: 15, lineHeight: 1.65, display: "block" }}
+          >
             You have reached this page because you clicked a password setup or reset link.
             <br />
             <br />
@@ -147,84 +147,71 @@ export default function SetPassword() {
             <br />
             <br />
             Please use the&nbsp;
-            <a
-              href="/send-password-reset"
-              style={{ color: "#5e72e4", textDecoration: "underline", fontWeight: 500 }}
-            >
+            <Link href="/send-password-reset" sx={{ color: "primary.main", textDecoration: "underline", fontWeight: 600 }}>
               Send Password Reset
-            </a>
+            </Link>
             &nbsp;page to request a new link.
             <br />
             <br />
             Support:{" "}
-            <a href="mailto:howard@stockownerreport.com" style={{ textDecoration: "underline" }}>
+            <Link href="mailto:howard@stockownerreport.com" sx={{ textDecoration: "underline" }}>
               howard@stockownerreport.com
-            </a>
-          </div>
+            </Link>
+          </CustomTypography>
         </div>
       ) : (
         <>
-          <h2 style={{ fontWeight: "bold", color: "#344767", marginBottom: 16, textAlign: "center" }}>
+          <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2, textAlign: "center" }}>
             Set Your Password
-          </h2>
+          </CustomTypography>
 
           {success ? (
-            <div style={{ color: "#388e3c", textAlign: "center" }}>
+            <CustomTypography variant="caption" color="success" sx={{ textAlign: "center", display: "block" }}>
               Password set successfully! Redirecting to login...
-            </div>
+            </CustomTypography>
           ) : (
             <>
-              <div style={{ marginBottom: 16 }}>
-                <input
-                  type="password"
-                  placeholder="New password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={inputStyle}
-                />
-              </div>
+              <TextField
+                type="password"
+                placeholder="New password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={{ mb: 2 }}
+              />
 
-              <div style={{ marginBottom: 24 }}>
-                <input
-                  type="password"
-                  placeholder="Confirm password"
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  style={inputStyle}
-                />
-              </div>
+              <TextField
+                type="password"
+                placeholder="Confirm password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={{ mb: 3 }}
+              />
 
               {error && (
-                <div
-                  style={{
-                    color: "#d32f2f",
-                    marginBottom: 12,
-                    textAlign: "left",
-                    fontSize: 14,
-                    whiteSpace: "pre-line",
-                  }}
+                <CustomTypography
+                  variant="caption"
+                  color="error"
+                  sx={{ mb: 1.5, textAlign: "left", whiteSpace: "pre-line", display: "block" }}
                 >
                   {error}
-                </div>
+                </CustomTypography>
               )}
 
-              <button
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: "6px",
-                  background: "#5e72e4",
-                  color: "white",
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                  border: "none",
-                  cursor: loading ? "not-allowed" : "pointer",
-                }}
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ py: 1.1, fontWeight: 700 }}
                 onClick={handleSetPassword}
                 disabled={loading}
               >
                 {loading ? "Saving..." : "Set Password"}
-              </button>
+              </Button>
             </>
           )}
         </>
