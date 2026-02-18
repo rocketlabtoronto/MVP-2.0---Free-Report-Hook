@@ -29,6 +29,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LinkIcon from "@mui/icons-material/Link";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import DevicesOutlinedIcon from "@mui/icons-material/DevicesOutlined";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import { bankLogoMap, logoFromBank } from "utils/brokerageLogos";
 
 const CONSENT_STORAGE_KEY = "brokerage_consent";
@@ -722,11 +725,11 @@ export default function BrokeragesAndAccounts() {
                 }}
               >
                 {[
-                  ["Credential Security", "Authentication occurs inside SnapTrade's secure portal. This platform never receives, stores, or transmits your brokerage username or password."],
-                  ["Read-Only Access", "Holdings, balances, and transactions are retrieved in read-only mode. No trades or transfers can be executed through this platform."],
-                  ["Local Device Storage", "Dashboard data is stored in your browser to power the interface. It remains on your device and is not uploaded to our servers."],
-                  ["Platform Independence", "The Stock Owner's Report is not affiliated with, sponsored by, or endorsed by any brokerage or financial institution."],
-                ].map(([heading, body], i) => (
+                  [LockOutlinedIcon, "Credential Security", "Authentication occurs inside SnapTrade's secure portal. This platform never receives, stores, or transmits your brokerage username or password."],
+                  [VisibilityOffOutlinedIcon, "Read-Only Access", "Holdings, balances, and transactions are retrieved in read-only mode. No trades or transfers can be executed through this platform."],
+                  [DevicesOutlinedIcon, "Local Device Storage", "Dashboard data is stored in your browser to power the interface. It remains on your device and is not uploaded to our servers."],
+                  [AccountBalanceOutlinedIcon, "Platform Independence", "The Stock Owner's Report is not affiliated with, sponsored by, or endorsed by any brokerage or financial institution."],
+                ].map(([Icon, heading, body], i) => (
                   <Box
                     key={heading}
                     sx={{
@@ -736,9 +739,12 @@ export default function BrokeragesAndAccounts() {
                       borderRight: i % 2 === 0 ? { xs: "none", sm: "1px solid #d6d9de" } : "none",
                     }}
                   >
-                    <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: 0.2, mb: 0.5 }}>
-                      {heading}
-                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}>
+                      <Icon sx={{ fontSize: 16, color: "#0d1b2a", flexShrink: 0 }} />
+                      <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: 0.2 }}>
+                        {heading}
+                      </Typography>
+                    </Box>
                     <Typography sx={{ fontSize: 14, color: "#4B5563", lineHeight: 1.7 }}>
                       {body}
                     </Typography>
@@ -1037,11 +1043,11 @@ export default function BrokeragesAndAccounts() {
               }}
             >
               {[
-                ["Credential Security", "Authentication occurs inside SnapTrade's secure portal. This platform never receives, stores, or transmits your brokerage username or password."],
-                ["Read-Only Access", "Holdings, balances, and transactions are retrieved in read-only mode. No trades or transfers can be executed through this platform."],
-                ["Local Device Storage", "Dashboard data is stored in your browser to power the interface. It remains on your device and is not uploaded to our servers."],
-                ["Platform Independence", "The Stock Owner's Report is not affiliated with, sponsored by, or endorsed by any brokerage or financial institution."],
-              ].map(([heading, body], i) => (
+                [LockOutlinedIcon, "Credential Security", "Authentication occurs inside SnapTrade's secure portal. This platform never receives, stores, or transmits your brokerage username or password."],
+                [VisibilityOffOutlinedIcon, "Read-Only Access", "Holdings, balances, and transactions are retrieved in read-only mode. No trades or transfers can be executed through this platform."],
+                [DevicesOutlinedIcon, "Local Device Storage", "Dashboard data is stored in your browser to power the interface. It remains on your device and is not uploaded to our servers."],
+                [AccountBalanceOutlinedIcon, "Platform Independence", "The Stock Owner's Report is not affiliated with, sponsored by, or endorsed by any brokerage or financial institution."],
+              ].map(([Icon, heading, body], i) => (
                 <Box
                   key={heading}
                   sx={{
@@ -1051,9 +1057,12 @@ export default function BrokeragesAndAccounts() {
                     borderRight: i % 2 === 0 ? { xs: "none", sm: "1px solid #d6d9de" } : "none",
                   }}
                 >
-                  <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: 0.2, mb: 0.5 }}>
-                    {heading}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}>
+                    <Icon sx={{ fontSize: 16, color: "#0d1b2a", flexShrink: 0 }} />
+                    <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111827", letterSpacing: 0.2 }}>
+                      {heading}
+                    </Typography>
+                  </Box>
                   <Typography sx={{ fontSize: 14, color: "#4B5563", lineHeight: 1.7 }}>
                     {body}
                   </Typography>
