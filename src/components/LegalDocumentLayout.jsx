@@ -12,7 +12,7 @@ const COMPANY_NAME = "LookThroughProfits, Inc.";
 const COMPANY_ADDRESS = "169 Madison Ave STE 38180, New York, NY 10016, USA";
 const SUPPORT_EMAIL = "howard@stockownerreport.com";
 
-export default function LegalDocumentLayout({ title, effectiveDate, children }) {
+export default function LegalDocumentLayout({ title, effectiveDate, hideMetadata, children }) {
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -41,25 +41,28 @@ export default function LegalDocumentLayout({ title, effectiveDate, children }) 
             }}
           >
             <CustomTypography variant="h4" fontWeight="bold" color="text" gutterBottom
-              sx={{ color: "#0d1b2a", fontSize: "1.6rem", letterSpacing: "-0.5px" }}
+              sx={{ color: "#0d1b2a", fontSize: "1rem", letterSpacing: "-0.5px" }}
             >
               {title}
             </CustomTypography>
 
-            <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5 }}>
-              Effective Date: {effectiveDate}
-            </CustomTypography>
-            <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5 }}>
-              Company: {COMPANY_NAME}
-            </CustomTypography>
-            <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5 }}>
-              Address: {COMPANY_ADDRESS}
-            </CustomTypography>
-            <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5, mb: 1 }}>
-              Contact: <Link href={`mailto:${SUPPORT_EMAIL}`} sx={{ color: "#0d1b2a", fontWeight: 600 }}>{SUPPORT_EMAIL}</Link>
-            </CustomTypography>
-
-            <Divider sx={{ my: 2, borderColor: "#d6d9de" }} />
+            {!hideMetadata && (
+              <>
+                <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5 }}>
+                  Effective Date: {effectiveDate}
+                </CustomTypography>
+                <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5 }}>
+                  Company: {COMPANY_NAME}
+                </CustomTypography>
+                <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5 }}>
+                  Address: {COMPANY_ADDRESS}
+                </CustomTypography>
+                <CustomTypography variant="caption" color="text" display="block" sx={{ lineHeight: 1.7, color: "#4B5563", fontSize: 13.5, mb: 1 }}>
+                  Contact: <Link href={`mailto:${SUPPORT_EMAIL}`} sx={{ color: "#0d1b2a", fontWeight: 600 }}>{SUPPORT_EMAIL}</Link>
+                </CustomTypography>
+                <Divider sx={{ my: 2, borderColor: "#d6d9de" }} />
+              </>
+            )}
 
             {children}
           </Card>
@@ -71,6 +74,7 @@ export default function LegalDocumentLayout({ title, effectiveDate, children }) 
 
 LegalDocumentLayout.propTypes = {
   title: PropTypes.string.isRequired,
-  effectiveDate: PropTypes.string.isRequired,
+  effectiveDate: PropTypes.string,
+  hideMetadata: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };

@@ -10,6 +10,7 @@ import SendPasswordReset from "layouts/sendPasswordReset/sendPasswordReset.jsx";
 import Login from "layouts/login/login";
 import Privacy from "pages/Privacy";
 import Terms from "pages/Terms";
+import OurPrinciples from "pages/OurPrinciples";
 import EnvironmentDebug from "components/EnvironmentDebug";
 
 import AccountBalanceWalletOutlined from "@mui/icons-material/AccountBalanceWalletOutlined";
@@ -115,6 +116,15 @@ const routes = [
     route: "/terms",
     icon: <CustomBox component="i" color="black" fontSize="14px" className="ni ni-book-bookmark" />,
     component: <Terms />,
+    hidden: true,
+  },
+  {
+    type: "route",
+    name: "Our Principles",
+    key: "our-principles",
+    route: "/our-principles",
+    icon: <CustomBox component="i" color="black" fontSize="14px" className="ni ni-single-copy-04" />,
+    component: <OurPrinciples />,
     hidden: true,
   },
   {

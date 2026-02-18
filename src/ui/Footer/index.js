@@ -34,6 +34,7 @@ function Footer({ company = { href: "#", name: "Company" }, links = [] }) {
       {[
         { name: "Privacy", href: "/privacy" },
         { name: "Terms", href: "/terms" },
+        { name: "Our Principles", href: "/our-principles" },
       ].map((link) => (
         <Link
           key={link.name}
