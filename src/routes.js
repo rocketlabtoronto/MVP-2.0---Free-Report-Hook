@@ -60,7 +60,7 @@ const routes = [
     route: "/billing",
     icon: <CustomBox component="i" color="black" fontSize="14px" className="ni ni-credit-card" />,
     component: <Billing />, // Billing does NOT require auth
-    hidden: false,
+    hidden: true,
   },
   {
     type: "route",
@@ -71,7 +71,7 @@ const routes = [
       <CustomBox component="i" color="black" fontSize="14px" className="ni ni-lock-circle-open" />
     ),
     component: <SetPassword />,
-    hidden: false,
+    hidden: true,
   },
   {
     type: "route",
@@ -80,7 +80,7 @@ const routes = [
     route: "/login",
     icon: <CustomBox component="i" color="black" fontSize="14px" className="ni ni-key-25" />,
     component: <Login />,
-    hidden: false,
+    hidden: true,
   },
   {
     type: "route",
@@ -89,7 +89,7 @@ const routes = [
     route: "/send-password-reset",
     icon: <CustomBox component="i" color="black" fontSize="14px" className="ni ni-email-83" />,
     component: <SendPasswordReset />,
-    hidden: false,
+    hidden: true,
   },
   {
     type: "route",
