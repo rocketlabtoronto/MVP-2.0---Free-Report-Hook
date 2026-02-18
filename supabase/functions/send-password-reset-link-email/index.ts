@@ -10,11 +10,9 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
  * 3) This function emails the link via Postmark.
  */
 
-// Only allow browser requests from these web apps.
-const ALLOWED_ORIGINS = new Set([
-  "http://localhost:3000",
-  "https://www.stockownerreport.com",
-]);
+const APP_BASE_URL = Deno.env.get("APP_BASE_URL").replace(/\/$/, "");
+// If you call this from the browser, CORS is required.
+const ALLOWED_ORIGINS = new Set(APP_BASE_URL ? [APP_BASE_URL] : []);
 
 function buildCorsHeaders(req: Request): HeadersInit {
   const origin = req.headers.get("origin") ?? "";
@@ -135,8 +133,7 @@ serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
     const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
     const POSTMARK_TOKEN = Deno.env.get("POSTMARK_SERVER_TOKEN") ?? "";
-    const FROM_EMAIL =
-      Deno.env.get("FROM_EMAIL") ?? "howard@stockownerreport.com";
+    const FROM_EMAIL = Deno.env.get("FROM_EMAIL");
 
     log("Step 3", "Loaded environment variables", {
       hasSupabaseUrl: Boolean(SUPABASE_URL),
@@ -240,24 +237,41 @@ serve(async (req) => {
         "Content-Type": "application/json",
         "X-Postmark-Server-Token": POSTMARK_TOKEN,
       },
-      body: JSON.stringify({
-        From: FROM_EMAIL,
-        To: email,
-        Subject: "Set up your password - Stock Owner Report",
-        HtmlBody: `
-          <div style="font-family: Arial, sans-serif; line-height:1.5">
-            <h2>Set up your password</h2>
-            <p>Click the link below to set up (or reset) your password:</p>
-            <p><a href="${resetUrl}" target="_blank" rel="noreferrer">Set up my password</a></p>
-            <p>If you didn’t request this, you can ignore this email.</p>
-          </div>
-        `,
-        TextBody:
-          `Set up your password\n\n` +
-          `Use this link:\n${resetUrl}\n\n` +
-          `If you didn’t request this, ignore this email.`,
-        MessageStream: "outbound",
-      }),
+body: JSON.stringify({
+  From: FROM_EMAIL,
+  To: email,
+  Subject: "Action required: Set your Stock Owner Report password",
+  HtmlBody: `
+    <div style="font-family: Arial, sans-serif; line-height:1.5; color:#111;">
+      <p>Dear Customer,</p>
+
+      <p>
+        We received a request to create or reset the password for your Stock Owner Report account.
+        To proceed, please use the secure link below:
+      </p>
+
+      <p>
+        <a href="${resetUrl}" target="_blank" rel="noreferrer">Set your password</a>
+      </p>
+
+      <p>
+        If you did not initiate this request, you may disregard this email. No changes will be made
+        unless the link is used.
+      </p>
+
+      <p>Sincerely,<br/>Stock Owner Report Support</p>
+    </div>
+  `,
+  TextBody:
+    `Dear Customer,\n\n` +
+    `We received a request to create or reset the password for your Stock Owner Report account.\n` +
+    `To proceed, please use the secure link below:\n\n` +
+    `${resetUrl}\n\n` +
+    `If you did not initiate this request, you may disregard this email. No changes will be made unless the link is used.\n\n` +
+    `Sincerely,\n` +
+    `Stock Owner Report Support`,
+  MessageStream: "outbound",
+}),
     }).catch((e) => {
       error("Step 7", "Network error calling Postmark", {
         message: String(e?.message ?? e),

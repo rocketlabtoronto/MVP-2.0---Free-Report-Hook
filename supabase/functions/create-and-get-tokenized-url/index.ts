@@ -7,11 +7,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const APP_BASE_URL = Deno.env.get("APP_BASE_URL").replace(/\/$/, "");
 // If you call this from the browser, CORS is required.
-const ALLOWED_ORIGINS = new Set([
-  "http://localhost:3000",
-  "https://www.stockownerreport.com",
-]);
+const ALLOWED_ORIGINS = new Set(APP_BASE_URL ? [APP_BASE_URL] : []);
 
 function buildCorsHeaders(req: Request): HeadersInit {
   const origin = req.headers.get("origin") ?? "";
@@ -74,11 +72,9 @@ serve(async (req) => {
     const POSTMARK_TOKEN = Deno.env.get("POSTMARK_SERVER_TOKEN") ?? "";
 
     // Where the user lands in your front-end
-    const APP_BASE_URL =
-      (Deno.env.get("APP_BASE_URL") ?? "https://www.stockownerreport.com").replace(/\/$/, "");
-    const SET_PASSWORD_PATH = Deno.env.get("SET_PASSWORD_PATH") ?? "/set-password";
-
-    const FROM_EMAIL = Deno.env.get("FROM_EMAIL") ?? "howard@stockownerreport.com";
+    const APP_BASE_URL = Deno.env.get("APP_BASE_URL").replace(/\/$/, "");
+    const SET_PASSWORD_PATH = "/set-password";
+    const FROM_EMAIL = Deno.env.get("FROM_EMAIL");
 
     log("Step 3", "Loaded env vars", {
       hasSupabaseUrl: Boolean(SUPABASE_URL),
@@ -147,47 +143,6 @@ serve(async (req) => {
       // don't log the full URL with token
       urlPreview: `${APP_BASE_URL}${SET_PASSWORD_PATH}`,
     });
-
-    // Step 8: Email the link via Postmark
-    log("Step 8", "Sending email via Postmark");
-    const postmarkResp = await fetch("https://api.postmarkapp.com/email", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-Postmark-Server-Token": POSTMARK_TOKEN,
-      },
-      body: JSON.stringify({
-        From: FROM_EMAIL,
-        To: email,
-        Subject: "Set up your password - Stock Owner Report",
-        HtmlBody: `
-          <div style="font-family: Arial, sans-serif; line-height:1.5">
-            <h2>Set up your password</h2>
-            <p>Click the link below to set up (or reset) your password:</p>
-            <p><a href="${tokenizedUrl}" target="_blank" rel="noreferrer">Set up my password</a></p>
-            <p>This link expires in 30 minutes.</p>
-            <p>If you didn’t request this, you can ignore this email.</p>
-          </div>
-        `,
-        TextBody:
-          `Set up your password\n\n` +
-          `Use this link (expires in 30 minutes):\n${tokenizedUrl}\n\n` +
-          `If you didn’t request this, ignore this email.`,
-        MessageStream: "outbound",
-      }),
-    });
-
-    log("Step 8", "Postmark responded", { ok: postmarkResp.ok, status: postmarkResp.status });
-
-    if (!postmarkResp.ok) {
-      const bodyText = await postmarkResp.text().catch(() => "");
-      error("Step 8", "Postmark failed", {
-        status: postmarkResp.status,
-        bodyPreview: bodyText.slice(0, 300),
-      });
-      return json(req, 500, { error: "Email send failed" });
-    }
 
     // Step 9: Return success
     log("Step 9", "Success - returning response");

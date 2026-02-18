@@ -26,8 +26,83 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const SUPABASE_DB_SCHEMA = Deno.env.get("SUPABASE_DB_SCHEMA") ?? "public";
 const POSTMARK_TOKEN = Deno.env.get("POSTMARK_SERVER_TOKEN") ?? "";
-
 const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2023-08-16" });
+const APP_BASE_URL = Deno.env.get("APP_BASE_URL").replace(/\/$/, "");
+const FROM_EMAIL = Deno.env.get("FROM_EMAIL");
+// If you call this from the browser, CORS is required.
+const ALLOWED_ORIGINS = new Set(APP_BASE_URL ? [APP_BASE_URL] : []);
+
+function buildCorsHeaders(req: Request): HeadersInit {
+  const origin = req.headers.get("origin") ?? "";
+  const isAllowed = origin && ALLOWED_ORIGINS.has(origin);
+
+  const headers: Record<string, string> = {
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "authorization, apikey, content-type",
+    "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
+  };
+
+  if (isAllowed) headers["Access-Control-Allow-Origin"] = origin;
+  return headers;
+}
+
+function json(req: Request, status: number, body: unknown) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...buildCorsHeaders(req), "Content-Type": "application/json" },
+  });
+}
+
+// The internal function may return JSON { tokenizedUrl: "..." } or plain text "..."
+function extractResetUrl(raw: string): string {
+  try {
+    const parsed = JSON.parse(raw);
+
+    // Support the actual response shape you're getting:
+    const candidate =
+      parsed?.tokenizedUrl ??
+      parsed?.resetUrl ??
+      parsed?.url;
+
+    if (candidate) return String(candidate).trim();
+
+    // It was JSON, but not the expected shape
+    return "";
+  } catch {
+    // Not JSON (plain text URL)
+    return raw.trim();
+  }
+}
+
+function isHttpUrl(value: string): boolean {
+  try {
+    const u = new URL(value);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+// Avoid dumping full email into logs; keep it useful but safer.
+function maskEmail(email: string): string {
+  const at = email.indexOf("@");
+  if (at <= 1) return "***";
+  return `${email.slice(0, 2)}***${email.slice(at)}`;
+}
+
+// Avoid dumping full URLs (tokens) into logs; log only host + path.
+function safeUrlForLogs(url: string): string {
+  try {
+    const u = new URL(url);
+    return `${u.origin}${u.pathname}`;
+  } catch {
+    return "(invalid-url)";
+  }
+}
+
+
+
 
 // -------------------- Small utilities --------------------
 function safeJson(v: unknown) {
@@ -65,7 +140,72 @@ function deriveIntervalFromDescription(description: unknown): string {
 // -------------------- Email (Activation) --------------------
 async function sendActivationEmail(to: string, interval: string) {
 
-  const activationUrl = `https://www.stockownerreport.com/activate?email=${encodeURIComponent(to)}`;
+    const log = (step: string, message: string, meta?: Record<string, unknown>) => {
+      if (meta) console.log(`${step} - ${message}`, meta);
+      else console.log(`${step} - ${message}`);
+    };
+
+    const error = (
+      step: string,
+      message: string,
+      meta?: Record<string, unknown>,
+    ) => {
+      if (meta) console.error(`${step} - ${message}`, meta);
+      else console.error(`${step} - ${message}`);
+    };
+  
+    const adminHeaders: HeadersInit = {
+      "Content-Type": "application/json",
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+    };
+
+    const linkResp = await fetch(
+    `${SUPABASE_URL}/functions/v1/create-and-get-tokenized-url`,
+    {
+        method: "POST",
+        headers: adminHeaders,
+        body: JSON.stringify({ email: to })
+    },
+    ).catch((e) => {
+      error("Step 5", "Network error calling internal reset-link function", {
+        message: String(e?.message ?? e),
+      });
+      throw e; // jump to catch so we get one consistent failure path
+    });
+
+    log("Step 5", "Internal function responded", {
+      status: linkResp.status,
+      ok: linkResp.ok,
+    });
+
+    const linkText = await linkResp.text().catch((e) => {
+      error("Step 5", "Failed reading internal function response body", {
+        message: String(e?.message ?? e),
+      });
+      throw e;
+    });
+
+    if (!linkResp.ok) {
+      // Log full details server-side; do NOT send internal details to browser.
+      error("Step 5", "Internal reset-link function returned non-OK", {
+        status: linkResp.status,
+        bodyPreview: linkText.slice(0, 300),
+      });
+    }
+
+    // Step 6: Parse and validate reset URL
+    log("Step 6", "Extracting reset URL from internal response");
+    const activationUrl = extractResetUrl(linkText);
+
+    if (!activationUrl || !isHttpUrl(activationUrl)) {
+      error("Step 6", "Invalid activation URL returned", {
+        activationUrlPreview: safeUrlForLogs(activationUrl),
+        bodyPreview: linkText.slice(0, 300),
+      });
+    }
+
+    log("Step 6", "Activation URL extracted", { url: safeUrlForLogs(activationUrl) });
 
   const safeInterval = (typeof interval === "string" && interval.trim() ? interval.trim() : "selected").toLowerCase();
   const subject = "Activate your subscription — The Stock Owner Report";
@@ -111,12 +251,12 @@ async function sendActivationEmail(to: string, interval: string) {
   const res = await fetch("https://api.postmarkapp.com/email", {
     method: "POST",
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
       "X-Postmark-Server-Token": POSTMARK_TOKEN,
     },
     body: JSON.stringify({
-      From: "howard@stockownerreport.com",
+      From: FROM_EMAIL,
       To: to,
       Subject: subject,
       HtmlBody: html,
