@@ -27,7 +27,7 @@ function IncomeStatement() {
     }
   }, [allAccountsWithLogos, selectedAccountId]);
 
-  const handleSelect = (id) => setSelectedAccountId((prev) => (prev === id ? null : id));
+  const handleSelect = (id) => setSelectedAccountId(id);
   const hasAccounts = Array.isArray(allAccountsWithLogos) && allAccountsWithLogos.length > 0;
   const hasRows = Array.isArray(aggregatedData?.rows) && aggregatedData.rows.length > 0;
 

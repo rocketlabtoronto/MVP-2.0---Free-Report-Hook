@@ -34,15 +34,14 @@ function useAggregatedIncomeStatement(selectedAccountId = null) {
   const brokeragesAndAccounts = useAppStore((state) => state.brokeragesAndAccounts) || [];
 
   // Build account list with logos for selector
-  const accountsWithHoldings = (Array.isArray(brokeragesAndAccounts) ? brokeragesAndAccounts : [])
+  const accountEntries = (Array.isArray(brokeragesAndAccounts) ? brokeragesAndAccounts : [])
     .map((item) => {
       const accountRaw = String(item.Account || "");
       const holdings = holdingsByAccount[accountRaw] || item.holdings || item.accountHoldings || [];
       return { item, accountRaw, holdings };
-    })
-    .filter(({ holdings }) => holdings.length > 0);
+    });
 
-  const allAccountsWithLogos = accountsWithHoldings.map(({ item, accountRaw, holdings }) => {
+  const allAccountsWithLogos = accountEntries.map(({ item, accountRaw, holdings }) => {
     const [namePart, numberPart] = accountRaw.split(" - ");
     const brokerageName = (namePart || "Unknown Brokerage").trim();
     const accountNumber = (numberPart || "").trim();
@@ -67,8 +66,17 @@ function useAggregatedIncomeStatement(selectedAccountId = null) {
   useEffect(() => {
     async function loadAggregatedIncomeStatement() {
       try {
-        const targetHoldings = selectedAccountId
-          ? holdingsByAccount[selectedAccountId] || []
+        const firstAvailableAccount =
+          allAccountsWithLogos.find((account) => account.isAvailable && (account.holdings || []).length > 0) ||
+          allAccountsWithLogos.find((account) => (account.holdings || []).length > 0) ||
+          null;
+
+        const resolvedAccountId = selectedAccountId || firstAvailableAccount?.id || null;
+
+        const targetHoldings = resolvedAccountId
+          ? holdingsByAccount[resolvedAccountId] ||
+            allAccountsWithLogos.find((account) => account.id === resolvedAccountId)?.holdings ||
+            []
           : defaultHoldings;
 
         if (!Array.isArray(targetHoldings) || targetHoldings.length === 0) {
