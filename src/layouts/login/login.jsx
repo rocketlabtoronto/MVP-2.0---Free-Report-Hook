@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
@@ -20,6 +20,11 @@ function Login() {
   const [success, setSuccess] = useState(false);
   const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -71,13 +76,14 @@ function Login() {
         </CustomTypography>
       ) : (
         <>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleLogin} autoComplete="off">
             <TextField
               type="email"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value.slice(0, EMAIL_MAX_LENGTH))}
-              inputProps={{ maxLength: EMAIL_MAX_LENGTH }}
+              autoComplete="off"
+              inputProps={{ maxLength: EMAIL_MAX_LENGTH, autoComplete: "off", name: "login-email-input" }}
               required
               fullWidth
               variant="outlined"
@@ -98,7 +104,12 @@ function Login() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value.slice(0, PASSWORD_MAX_LENGTH))}
-              inputProps={{ maxLength: PASSWORD_MAX_LENGTH }}
+              autoComplete="new-password"
+              inputProps={{
+                maxLength: PASSWORD_MAX_LENGTH,
+                autoComplete: "new-password",
+                name: "login-password-input",
+              }}
               required
               fullWidth
               variant="outlined"
