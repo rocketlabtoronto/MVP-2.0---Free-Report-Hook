@@ -41,7 +41,9 @@ function useAggregatedIncomeStatement(selectedAccountId = null) {
       return { item, accountRaw, holdings };
     });
 
-  const allAccountsWithLogos = accountEntries.map(({ item, accountRaw, holdings }) => {
+  const allAccountsWithLogos = accountEntries
+    .filter(({ holdings }) => Array.isArray(holdings) && holdings.length > 0)
+    .map(({ item, accountRaw, holdings }) => {
     const [namePart, numberPart] = accountRaw.split(" - ");
     const brokerageName = (namePart || "Unknown Brokerage").trim();
     const accountNumber = (numberPart || "").trim();

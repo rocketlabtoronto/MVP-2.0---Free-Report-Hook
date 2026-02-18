@@ -944,31 +944,6 @@ export default function BrokeragesAndAccounts() {
                         );
                       })}
                     </List>
-                    <Box mt={0.05} display="flex" gap={0.75}>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => handleUnlinkBrokerage(brokerage.name)}
-                        sx={{
-                          textTransform: "none",
-                          borderRadius: 1.5,
-                          backgroundColor: "background.paper",
-                          color: "text.primary",
-                          borderColor: "divider",
-                          fontWeight: 600,
-                          fontSize: 11,
-                          px: 1.2,
-                          py: 0.1,
-                          "&:hover": {
-                            backgroundColor: "grey.100",
-                            borderColor: "text.secondary",
-                            color: "text.primary",
-                          },
-                        }}
-                      >
-                        Unlink Brokerage
-                      </Button>
-                    </Box>
                   </AccordionDetails>
                 </Accordion>
               );
@@ -983,42 +958,33 @@ export default function BrokeragesAndAccounts() {
               justifyContent="flex-end"
             >
               <Button
-                variant="contained"
-                onClick={handleOpen}
-                disabled={!canConnectBrokerage}
+                variant="outlined"
+                onClick={() => handleUnlinkBrokerage(brokerages[0]?.name)}
+                disabled={!brokerages.length}
                 sx={{
-                  background: (theme) =>
-                    `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 13,
                   textTransform: "none",
                   borderRadius: 1.5,
-                  px: 2,
-                  py: 0.6,
-                  "&:hover": {
-                    background: (theme) =>
-                      `linear-gradient(90deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
-                  },
+                  backgroundColor: "background.paper",
+                  color: "text.primary",
+                  borderColor: "divider",
+                  fontWeight: 600,
+                  fontSize: 11,
+                  px: 1.2,
+                  py: 0.1,
                   minWidth: 175,
+                  "&:hover": {
+                    backgroundColor: "grey.100",
+                    borderColor: "text.secondary",
+                    color: "text.primary",
+                  },
                   "&.Mui-disabled": {
-                    background: "#c4c9d4",
-                    color: "#ffffff",
-                    opacity: 0.85,
+                    opacity: 0.6,
                   },
                 }}
               >
-                Connect Brokerage
+                Unlink Brokerage
               </Button>
             </Box>
-            {canConnectBrokerage && (
-              <Box px={{ xs: 1.5, sm: 2.25 }} pb={1.5}>
-                <Typography variant="caption" color="text.secondary">
-                  Before connecting, you&rsquo;ll review and accept key privacy and authorization
-                  terms.
-                </Typography>
-              </Box>
-            )}
           </Paper>
 
           {/* Security & Data Handling card - filled state */}
