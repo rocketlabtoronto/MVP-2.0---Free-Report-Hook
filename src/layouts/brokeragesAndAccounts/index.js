@@ -1011,12 +1011,14 @@ export default function BrokeragesAndAccounts() {
                 Connect Brokerage
               </Button>
             </Box>
-            <Box px={{ xs: 1.5, sm: 2.25 }} pb={1.5}>
-              <Typography variant="caption" color="text.secondary">
-                Before connecting, you&rsquo;ll review and accept key privacy and authorization
-                terms.
-              </Typography>
-            </Box>
+            {canConnectBrokerage && (
+              <Box px={{ xs: 1.5, sm: 2.25 }} pb={1.5}>
+                <Typography variant="caption" color="text.secondary">
+                  Before connecting, you&rsquo;ll review and accept key privacy and authorization
+                  terms.
+                </Typography>
+              </Box>
+            )}
           </Paper>
 
           {/* Security & Data Handling card - filled state */}
