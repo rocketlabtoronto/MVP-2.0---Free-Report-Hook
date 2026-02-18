@@ -7,7 +7,7 @@ import borders from "assets/theme/base/borders";
 import pxToRem from "assets/theme/functions/pxToRem";
 
 const { dark, white, grey, inputColors } = colors;
-const { size, fontWeightRegular } = typography;
+const { size, fontWeightRegular, fontFamily } = typography;
 const { borderWidth, borderRadius } = borders;
 
 const inputBase = {
@@ -18,6 +18,7 @@ const inputBase = {
       width: "100% !important",
       height: "auto !important",
       padding: `${pxToRem(10)} ${pxToRem(14)}`,
+      fontFamily: `${fontFamily} !important`,
       fontSize: `${size.sm} !important`,
       fontWeight: `${fontWeightRegular} !important`,
       lineHeight: "1.4 !important",
@@ -30,21 +31,28 @@ const inputBase = {
       transition: "box-shadow 150ms ease, border-color 150ms ease, padding 150ms ease !important",
 
       "&:focus-within": {
-        borderColor: inputColors.borderColor.focus,
-        boxShadow: "0 0 0 4px rgba(45, 108, 223, 0.12)",
+        border: `${borderWidth[1]} solid rgba(148, 163, 184, 0.35)`,
+        boxShadow: "none",
       },
     },
 
     input: {
       width: "100% !important",
       height: pxToRem(22),
+      fontFamily: `${fontFamily} !important`,
       paddingTop: "0 !important",
       paddingRight: "0 !important",
       paddingBottom: "0 !important",
       paddingLeft: pxToRem(6),
 
       "&::-webkit-input-placeholder": {
+        fontFamily: `${fontFamily} !important`,
         color: `${dark.main} !important`,
+      },
+
+      "&:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus": {
+        WebkitTextFillColor: `${grey[700]} !important`,
+        fontFamily: `${fontFamily} !important`,
       },
     },
   },

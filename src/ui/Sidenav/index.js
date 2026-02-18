@@ -52,6 +52,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     return () => window.removeEventListener("resize", handleMiniSidenav);
   }, [dispatch, location]);
 
+  const user = useAuthStore((s) => s.user);
   const clearUser = useAuthStore((s) => s.clearUser);
 
   const handleSignOut = () => {
@@ -113,16 +114,18 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     <SidenavRoot {...rest} variant="permanent" ownerState={{ darkSidenav, miniSidenav, layout }}>
       <List sx={{ mt: 1, px: 1 }}>{renderRoutes}</List>
       <div style={{ flexGrow: 1 }} />
-      <div style={{ padding: "12px 16px", marginTop: "auto" }}>
-        <Button
-          onClick={handleSignOut}
-          variant="contained"
-          fullWidth
-          sx={{ py: 1.1, fontWeight: 700, borderRadius: 1.5 }}
-        >
-          Sign Out
-        </Button>
-      </div>
+      {user && (
+        <div style={{ padding: "12px 16px", marginTop: "auto" }}>
+          <Button
+            onClick={handleSignOut}
+            variant="contained"
+            fullWidth
+            sx={{ py: 1.1, fontWeight: 700, borderRadius: 1.5 }}
+          >
+            Sign Out
+          </Button>
+        </div>
+      )}
     </SidenavRoot>
   );
 }

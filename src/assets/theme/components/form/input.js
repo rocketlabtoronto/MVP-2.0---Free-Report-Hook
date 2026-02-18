@@ -21,14 +21,14 @@ const input = {
       },
 
       "&:focus-within": {
-        borderColor: inputColors.borderColor.focus,
-        boxShadow: "0 0 0 4px rgba(45, 108, 223, 0.12)",
+        border: `${borderWidth[1]} solid rgba(148, 163, 184, 0.35)`,
+        boxShadow: "none",
       },
     },
 
     input: {
       height: pxToRem(22),
-      width: "max-content !important",
+      width: "100% !important",
     },
 
     inputSizeSmall: {

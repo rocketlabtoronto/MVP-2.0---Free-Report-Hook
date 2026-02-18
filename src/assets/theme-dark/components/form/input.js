@@ -19,11 +19,16 @@ const input = {
       "& fieldset": {
         border: "none",
       },
+
+      "&:focus-within": {
+        border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,
+        boxShadow: "none",
+      },
     },
 
     input: {
       height: pxToRem(22),
-      width: "max-content !important",
+      width: "100% !important",
     },
 
     inputSizeSmall: {

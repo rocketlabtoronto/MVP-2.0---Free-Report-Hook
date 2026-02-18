@@ -86,6 +86,23 @@ export default createTheme({
       styleOverrides: {
         ...globals,
         ...container,
+        "input, textarea": {
+          fontFamily: `${typography.fontFamily} !important`,
+          fontSize: `${typography.size.md} !important`,
+          fontWeight: `${typography.fontWeightRegular} !important`,
+          lineHeight: "1.5 !important",
+        },
+        "input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus": {
+          WebkitTextFillColor: `${colors.grey[700]} !important`,
+          caretColor: `${colors.grey[700]} !important`,
+          fontFamily: `${typography.fontFamily} !important`,
+          fontSize: `${typography.size.md} !important`,
+          fontWeight: `${typography.fontWeightRegular} !important`,
+          lineHeight: "1.5 !important",
+          WebkitBoxShadow: `0 0 0 1000px ${colors.background.dark} inset !important`,
+          boxShadow: `0 0 0 1000px ${colors.background.dark} inset !important`,
+          transition: "background-color 9999s ease-out 0s",
+        },
       },
     },
     MuiDrawer: { ...sidenav },

@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import AuthPageLayout from "components/AuthPageLayout";
 import CustomTypography from "components/CustomTypography";
 const logo = "/logos/logo_image.jpg";
+const EMAIL_MAX_LENGTH = 36;
+const PASSWORD_MAX_LENGTH = 36;
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -74,23 +76,43 @@ function Login() {
               type="email"
               placeholder="Email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.slice(0, EMAIL_MAX_LENGTH))}
+              inputProps={{ maxLength: EMAIL_MAX_LENGTH }}
               required
               fullWidth
               variant="outlined"
-              size="small"
-              sx={{ mb: 2 }}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  minHeight: 46,
+                },
+                "& .MuiInputBase-input": {
+                  fontSize: "1.1rem",
+                  lineHeight: 1.5,
+                  py: 1.1,
+                },
+              }}
             />
             <TextField
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.slice(0, PASSWORD_MAX_LENGTH))}
+              inputProps={{ maxLength: PASSWORD_MAX_LENGTH }}
               required
               fullWidth
               variant="outlined"
-              size="small"
-              sx={{ mb: 3 }}
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  minHeight: 46,
+                },
+                "& .MuiInputBase-input": {
+                  fontSize: "1.1rem",
+                  lineHeight: 1.5,
+                  py: 1.1,
+                },
+              }}
             />
             {error && (
               <CustomTypography
@@ -117,8 +139,14 @@ function Login() {
               Send Password Reset
             </Link>
           </CustomTypography>
-          <CustomTypography variant="caption" color="text" sx={{ textAlign: "center", mt: 1.5 }}>
-            Don&apos;t have an account?&nbsp;
+          <CustomTypography
+            variant="caption"
+            color="text"
+            sx={{ textAlign: "center", mt: 1.5, display: "block" }}
+          >
+            Don&apos;t have an account?
+          </CustomTypography>
+          <CustomTypography variant="caption" color="text" sx={{ textAlign: "center", mt: 0.5, display: "block" }}>
             <Link href="/billing" sx={{ color: "primary.main", textDecoration: "underline", fontWeight: 600 }}>
               Sign Up
             </Link>

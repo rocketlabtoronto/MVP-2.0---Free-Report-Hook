@@ -250,13 +250,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Box>
-        ) : (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="body2" sx={{ color: "#8392ab" }}>
-              Not logged in
-            </Typography>
-          </Box>
-        )}
+        ) : null}
       </Toolbar>
     </AppBar>
   );

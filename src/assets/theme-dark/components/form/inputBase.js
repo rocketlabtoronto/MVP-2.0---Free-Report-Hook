@@ -7,7 +7,7 @@ import borders from "assets/theme-dark/base/borders";
 import pxToRem from "assets/theme-dark/functions/pxToRem";
 
 const { dark, background, grey, inputColors } = colors;
-const { size, fontWeightRegular } = typography;
+const { size, fontWeightRegular, fontFamily } = typography;
 const { borderWidth, borderRadius } = borders;
 
 const inputBase = {
@@ -18,6 +18,7 @@ const inputBase = {
       width: "100% !important",
       height: "auto !important",
       padding: `${pxToRem(8)} ${pxToRem(12)}`,
+      fontFamily: `${fontFamily} !important`,
       fontSize: `${size.sm} !important`,
       fontWeight: `${fontWeightRegular} !important`,
       lineHeight: "1.4 !important",
@@ -33,13 +34,20 @@ const inputBase = {
     input: {
       width: "100% !important",
       height: pxToRem(22),
+      fontFamily: `${fontFamily} !important`,
       paddingTop: "0 !important",
       paddingRight: "0 !important",
       paddingBottom: "0 !important",
       paddingLeft: pxToRem(6),
 
       "&::-webkit-input-placeholder": {
+        fontFamily: `${fontFamily} !important`,
         color: `${dark.main} !important`,
+      },
+
+      "&:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus": {
+        WebkitTextFillColor: `${grey[700]} !important`,
+        fontFamily: `${fontFamily} !important`,
       },
     },
   },
