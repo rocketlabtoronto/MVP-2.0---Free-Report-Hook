@@ -18,6 +18,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [subscriptionExpired, setSubscriptionExpired] = useState(false);
   const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSubscriptionExpired(false);
     try {
       // Fetch user by email
       const { data, error } = await supabase
@@ -53,6 +55,77 @@ function Login() {
         return;
       }
       if (decryptedPassword === password) {
+        // --- Subscription validity check ---
+        // We derive the expiration date purely from subscription_interval and
+        // last_payment_at stored on the user row. No extra DB field is written.
+        //
+        // Strategy for "add one month" (subscription_interval === 'month'):
+        //   We use Date's built-in month arithmetic. JavaScript's Date constructor
+        //   rolls over automatically when the resulting day would not exist in the
+        //   target month (e.g. Jan 31 + 1 month → Feb 31 → Mar 3 in a non-leap
+        //   year, or Mar 2 in a leap year). To avoid inadvertently granting a few
+        //   extra days in short months, we instead let the Date object overflow and
+        //   then compare: if the day-of-month changed after setMonth(), we went past
+        //   the end of the target month, so we back up to the last day of that month.
+        //   Example: last_payment_at = Jan 31 → setMonth(+1) gives Mar 3 → we detect
+        //   the overflow and floor back to Feb 28 (or Feb 29 in a leap year).
+        //
+        // Strategy for "add one year" (subscription_interval === 'year'):
+        //   Same principle with setFullYear(+1). The only edge case is Feb 29 in a
+        //   leap year: adding 1 year to 2024-02-29 would produce 2025-02-29, which
+        //   doesn't exist, so JavaScript rolls to 2025-03-01. We detect the day change
+        //   and back up to the last day of the target February (2025-02-28).
+
+        const { subscription_interval, last_payment_at } = data;
+
+        if (subscription_interval && last_payment_at) {
+          const paymentDate = new Date(last_payment_at);
+
+          // Compute expiry date without mutating paymentDate.
+          const expiry = new Date(paymentDate);
+
+          if (subscription_interval === "month") {
+            const originalDay = expiry.getDate();
+            expiry.setMonth(expiry.getMonth() + 1);
+            // If the day changed, JS overflowed into the next month (e.g. Jan 31 →
+            // Mar 2/3). Back up to the last day of the intended target month by
+            // setting day=0 on the overflowed month (day 0 = last day of prev month).
+            if (expiry.getDate() !== originalDay) {
+              expiry.setDate(0);
+            }
+          } else if (subscription_interval === "year") {
+            const originalDay = expiry.getDate();
+            expiry.setFullYear(expiry.getFullYear() + 1);
+            // Handle Feb 29 in a leap year paid on → Feb 28/29 next year.
+            if (expiry.getDate() !== originalDay) {
+              expiry.setDate(0);
+            }
+          }
+          // If subscription_interval is an unrecognised value (e.g. a future plan
+          // type), we fall through and allow login — handle explicitly if needed.
+
+          const now = new Date();
+          if (now > expiry) {
+            // Subscription has lapsed. Tell the user when it expired and give them
+            // a clear path to renew. We intentionally do NOT call setUser() so the
+            // session is never established.
+            const formattedExpiry = expiry.toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+            setError(
+              `Your subscription expired on ${formattedExpiry}.\nPlease renew to continue.`
+            );
+            // Render a renew CTA by storing a special flag in the error state so
+            // the JSX below can show the billing link.
+            setSubscriptionExpired(true);
+            setLoading(false);
+            return;
+          }
+        }
+        // --- End subscription check ---
+
         setSuccess(true);
         setUser(data);
         navigate("/brokeragesAndAccounts");
@@ -129,10 +202,20 @@ function Login() {
               <CustomTypography
                 variant="caption"
                 color="error"
-                sx={{ mb: 1.5, textAlign: "left", whiteSpace: "pre-line", display: "block" }}
+                sx={{ mb: subscriptionExpired ? 0.5 : 1.5, textAlign: "left", whiteSpace: "pre-line", display: "block" }}
               >
                 {error}
               </CustomTypography>
+            )}
+            {subscriptionExpired && (
+              <Button
+                variant="outlined"
+                fullWidth
+                href="/billing"
+                sx={{ mb: 1.5, fontWeight: 700, textTransform: "none" }}
+              >
+                Renew Subscription
+              </Button>
             )}
             <Button
               type="submit"
