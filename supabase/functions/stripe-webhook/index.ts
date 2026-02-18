@@ -207,6 +207,23 @@ async function sendActivationEmail(to: string, interval: string) {
 
     log("Step 6", "Activation URL extracted", { url: safeUrlForLogs(activationUrl) });
 
+  // Append mode=activation so the set-password page can distinguish a first-time
+  // account activation from a subsequent password reset. The set-password page reads
+  // this query parameter and renders appropriate verbiage to the user.
+  let activationUrlWithMode = activationUrl;
+  try {
+    const urlObj = new URL(activationUrl);
+    urlObj.searchParams.set("mode", "activation");
+    activationUrlWithMode = urlObj.toString();
+  } catch {
+    // If URL parsing fails, fall back to simple string append. We check for an
+    // existing '?' to avoid malforming the URL.
+    activationUrlWithMode = activationUrl.includes("?")
+      ? `${activationUrl}&mode=activation`
+      : `${activationUrl}?mode=activation`;
+  }
+  log("Step 6", "Activation URL with mode param ready", { url: safeUrlForLogs(activationUrlWithMode) });
+
   const safeInterval = (typeof interval === "string" && interval.trim() ? interval.trim() : "selected").toLowerCase();
   const subject = "Activate your subscription — The Stock Owner Report";
 
@@ -234,8 +251,8 @@ async function sendActivationEmail(to: string, interval: string) {
       <h1>Confirm your email to activate your subscription</h1>
       <p>Hi,</p>
       <p>We received your payment for the <strong>${safeInterval}</strong> plan. To finish setting up your account, please confirm your email:</p>
-      <p><a class="button" href="${activationUrl}" target="_blank" rel="noopener noreferrer">Activate Subscription</a></p>
-      <p class="muted">If the button doesn’t work, copy and paste this link into your browser:<br /><code>${activationUrl}</code></p>
+      <p><a class="button" href="${activationUrlWithMode}" target="_blank" rel="noopener noreferrer">Activate Subscription</a></p>
+      <p class="muted">If the button doesn't work, copy and paste this link into your browser:<br /><code>${activationUrlWithMode}</code></p>
       <p>Regards,<br /><strong>Howard Lin</strong><br />Founder, The Stock Owner Report</p>
       <div class="footer">You’re receiving this email because a subscription was started using this address. If you did not request this, you can safely ignore this message.</div>
     </div>

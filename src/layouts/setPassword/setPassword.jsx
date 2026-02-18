@@ -24,9 +24,15 @@ export default function SetPassword() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Read token from URL querystring (react-router safe)
+  // Read token and mode from URL querystring (react-router safe).
+  // mode=activation  → user is setting a password for the first time after subscribing.
+  // mode absent / anything else → standard password reset flow.
   const token = useMemo(() => {
     return new URLSearchParams(location.search).get("token")?.trim() ?? "";
+  }, [location.search]);
+
+  const isActivation = useMemo(() => {
+    return new URLSearchParams(location.search).get("mode") === "activation";
   }, [location.search]);
 
   const [password, setPassword] = useState("");
@@ -161,13 +167,43 @@ export default function SetPassword() {
         </div>
       ) : (
         <>
-          <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2, textAlign: "center" }}>
-            Set Your Password
-          </CustomTypography>
+          {/* ---- Page heading: differs by flow ---- */}
+          {isActivation ? (
+            <>
+              <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 1, textAlign: "center" }}>
+                Welcome to The Stock Owner Report
+              </CustomTypography>
+              <CustomTypography
+                variant="body2"
+                color="text"
+                sx={{ mb: 2.5, textAlign: "center", lineHeight: 1.7 }}
+              >
+                Your subscription has been confirmed. To complete your account setup, please create
+                a secure password below. You will use this password to access your dashboard going
+                forward.
+              </CustomTypography>
+            </>
+          ) : (
+            <>
+              <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 1, textAlign: "center" }}>
+                Reset Your Password
+              </CustomTypography>
+              <CustomTypography
+                variant="body2"
+                color="text"
+                sx={{ mb: 2.5, textAlign: "center", lineHeight: 1.7 }}
+              >
+                Please enter and confirm your new password below. Once saved, you will be
+                redirected to the login page where you may sign in with your updated credentials.
+              </CustomTypography>
+            </>
+          )}
 
           {success ? (
             <CustomTypography variant="caption" color="success" sx={{ textAlign: "center", display: "block" }}>
-              Password set successfully! Redirecting to login...
+              {isActivation
+                ? "Your password has been set. Redirecting you to the login page..."
+                : "Password updated successfully. Redirecting to login..."}
             </CustomTypography>
           ) : (
             <>
@@ -178,8 +214,11 @@ export default function SetPassword() {
                 onChange={(e) => setPassword(e.target.value)}
                 fullWidth
                 variant="outlined"
-                size="small"
-                sx={{ mb: 2 }}
+                sx={{
+                  mb: 2,
+                  "& .MuiOutlinedInput-root": { minHeight: 46 },
+                  "& .MuiInputBase-input": { fontSize: "1.1rem", lineHeight: 1.5, py: 1.1 },
+                }}
               />
 
               <TextField
@@ -189,8 +228,11 @@ export default function SetPassword() {
                 onChange={(e) => setConfirm(e.target.value)}
                 fullWidth
                 variant="outlined"
-                size="small"
-                sx={{ mb: 3 }}
+                sx={{
+                  mb: 3,
+                  "& .MuiOutlinedInput-root": { minHeight: 46 },
+                  "& .MuiInputBase-input": { fontSize: "1.1rem", lineHeight: 1.5, py: 1.1 },
+                }}
               />
 
               {error && (
@@ -210,7 +252,7 @@ export default function SetPassword() {
                 onClick={handleSetPassword}
                 disabled={loading}
               >
-                {loading ? "Saving..." : "Set Password"}
+                {loading ? "Saving..." : isActivation ? "Activate Account" : "Set Password"}
               </Button>
             </>
           )}
