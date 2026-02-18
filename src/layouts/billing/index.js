@@ -20,35 +20,33 @@ function Billing() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <CustomBox py={3}>
+      <CustomBox py={1}>
         <CustomBox display="flex" justifyContent="center">
           <Card
             sx={{
               p: 3,
-              background: "background.paper",
+              backgroundColor: "#ffffff",
               overflow: "visible",
-              borderRadius: 3,
-              boxShadow: 6,
-              border: "1px solid",
-              borderColor: "divider",
-              maxWidth: 400,
+              borderRadius: 0,
+              boxShadow: "none",
+              border: "1px solid #d6d9de",
+              borderTop: "2px solid #0d1b2a",
+              maxWidth: 480,
               width: "100%",
               position: "relative",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "4px",
-                background: (theme) =>
-                  `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
-                borderTopLeftRadius: "12px",
-                borderTopRightRadius: "12px",
-              },
             }}
           >
-            <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2 }}>
+            <CustomTypography
+              sx={{
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: 3,
+                color: "#6b7280",
+                textTransform: "uppercase",
+                mb: 2,
+                fontFamily: '"Inter", "Helvetica Neue", Arial, sans-serif',
+              }}
+            >
               Billing
             </CustomTypography>
             <BillingInformation

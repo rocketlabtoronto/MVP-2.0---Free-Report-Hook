@@ -18,14 +18,15 @@ const borders = {
     5: pxToRem(5),
   },
 
+  // Goldman Sachs: minimal/sharp radius
   borderRadius: {
-    xs: pxToRem(2),
-    sm: pxToRem(4),
-    md: pxToRem(8),
-    lg: pxToRem(12),
-    xl: pxToRem(16),
-    xxl: pxToRem(24),
-    section: pxToRem(160),
+    xs: 0,
+    sm: pxToRem(2),
+    md: pxToRem(4),
+    lg: pxToRem(4),
+    xl: pxToRem(4),
+    xxl: pxToRem(4),
+    section: pxToRem(4),
   },
 };
 

@@ -20,9 +20,10 @@ const card = {
       wordWrap: "break-word",
       backgroundColor: white.main,
       backgroundClip: "border-box",
-      border: `${borderWidth[0]} solid ${rgba(black.main, 0.06)}`,
-      borderRadius: borderRadius.xxl,
-      boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+      border: `1px solid #d6d9de`,
+      borderTop: `2px solid #0d1b2a`,
+      borderRadius: 0,
+      boxShadow: "none",
     },
   },
 };

@@ -27,10 +27,13 @@ function DashboardLayout({ bgColor, children, ...rest }) {
     <CustomBox
       sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
         p: 2,
-        pb: 1, // Add bottom padding to prevent content from being hidden behind sticky footer
+        pb: 1,
+        pt: 1,
+        minHeight: "100vh",
+        backgroundColor: darkMode ? "#0d1b2a" : "#f7f7f5",
 
         [breakpoints.up("xl")]: {
-          marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
+          marginLeft: miniSidenav ? pxToRem(120) : pxToRem(284),
           transition: transitions.create(["margin-left", "margin-right"], {
             easing: transitions.easing.easeInOut,
             duration: transitions.duration.standard,

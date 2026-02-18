@@ -7,7 +7,7 @@ import pxToRem from "assets/theme/functions/pxToRem";
 const { dark } = colors;
 
 const baseProperties = {
-  fontFamily: '"Source Serif 4", "Baskerville", "Georgia", "Times New Roman", serif',
+  fontFamily: '"Inter", "Helvetica Neue", "Arial", sans-serif',
   fontWeightLight: 300,
   fontWeightRegular: 400,
   fontWeightMedium: 600,
@@ -24,7 +24,7 @@ const baseHeadingProperties = {
   fontFamily: baseProperties.fontFamily,
   color: dark.main,
   fontWeight: baseProperties.fontWeightBold,
-  letterSpacing: "0.004em",
+  letterSpacing: "-0.02em",
 };
 
 const baseDisplayProperties = {

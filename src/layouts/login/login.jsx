@@ -140,8 +140,11 @@ function Login() {
 
   return (
     <AuthPageLayout logoSrc={logo} cardStyle={{ padding: 16 }}>
-      <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2, textAlign: "center" }}>
-        Login
+      <CustomTypography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: "#6b7280", textTransform: "uppercase", mb: 0.5, textAlign: "center" }}>
+        Investor Dashboard
+      </CustomTypography>
+      <CustomTypography sx={{ fontSize: 16, fontWeight: 600, color: "#0d1b2a", mb: 2, textAlign: "center" }}>
+        Sign In to Your Account
       </CustomTypography>
       {success ? (
         <CustomTypography variant="caption" color="success" sx={{ textAlign: "center", display: "block" }}>
@@ -164,11 +167,15 @@ function Login() {
                 mb: 2,
                 "& .MuiOutlinedInput-root": {
                   minHeight: 46,
+                  borderRadius: 0,
+                  "& fieldset": { borderColor: "#d6d9de" },
+                  "&:hover fieldset": { borderColor: "#9ca3af" },
+                  "&.Mui-focused fieldset": { borderColor: "#0d1b2a", borderWidth: 1.5 },
                 },
                 "& .MuiInputBase-input": {
-                  fontSize: "1.1rem",
+                  fontSize: "0.9rem",
                   lineHeight: 1.5,
-                  py: 1.1,
+                  py: 1.3,
                 },
               }}
             />
@@ -190,11 +197,15 @@ function Login() {
                 mb: 3,
                 "& .MuiOutlinedInput-root": {
                   minHeight: 46,
+                  borderRadius: 0,
+                  "& fieldset": { borderColor: "#d6d9de" },
+                  "&:hover fieldset": { borderColor: "#9ca3af" },
+                  "&.Mui-focused fieldset": { borderColor: "#0d1b2a", borderWidth: 1.5 },
                 },
                 "& .MuiInputBase-input": {
-                  fontSize: "1.1rem",
+                  fontSize: "0.9rem",
                   lineHeight: 1.5,
-                  py: 1.1,
+                  py: 1.3,
                 },
               }}
             />
@@ -212,7 +223,7 @@ function Login() {
                 variant="outlined"
                 fullWidth
                 href="/billing"
-                sx={{ mb: 1.5, fontWeight: 700, textTransform: "none" }}
+                sx={{ mb: 1.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2, borderRadius: 0, borderColor: "#0d1b2a", color: "#0d1b2a", fontSize: 12 }}
               >
                 Renew Subscription
               </Button>
@@ -222,7 +233,7 @@ function Login() {
               variant="contained"
               fullWidth
               disabled={loading}
-              sx={{ py: 1.1, fontWeight: 700 }}
+              sx={{ py: 1.2, fontWeight: 700, borderRadius: 0, backgroundColor: "#0d1b2a", boxShadow: "none", textTransform: "uppercase", letterSpacing: 1.5, fontSize: 13, "&:hover": { backgroundColor: "#1a3a5c", boxShadow: "none" }, "&:disabled": { backgroundColor: "#9ca3af", color: "#fff" } }}
             >
               {loading ? "Logging in..." : "Login"}
             </Button>

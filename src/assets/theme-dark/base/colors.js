@@ -1,18 +1,16 @@
 /**
- * The base colors for the Custom Dashboard 2 MUI.
- * You can add new color using this file.
- * You can customized the colors for the entire Custom Dashboard 2 MUI using thie file.
+ * Goldman Sachs dark theme colors.
  */
 
 const colors = {
   background: {
-    default: "#0b1220",
-    dark: "#0f172a",
+    default: "#0d1b2a",   // GS deep navy page background
+    dark: "#08111a",      // GS darkest panel
   },
 
   text: {
-    main: "#e2e8f0",
-    focus: "#e2e8f0",
+    main: "#e8edf2",      // light on dark
+    focus: "#ffffff",
   },
 
   transparent: {
@@ -25,102 +23,102 @@ const colors = {
   },
 
   black: {
-    light: "#141414",
+    light: "#1a1a1a",
     main: "#000000",
     focus: "#000000",
   },
 
   primary: {
-    main: "#2d6cdf",
-    focus: "#2d6cdf",
+    main: "#c8a96e",      // GS gold accent on dark
+    focus: "#d4bc88",
   },
 
   secondary: {
-    main: "#8392ab",
-    focus: "#8392ab",
+    main: "#8c98a8",
+    focus: "#8c98a8",
   },
 
   info: {
-    main: "#2d6cdf",
-    focus: "#2d6cdf",
+    main: "#6ea8d4",      // muted blue on dark
+    focus: "#89badf",
   },
 
   success: {
-    main: "#2dce89",
-    focus: "#2dce89",
+    main: "#4aad72",
+    focus: "#4aad72",
   },
 
   warning: {
-    main: "#fb6340",
-    focus: "#fb6340",
+    main: "#d4a030",
+    focus: "#d4a030",
   },
 
   error: {
-    main: "#f5365c",
-    focus: "#f5365c",
+    main: "#d95555",
+    focus: "#d95555",
   },
 
   light: {
-    main: "#f0f2f566",
-    focus: "#f0f2f566",
+    main: "#1e2d3d",
+    focus: "#243548",
   },
 
   dark: {
-    main: "#344767",
-    focus: "#344767",
+    main: "#c8d4e0",      // light text in dark context
+    focus: "#e8edf2",
   },
 
   grey: {
-    100: "#f8f9fa",
-    200: "#f0f2f566",
-    300: "#ffffff26",
-    400: "#ced4da",
-    500: "#adb5bd",
-    600: "#6c757d",
-    700: "#495057",
-    800: "#343a40",
-    900: "#212529",
+    100: "#1e2d3d",
+    200: "#243548",
+    300: "#2c3f54",
+    400: "#3d5266",
+    500: "#5a6e80",
+    600: "#8c98a8",
+    700: "#b8c4d0",
+    800: "#d8e2ea",
+    900: "#e8edf2",
   },
 
   gradients: {
     primary: {
-      main: "#2d6cdf",
-      state: "#4f83ff",
+      main: "#c8a96e",
+      state: "#d4bc88",
     },
 
     secondary: {
-      main: "#627594",
-      state: "#a8b8d8",
+      main: "#5a6e80",
+      state: "#8c98a8",
     },
 
     info: {
-      main: "#2d6cdf",
-      state: "#4f83ff",
+      main: "#6ea8d4",
+      state: "#89badf",
     },
 
     success: {
-      main: "#2dce89",
-      state: "#2dcecc",
+      main: "#4aad72",
+      state: "#5bc080",
     },
 
     warning: {
-      main: "#fb6340",
-      state: "#fbb140",
+      main: "#d4a030",
+      state: "#e0b040",
     },
 
     error: {
-      main: "#f5365c",
-      state: "#f56036",
+      main: "#d95555",
+      state: "#e06060",
     },
 
     light: {
-      main: "#ced4da",
-      state: "#ebeff4",
+      main: "#2c3f54",
+      state: "#3d5266",
     },
 
     dark: {
-      main: "#212229",
-      state: "#212529",
+      main: "#c8d4e0",
+      state: "#e8edf2",
     },
   },
 
@@ -188,100 +186,100 @@ const colors = {
 
   alertColors: {
     primary: {
-      main: "#2d6cdf",
-      state: "#4f83ff",
-      border: "#cfd5f7",
+      main: "#c8a96e",
+      state: "#d4bc88",
+      border: "#3d5266",
     },
 
     secondary: {
-      main: "#627594",
-      state: "#8ca1cb",
-      border: "#dadee6",
+      main: "#8c98a8",
+      state: "#b8c4d0",
+      border: "#2c3f54",
     },
 
     info: {
-      main: "#2d6cdf",
-      state: "#4f83ff",
-      border: "#b8f0fa",
+      main: "#6ea8d4",
+      state: "#89badf",
+      border: "#2c3f54",
     },
 
     success: {
-      main: "#2dce89",
-      state: "#26adab",
-      border: "#c0f0dc",
+      main: "#4aad72",
+      state: "#5bc080",
+      border: "#1e3d2a",
     },
 
     warning: {
-      main: "#fb6340",
-      state: "#faa118",
-      border: "#fed0c6",
+      main: "#d4a030",
+      state: "#e0b040",
+      border: "#3d2e10",
     },
 
     error: {
-      main: "#f5365c",
-      state: "#f3410f",
-      border: "#fcc3ce",
+      main: "#d95555",
+      state: "#e06060",
+      border: "#3d1a1a",
     },
 
     light: {
-      main: "#ced4da",
-      state: "#d1dae6",
-      border: "#f8f9fa",
+      main: "#2c3f54",
+      state: "#3d5266",
+      border: "#1e2d3d",
     },
 
     dark: {
-      main: "#212229",
-      state: "#0f1112",
-      border: "#c2c8d1",
+      main: "#c8d4e0",
+      state: "#e8edf2",
+      border: "#3d5266",
     },
   },
 
   badgeColors: {
     primary: {
-      background: "#eaecfb",
-      text: "#2d6cdf",
+      background: "#1e2d3d",
+      text: "#c8a96e",
     },
 
     secondary: {
-      background: "#e4e8ed",
-      text: "#5974a2",
+      background: "#1e2d3d",
+      text: "#8c98a8",
     },
 
     info: {
-      background: "#aaedf9",
-      text: "#03acca",
+      background: "#1e2d3d",
+      text: "#6ea8d4",
     },
 
     success: {
-      background: "#b0eed3",
-      text: "#1aae6f",
+      background: "#1a3028",
+      text: "#4aad72",
     },
 
     warning: {
-      background: "#fee6e0",
-      text: "#ff3709",
+      background: "#2a2010",
+      text: "#d4a030",
     },
 
     error: {
-      background: "#fdd1da",
-      text: "#f80031",
+      background: "#2a1010",
+      text: "#d95555",
     },
 
     light: {
-      background: "#ffffff",
-      text: "#c7d3de",
+      background: "#1e2d3d",
+      text: "#8c98a8",
     },
 
     dark: {
-      background: "#8097bf",
-      text: "#1e2e4a",
+      background: "#0d1b2a",
+      text: "#c8d4e0",
     },
   },
 
   inputColors: {
-    borderColor: { main: "#f0f2f566", focus: "#11cdef" },
-    error: "#f5365c",
-    success: "#2dce89",
+    borderColor: { main: "#2c3f54", focus: "#6ea8d4" },
+    error: "#d95555",
+    success: "#4aad72",
   },
 
   sliderColors: {

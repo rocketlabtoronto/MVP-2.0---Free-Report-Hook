@@ -1,13 +1,14 @@
 const colors = {
+  // Goldman Sachs palette: navy, white, warm off-white, cool greys
   background: {
-    default: "#f5f7fb",
-    dark: "#111827",
+    default: "#f7f7f5",   // GS warm off-white page background
+    dark: "#0d1b2a",      // GS navy dark panel
   },
 
   text: {
-    main: "#1f2937",
-    focus: "#111827",
-    secondary: "#334155",
+    main: "#0d1b2a",      // GS navy text
+    focus: "#0d1b2a",
+    secondary: "#5a6473", // GS mid-grey secondary text
   },
 
   transparent: {
@@ -20,102 +21,102 @@ const colors = {
   },
 
   black: {
-    light: "#141414",
+    light: "#1a1a1a",
     main: "#000000",
     focus: "#000000",
   },
 
   primary: {
-    main: "#1a4b8f",
-    focus: "#1a4b8f",
+    main: "#0d1b2a",      // GS deep navy
+    focus: "#1a3a5c",
   },
 
   secondary: {
-    main: "#8392ab",
-    focus: "#8392ab",
+    main: "#8c98a8",      // GS cool grey
+    focus: "#8c98a8",
   },
 
   info: {
-    main: "#2d6cdf",
-    focus: "#2d6cdf",
+    main: "#1a3a5c",      // GS medium navy (links, CTAs)
+    focus: "#0d1b2a",
   },
 
   success: {
-    main: "#2dce89",
-    focus: "#2dce89",
+    main: "#2a7a4b",      // muted green (GS-appropriate)
+    focus: "#2a7a4b",
   },
 
   warning: {
-    main: "#fb6340",
-    focus: "#fb6340",
+    main: "#b56a00",      // muted amber
+    focus: "#b56a00",
   },
 
   error: {
-    main: "#f5365c",
-    focus: "#f5365c",
+    main: "#b91c1c",      // muted red
+    focus: "#b91c1c",
   },
 
   light: {
-    main: "#e9ecef",
-    focus: "#e9ecef",
+    main: "#eaecef",
+    focus: "#eaecef",
   },
 
   dark: {
-    main: "#1e293b",
-    focus: "#0f172a",
+    main: "#0d1b2a",      // GS deep navy
+    focus: "#051018",
   },
 
   grey: {
-    100: "#f8f9fa",
-    200: "#e9ecef",
-    300: "#dee2e6",
-    400: "#ced4da",
-    500: "#adb5bd",
-    600: "#6c757d",
-    700: "#495057",
-    800: "#343a40",
-    900: "#212529",
+    100: "#f7f7f5",       // warm off-white
+    200: "#eaecef",
+    300: "#d6d9de",       // GS border grey
+    400: "#c2c8d1",
+    500: "#8c98a8",
+    600: "#5a6473",
+    700: "#3d4552",
+    800: "#232b35",
+    900: "#0d1b2a",
   },
 
   gradients: {
     primary: {
-      main: "#1a4b8f",
-      state: "#244e9c",
+      main: "#0d1b2a",
+      state: "#1a3a5c",
     },
 
     secondary: {
-      main: "#627594",
-      state: "#a8b8d8",
+      main: "#5a6473",
+      state: "#8c98a8",
     },
 
     info: {
-      main: "#2d6cdf",
-      state: "#4f83ff",
+      main: "#1a3a5c",
+      state: "#2d5c8a",
     },
 
     success: {
-      main: "#2dce89",
-      state: "#2dcecc",
+      main: "#2a7a4b",
+      state: "#358c5a",
     },
 
     warning: {
-      main: "#fb6340",
-      state: "#fbb140",
+      main: "#b56a00",
+      state: "#cc7a00",
     },
 
     error: {
-      main: "#f5365c",
-      state: "#f56036",
+      main: "#b91c1c",
+      state: "#c72020",
     },
 
     light: {
-      main: "#ced4da",
-      state: "#ebeff4",
+      main: "#d6d9de",
+      state: "#eaecef",
     },
 
     dark: {
-      main: "#212229",
-      state: "#212529",
+      main: "#0d1b2a",
+      state: "#051018",
     },
   },
 
@@ -183,100 +184,100 @@ const colors = {
 
   alertColors: {
     primary: {
-      main: "#1a4b8f",
-      state: "#244e9c",
-      border: "#c9d9f5",
+      main: "#0d1b2a",
+      state: "#1a3a5c",
+      border: "#c2c8d1",
     },
 
     secondary: {
-      main: "#627594",
-      state: "#8ca1cb",
-      border: "#dadee6",
+      main: "#5a6473",
+      state: "#8c98a8",
+      border: "#d6d9de",
     },
 
     info: {
-      main: "#2d6cdf",
-      state: "#4f83ff",
-      border: "#cfe0ff",
+      main: "#1a3a5c",
+      state: "#2d5c8a",
+      border: "#c2cfe0",
     },
 
     success: {
-      main: "#2dce89",
-      state: "#26adab",
-      border: "#c0f0dc",
+      main: "#2a7a4b",
+      state: "#358c5a",
+      border: "#b8dfc8",
     },
 
     warning: {
-      main: "#fb6340",
-      state: "#faa118",
-      border: "#fed0c6",
+      main: "#b56a00",
+      state: "#cc7a00",
+      border: "#f0d8b0",
     },
 
     error: {
-      main: "#f5365c",
-      state: "#f3410f",
-      border: "#fcc3ce",
+      main: "#b91c1c",
+      state: "#c72020",
+      border: "#f0c8c8",
     },
 
     light: {
-      main: "#ced4da",
-      state: "#d1dae6",
-      border: "#f8f9fa",
+      main: "#d6d9de",
+      state: "#eaecef",
+      border: "#f7f7f5",
     },
 
     dark: {
-      main: "#212229",
-      state: "#0f1112",
+      main: "#0d1b2a",
+      state: "#051018",
       border: "#c2c8d1",
     },
   },
 
   badgeColors: {
     primary: {
-      background: "#e4edff",
-      text: "#1a4b8f",
+      background: "#e8edf2",
+      text: "#0d1b2a",
     },
 
     secondary: {
-      background: "#e4e8ed",
-      text: "#5974a2",
+      background: "#eaecef",
+      text: "#5a6473",
     },
 
     info: {
-      background: "#e4edff",
-      text: "#1a4b8f",
+      background: "#e8edf2",
+      text: "#1a3a5c",
     },
 
     success: {
-      background: "#b0eed3",
-      text: "#1aae6f",
+      background: "#d4eddf",
+      text: "#2a7a4b",
     },
 
     warning: {
-      background: "#fee6e0",
-      text: "#ff3709",
+      background: "#f5e8d0",
+      text: "#b56a00",
     },
 
     error: {
-      background: "#fdd1da",
-      text: "#f80031",
+      background: "#f5d8d8",
+      text: "#b91c1c",
     },
 
     light: {
       background: "#ffffff",
-      text: "#c7d3de",
+      text: "#8c98a8",
     },
 
     dark: {
-      background: "#8097bf",
-      text: "#1e2e4a",
+      background: "#e8edf2",
+      text: "#0d1b2a",
     },
   },
 
   inputColors: {
-    borderColor: { main: "#d2d6da", focus: "#2d6cdf" },
-    error: "#f5365c",
-    success: "#2dce89",
+    borderColor: { main: "#d6d9de", focus: "#0d1b2a" },
+    error: "#b91c1c",
+    success: "#2a7a4b",
   },
 
   sliderColors: {

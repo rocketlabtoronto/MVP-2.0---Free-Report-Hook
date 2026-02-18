@@ -9,13 +9,21 @@ const baseWrapperStyle = {
   justifyContent: "center",
   minHeight: "100vh",
   padding: 24,
+  background: "#f4f5f7",
 };
 
 const baseCardStyle = {
-  borderRadius: 16,
-  padding: 28,
-  maxWidth: 440,
+  borderRadius: 0,
+  padding: 40,
+  maxWidth: 420,
   width: "100%",
+  background: "#ffffff",
+  border: "none",
+  borderTop: "3px solid #0d1b2a",
+  borderBottom: "1px solid #d6d9de",
+  boxShadow: "none",
+  position: "relative",
+  overflow: "hidden",
 };
 
 const baseLogoStyle = {
@@ -38,16 +46,8 @@ export default function AuthPageLayout({
   showLogo,
 }) {
   const theme = useTheme();
-  const themedWrapperStyle = {
-    background: `linear-gradient(145deg, ${theme.palette.grey[100]} 0%, ${theme.palette.background.default} 55%, ${theme.palette.primary.light}22 100%)`,
-  };
-  const themedCardStyle = {
-    background: theme.palette.background.paper,
-    border: `1px solid ${theme.palette.divider}`,
-    boxShadow: theme.shadows[8],
-    position: "relative",
-    overflow: "hidden",
-  };
+  const themedWrapperStyle = {};
+  const themedCardStyle = {};
 
   const logo = showLogo ? (
     <div style={{ marginBottom: 24, textAlign: "center" }}>
@@ -64,14 +64,14 @@ export default function AuthPageLayout({
   ) : null;
 
   return (
-    <div style={{ ...baseWrapperStyle, ...themedWrapperStyle, ...wrapperStyle }}>
+    <div style={{ ...baseWrapperStyle, ...wrapperStyle }}>
       {logoPosition === "outside" && logo}
-      <div style={{ ...baseCardStyle, ...themedCardStyle, ...cardStyle }}>
+      <div style={{ ...baseCardStyle, ...cardStyle }}>
         <div
           style={{
-            height: 4,
+            height: 3,
             width: "100%",
-            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
+            background: "#0d1b2a",
             position: "absolute",
             top: 0,
             left: 0,

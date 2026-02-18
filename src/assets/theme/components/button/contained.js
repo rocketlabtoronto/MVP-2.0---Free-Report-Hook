@@ -1,39 +1,47 @@
 // Custom Dashboard 2 MUI Base Styles
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
-import boxShadows from "assets/theme/base/boxShadows";
 
 // Custom Dashboard 2 MUI Helper Functions
 import pxToRem from "assets/theme/functions/pxToRem";
 
-const { white, text, info, secondary } = colors;
+const { white, text, dark, secondary } = colors;
 const { size } = typography;
-const { buttonBoxShadow } = boxShadows;
 
 const contained = {
   base: {
     backgroundColor: white.main,
-    minHeight: pxToRem(40),
+    minHeight: pxToRem(38),
     color: text.main,
-    boxShadow: "0 10px 24px rgba(15, 23, 42, 0.08)",
-    padding: `${pxToRem(10)} ${pxToRem(20)}`,
+    boxShadow: "none",
+    padding: `${pxToRem(9)} ${pxToRem(20)}`,
+    borderRadius: 0,
+    border: "1px solid #d6d9de",
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+    fontSize: pxToRem(12),
+    fontWeight: 700,
 
     "&:hover": {
-      backgroundColor: white.main,
-      boxShadow: "0 12px 28px rgba(15, 23, 42, 0.12)",
+      backgroundColor: "#f7f7f5",
+      boxShadow: "none",
+      borderColor: "#0d1b2a",
     },
 
     "&:focus": {
-      boxShadow: "0 12px 28px rgba(15, 23, 42, 0.12)",
+      boxShadow: "none",
+      outline: "2px solid #0d1b2a",
+      outlineOffset: 1,
     },
 
     "&:active, &:active:focus, &:active:hover": {
       opacity: 0.9,
-      boxShadow: "0 8px 18px rgba(15, 23, 42, 0.12)",
+      boxShadow: "none",
     },
 
     "&:disabled": {
-      boxShadow: "0 6px 14px rgba(15, 23, 42, 0.08)",
+      boxShadow: "none",
+      opacity: 0.45,
     },
 
     "& .material-icon, .material-icons-round, svg": {
@@ -42,9 +50,9 @@ const contained = {
   },
 
   small: {
-    minHeight: pxToRem(32),
-    padding: `${pxToRem(8)} ${pxToRem(32)}`,
-    fontSize: size.xs,
+    minHeight: pxToRem(30),
+    padding: `${pxToRem(6)} ${pxToRem(16)}`,
+    fontSize: pxToRem(11),
 
     "& .material-icon, .material-icons-round, svg": {
       fontSize: `${pxToRem(12)} !important`,
@@ -52,9 +60,9 @@ const contained = {
   },
 
   large: {
-    minHeight: pxToRem(47),
-    padding: `${pxToRem(14)} ${pxToRem(64)}`,
-    fontSize: size.sm,
+    minHeight: pxToRem(44),
+    padding: `${pxToRem(12)} ${pxToRem(32)}`,
+    fontSize: pxToRem(13),
 
     "& .material-icon, .material-icons-round, svg": {
       fontSize: `${pxToRem(22)} !important`,
@@ -62,31 +70,36 @@ const contained = {
   },
 
   primary: {
-    backgroundColor: info.main,
+    backgroundColor: "#0d1b2a",
     color: white.main,
-    boxShadow: "0 12px 28px rgba(45, 108, 223, 0.35)",
+    border: "1px solid #0d1b2a",
+    boxShadow: "none",
 
     "&:hover": {
-      backgroundColor: info.focus,
-      boxShadow: "0 14px 32px rgba(45, 108, 223, 0.4)",
+      backgroundColor: "#1a3a5c",
+      border: "1px solid #1a3a5c",
+      boxShadow: "none",
     },
 
     "&:focus:not(:hover)": {
-      backgroundColor: info.focus,
-      boxShadow: "0 12px 28px rgba(45, 108, 223, 0.35)",
+      backgroundColor: "#1a3a5c",
+      boxShadow: "none",
     },
   },
 
   secondary: {
-    backgroundColor: secondary.main,
+    backgroundColor: "#f7f7f5",
+    color: "#0d1b2a",
+    border: "1px solid #d6d9de",
 
     "&:hover": {
-      backgroundColor: secondary.main,
+      backgroundColor: "#eaecef",
+      border: "1px solid #0d1b2a",
     },
 
     "&:focus:not(:hover)": {
-      backgroundColor: secondary.focus,
-      boxShadow: buttonBoxShadow.stateOfNotHover,
+      backgroundColor: "#eaecef",
+      boxShadow: "none",
     },
   },
 };

@@ -6,57 +6,59 @@ import DashboardLayout from "ui/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "ui/Navbars/DashboardNavbar";
 
 function StockOwnersReportManual() {
-  const accentColor = "#1a4b8f";
+  const accentColor = "#0d1b2a";
   const containerStyle = {
     backgroundColor: "#ffffff",
-    boxShadow: "0 24px 54px rgba(15, 23, 42, 0.12)",
-    borderRadius: "20px",
-    border: "1px solid rgba(15, 23, 42, 0.06)",
-    borderTop: "4px solid #1a4b8f",
+    boxShadow: "none",
+    borderRadius: 0,
+    border: "none",
+    borderTop: "3px solid #0d1b2a",
+    borderBottom: "1px solid #d6d9de",
     fontFamily: "inherit",
-    lineHeight: 1.45,
+    lineHeight: 1.6,
     fontSize: 15,
-    color: "#111827",
+    color: "#0d1b2a",
   };
 
   const headingStyle = {
     fontFamily: "inherit",
     fontWeight: 700,
-    color: "#111827",
+    color: "#0d1b2a",
     lineHeight: 1.15,
     marginBottom: 12,
+    letterSpacing: "-0.02em",
   };
 
   const bodyStyle = {
     fontFamily: "inherit",
-    fontSize: 15,
-    color: "#475569",
-    lineHeight: 1.42,
+    fontSize: 14.5,
+    color: "#4b5563",
+    lineHeight: 1.75,
     marginBottom: 12,
   };
 
   const sectionDivider = {
-    borderTop: "1px solid #e2e8f0",
-    paddingTop: 18,
-    marginTop: 18,
+    borderTop: "1px solid #d6d9de",
+    paddingTop: 24,
+    marginTop: 24,
   };
 
   const highlightBox = {
-    backgroundColor: "#eef3ff",
-    padding: 14,
-    margin: "12px 0",
-    borderLeft: `4px solid ${accentColor}`,
-    fontSize: 15,
+    backgroundColor: "#f9fafb",
+    padding: "14px 18px",
+    margin: "16px 0",
+    borderLeft: "3px solid #0d1b2a",
+    fontSize: 14.5,
     fontStyle: "italic",
-    color: accentColor,
-    borderRadius: 12,
+    color: "#1a3a5c",
+    borderRadius: 0,
   };
 
   const exampleBox = {
-    backgroundColor: "#f8fafc",
-    border: "1px solid #e2e8f0",
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: "#f9fafb",
+    border: "1px solid #d6d9de",
+    borderRadius: 0,
+    padding: "16px 20px",
     margin: "16px 0",
   };
 
@@ -91,10 +93,13 @@ function StockOwnersReportManual() {
       variant="h4"
       style={{
         ...headingStyle,
-        fontSize: 22,
-        marginBottom: 12,
-        paddingLeft: 10,
-        borderLeft: `3px solid ${accentColor}`,
+        fontSize: 19,
+        fontWeight: 700,
+        letterSpacing: -0.3,
+        color: "#0d1b2a",
+        marginBottom: 10,
+        paddingLeft: 12,
+        borderLeft: "3px solid #0d1b2a",
         ...style,
       }}
     >
@@ -152,43 +157,45 @@ function StockOwnersReportManual() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <CustomBox py={2}>
+      <CustomBox py={1}>
         <CustomBox
-            px={{ xs: 2, sm: 3, md: 4 }}
-        py={3}
-            maxWidth={820}
+          px={{ xs: 3, sm: 4, md: 5 }}
+          py={4}
           width="100%"
-          mr="auto"
           style={containerStyle}
           className="owner-manual"
         >
+          <CustomBox maxWidth={760}>
           <style>{`
-            .owner-manual [style*="#bfa14a"] {
+            .owner-manual [style*="#1a3a5c"] {
               color: ${accentColor} !important;
               border-color: ${accentColor} !important;
             }
           `}</style>
           {/* Hero Section */}
+          {/* Overline */}
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, color: "#9ca3af", textTransform: "uppercase", marginBottom: 10 }}>Investment Philosophy</div>
           <CustomTypography
             variant="h4"
             style={{
               ...headingStyle,
-              fontSize: 30,
+              fontSize: 28,
               fontWeight: 700,
-              marginBottom: 16,
-              borderBottom: "3px solid #1a4b8f",
-              paddingBottom: 12,
+              marginBottom: 6,
+              letterSpacing: -0.5,
+              lineHeight: 1.2,
             }}
           >
-            The Stock Owner&apos;s Report: Proportionate Share Earnings — Investing Like a Business Owner, Not
-            a Speculator
+            The Stock Owner&apos;s Report
           </CustomTypography>
+          <div style={{ fontSize: 14.5, color: "#4b5563", marginBottom: 20, lineHeight: 1.6 }}>Proportionate Share Earnings — Investing Like a Business Owner, Not a Speculator</div>
+          <div style={{ borderTop: "1px solid #d6d9de", marginBottom: 20 }} />
 
           <Highlight>
             &quot;We regard look-through earnings as a much better gauge of economic reality than GAAP
             earnings.&quot;
             <br />
-            <span style={{ fontStyle: "normal", fontWeight: 600, color: "#111827" }}>
+            <span style={{ fontStyle: "normal", fontWeight: 600, color: "#0d1b2a" }}>
               — Warren Buffett, Berkshire Hathaway Shareholder Letter
             </span>
           </Highlight>
@@ -251,7 +258,7 @@ function StockOwnersReportManual() {
                       well, your proportionate share of future earnings can grow even if dividends are small.
                     </>
                   ),
-                  bulletColor: "#bfa14a",
+                  bulletColor: "#1a3a5c",
                 },
                 {
                   content: (
@@ -260,7 +267,7 @@ function StockOwnersReportManual() {
                       earnings and cash flows your proportionate share represents.
                     </>
                   ),
-                  bulletColor: "#bfa14a",
+                  bulletColor: "#1a3a5c",
                 },
                 {
                   content: (
@@ -269,7 +276,7 @@ function StockOwnersReportManual() {
                       of &quot;price moved,&quot; volatility becomes information — not a trigger.
                     </>
                   ),
-                  bulletColor: "#bfa14a",
+                  bulletColor: "#1a3a5c",
                 },
               ]}
             />
@@ -290,15 +297,16 @@ function StockOwnersReportManual() {
               variant="h5"
               style={{
                 ...headingStyle,
-                fontSize: 18,
-                color: "#bfa14a",
+                fontSize: 14,
+                fontWeight: 700,
+                color: "#0d1b2a",
                 marginBottom: 10,
               }}
             >
               Mr. Stock Owner (Buffett&apos;s ideal investor)
             </CustomTypography>
             <BulletList
-              bulletColor="#bfa14a"
+              bulletColor="#1a3a5c"
               listOverrides={{ margin: 0, paddingLeft: 0 }}
               items={[
                 "Thinks like a business owner.",
@@ -316,15 +324,16 @@ function StockOwnersReportManual() {
               variant="h5"
               style={{
                 ...headingStyle,
-                fontSize: 18,
-                color: "#bfa14a",
+                fontSize: 14,
+                fontWeight: 700,
+                color: "#0d1b2a",
                 marginBottom: 10,
               }}
             >
               Mr. Market (from Benjamin Graham)
             </CustomTypography>
             <BulletList
-              bulletColor="#bfa14a"
+              bulletColor="#1a3a5c"
               listOverrides={{ margin: 0, paddingLeft: 0 }}
               items={[
                 "Is manic, emotional, and short-sighted.",
@@ -345,7 +354,7 @@ function StockOwnersReportManual() {
       <Body>
         Speculators focus on:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={["Stock price movements", "Daily news cycles", "Market sentiment and trading volume"]}
         />
         But that&apos;s not how an owner thinks.
@@ -353,7 +362,7 @@ function StockOwnersReportManual() {
       <Body>
         Proportionate-share earnings reflect:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={[
             <>
               Your <strong>proportionate share</strong> of the profits earned by the companies you own — whether or not
@@ -363,7 +372,7 @@ function StockOwnersReportManual() {
         />
         This includes:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={[
             "Your share of reported earnings (where applicable)",
             "Your share of retained earnings (profits the company keeps and reinvests)",
@@ -391,7 +400,7 @@ function StockOwnersReportManual() {
         &quot;Many of the businesses we own retain all earnings. These earnings do not hit our
         income statement but are building our wealth nonetheless.&quot;
         <br />
-        <span style={{ fontStyle: "normal", fontWeight: 600, color: "#1a1a1a" }}>
+        <span style={{ fontStyle: "normal", fontWeight: 600, color: "#0d1b2a" }}>
           — Warren Buffett
         </span>
       </Highlight>
@@ -399,7 +408,7 @@ function StockOwnersReportManual() {
 
       {/* Example: What a Speculator Sees vs. What an Owner Sees */}
       <div style={sectionDivider} />
-      <SectionTitle style={{ borderLeft: "4px solid #bfa14a", paddingLeft: 16 }}>
+      <SectionTitle style={{ borderLeft: "4px solid #1a3a5c", paddingLeft: 16 }}>
         Example: What a Speculator Sees vs. What an Owner Sees
       </SectionTitle>
 
@@ -502,12 +511,12 @@ function StockOwnersReportManual() {
         share of earnings, you think like a business owner — and make more rational, long-term decisions.
         <br />
         <br />
-        <span style={{ color: "#bfa14a", fontWeight: 600 }}>That&apos;s the owner&apos;s lens.</span>
+        <span style={{ color: "#1a3a5c", fontWeight: 600 }}>That&apos;s the owner&apos;s lens.</span>
       </Body>
 
       {/* Example: The Dividend Trap */}
       <div style={sectionDivider} />
-      <SectionTitle style={{ borderLeft: "4px solid #bfa14a", paddingLeft: 16 }}>
+      <SectionTitle style={{ borderLeft: "4px solid #1a3a5c", paddingLeft: 16 }}>
         Example: The Dividend Trap
       </SectionTitle>
 
@@ -599,7 +608,7 @@ function StockOwnersReportManual() {
         <br />
         Owner thinking asks:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           listOverrides={{ marginTop: 18, marginBottom: 0 }}
           itemOverrides={{ marginBottom: 8 }}
           items={["Is my proportionate share of earnings growing?", "Is capital being deployed productively?"]}
@@ -644,7 +653,7 @@ function StockOwnersReportManual() {
                   fontSize: 14,
                   padding: "8px 6px",
                   fontWeight: 600,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                 title="Ownership stake tier"
               >
@@ -656,7 +665,7 @@ function StockOwnersReportManual() {
                   padding: "8px 6px",
                   fontWeight: 600,
                   fontSize: 14,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                 title="Accounting category"
               >
@@ -668,7 +677,7 @@ function StockOwnersReportManual() {
                   padding: "8px 6px",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                 title="Recognition method"
               >
@@ -680,7 +689,7 @@ function StockOwnersReportManual() {
                   padding: "8px 6px",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                   title="Income recognition"
               >
@@ -728,7 +737,7 @@ function StockOwnersReportManual() {
       <Body>
         This shift in mindset changes everything:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={[
             "Instead of tracking stock prices, you track business performance.",
             "Instead of reacting to volatility, you assess value.",
@@ -763,7 +772,7 @@ function StockOwnersReportManual() {
           <br />
           For example (illustrative):
           <BulletList
-            bulletColor="#bfa14a"
+            bulletColor="#1a3a5c"
             items={[
               "A small ownership stake in a mid-cap company can translate into hundreds or thousands of dollars of earnings exposure — even if the dividend is minimal.",
               "Across a portfolio, those earnings exposures aggregate into a single owner-style total: how much the businesses you own collectively earned on your behalf.",
@@ -784,7 +793,7 @@ function StockOwnersReportManual() {
       <Body>
         The Stock Owner&apos;s Report generates clear, owner-style statements that show you:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={[
             "Your proportionate share of each company&apos;s assets, liabilities, equity, income, and cash flow",
             "A breakdown of retained vs. distributed earnings",
@@ -809,7 +818,7 @@ function StockOwnersReportManual() {
       <Body>
         That&apos;s how a true owner thinks. Just like a business owner, you want to know:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={["How much are we earning?", "What did we reinvest this year — and what return did it earn?"]}
         />
         That&apos;s how real owners think. And that&apos;s what we deliver.
@@ -821,7 +830,7 @@ function StockOwnersReportManual() {
       <Body>
         When you use proportionate-share earnings:
         <BulletList
-          bulletColor="#bfa14a"
+          bulletColor="#1a3a5c"
           items={[
             "You stop asking \"What&apos;s the stock price?\"",
             "And start asking: \"What is my proportionate share of the profits?\" \"Are those profits growing?\" \"Are they being reinvested wisely?\"",
@@ -864,7 +873,7 @@ function StockOwnersReportManual() {
                   padding: "8px 6px",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                 title="Key principle"
               >
@@ -875,7 +884,7 @@ function StockOwnersReportManual() {
                   textAlign: "left",
                   padding: "8px 6px",
                   fontWeight: 600,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                 title="Mr. Market mindset"
               >
@@ -886,7 +895,7 @@ function StockOwnersReportManual() {
                   textAlign: "left",
                   padding: "8px 6px",
                   fontWeight: 600,
-                  color: "#1a1a1a",
+                  color: "#0d1b2a",
                 }}
                 title="Mr. Stock Owner mindset"
               >
@@ -959,7 +968,7 @@ function StockOwnersReportManual() {
           style={{
             ...headingStyle,
             fontSize: 18,
-            color: "#bfa14a",
+            color: "#1a3a5c",
             marginBottom: 10,
           }}
         >
@@ -980,14 +989,14 @@ function StockOwnersReportManual() {
         style={{
           ...headingStyle,
           fontSize: 22,
-          color: "#bfa14a",
+          color: "#1a3a5c",
           marginBottom: 16,
         }}
       >
         Why Owner&apos;s Earnings Matter:
       </CustomTypography>
       <BulletList
-        bulletColor="#bfa14a"
+        bulletColor="#1a3a5c"
         items={[
           "They show how much cash the business could return to shareholders without shrinking.",
           "They strip out accounting distortions.",
@@ -1028,11 +1037,12 @@ function StockOwnersReportManual() {
           textAlign: "center",
           marginTop: 48,
           marginBottom: 0,
-          color: "#bfa14a",
+          color: "#1a3a5c",
         }}
       >
         And at The Stock Owner&apos;s Report, we help bring that clarity to every investor.
       </Body>
+        </CustomBox>
         </CustomBox>
       </CustomBox>
     </DashboardLayout>

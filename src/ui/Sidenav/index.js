@@ -128,7 +128,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             onClick={handleSignOut}
             variant="contained"
             fullWidth
-            sx={{ py: 1.1, fontWeight: 700, borderRadius: 1.5 }}
+            sx={{ py: 1.1, fontWeight: 700, borderRadius: 0, backgroundColor: "#0d1b2a", boxShadow: "none", textTransform: "uppercase", letterSpacing: 1.2, fontSize: 12, "&:hover": { backgroundColor: "#1a3a5c", boxShadow: "none" } }}
           >
             Sign Out
           </Button>

@@ -128,10 +128,13 @@ export default function SetPassword() {
             padding: "20px",
             borderRadius: 10,
             background: "#fff",
-            border: "1px solid #e8edf3",
+            border: "1px solid #d6d9de",
+            borderTop: "2px solid #0d1b2a",
+            borderRadius: 0,
+            boxShadow: "none",
           }}
         >
-          <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 1.5 }}>
+          <CustomTypography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: "#6b7280", textTransform: "uppercase", mb: 1, textAlign: "center" }}>
             Password Reset Link
           </CustomTypography>
           <CustomTypography variant="body2" color="error" fontWeight="medium" sx={{ mb: 1.75 }}>
@@ -170,7 +173,10 @@ export default function SetPassword() {
           {/* ---- Page heading: differs by flow ---- */}
           {isActivation ? (
             <>
-              <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 1, textAlign: "center" }}>
+              <CustomTypography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: "#6b7280", textTransform: "uppercase", mb: 1, textAlign: "center" }}>
+                Account Activation
+              </CustomTypography>
+              <CustomTypography sx={{ fontSize: 16, fontWeight: 600, color: "#0d1b2a", mb: 0.5, textAlign: "center" }}>
                 Welcome to The Stock Owner Report
               </CustomTypography>
               <CustomTypography
@@ -185,7 +191,10 @@ export default function SetPassword() {
             </>
           ) : (
             <>
-              <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 1, textAlign: "center" }}>
+              <CustomTypography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: "#6b7280", textTransform: "uppercase", mb: 1, textAlign: "center" }}>
+                Password Reset
+              </CustomTypography>
+              <CustomTypography sx={{ fontSize: 16, fontWeight: 600, color: "#0d1b2a", mb: 0.5, textAlign: "center" }}>
                 Reset Your Password
               </CustomTypography>
               <CustomTypography
@@ -216,8 +225,8 @@ export default function SetPassword() {
                 variant="outlined"
                 sx={{
                   mb: 2,
-                  "& .MuiOutlinedInput-root": { minHeight: 46 },
-                  "& .MuiInputBase-input": { fontSize: "1.1rem", lineHeight: 1.5, py: 1.1 },
+                  "& .MuiOutlinedInput-root": { minHeight: 44, borderRadius: 0, "& fieldset": { borderColor: "#d6d9de" }, "&:hover fieldset": { borderColor: "#8c98a8" }, "&.Mui-focused fieldset": { borderColor: "#0d1b2a", borderWidth: 1.5 } },
+                  "& .MuiInputBase-input": { fontSize: "0.9rem", lineHeight: 1.5, py: 1.2 },
                 }}
               />
 
@@ -230,8 +239,8 @@ export default function SetPassword() {
                 variant="outlined"
                 sx={{
                   mb: 3,
-                  "& .MuiOutlinedInput-root": { minHeight: 46 },
-                  "& .MuiInputBase-input": { fontSize: "1.1rem", lineHeight: 1.5, py: 1.1 },
+                  "& .MuiOutlinedInput-root": { minHeight: 44, borderRadius: 0, "& fieldset": { borderColor: "#d6d9de" }, "&:hover fieldset": { borderColor: "#8c98a8" }, "&.Mui-focused fieldset": { borderColor: "#0d1b2a", borderWidth: 1.5 } },
+                  "& .MuiInputBase-input": { fontSize: "0.9rem", lineHeight: 1.5, py: 1.2 },
                 }}
               />
 
@@ -248,7 +257,7 @@ export default function SetPassword() {
               <Button
                 variant="contained"
                 fullWidth
-                sx={{ py: 1.1, fontWeight: 700 }}
+                sx={{ py: 1.2, fontWeight: 700, borderRadius: 0, backgroundColor: "#0d1b2a", boxShadow: "none", textTransform: "uppercase", letterSpacing: 1.5, fontSize: 12, "&:hover": { backgroundColor: "#1a3a5c", boxShadow: "none" }, "&:disabled": { backgroundColor: "#9ca3af", color: "#fff" } }}
                 onClick={handleSetPassword}
                 disabled={loading}
               >

@@ -60,7 +60,7 @@ export default function App() {
       <Box
         sx={{
           minHeight: "100vh",
-          background: "#27ae60",
+          background: "#f7f7f5",
           display: "flex",
           flexDirection: "column",
         }}
@@ -89,7 +89,8 @@ export default function App() {
         {/* Always visible sticky footer */}
         <Box
           sx={({ breakpoints, functions: { pxToRem } }) => ({
-            background: "#27ae60",
+            background: "#f7f7f5",
+            borderTop: "1px solid #d6d9de",
             py: 2,
             px: 3,
             mt: "auto",

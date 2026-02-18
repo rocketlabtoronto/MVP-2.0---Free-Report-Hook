@@ -11,57 +11,33 @@ function item(theme, ownerState) {
   const accentColor = palette[sidenavColor ?? "info"].main;
 
   return {
-    background: active
-      ? `linear-gradient(90deg, ${rgba(accentColor, darkSidenav ? 0.42 : 0.22)} 0%, ${rgba(
-          accentColor,
-          darkSidenav ? 0.18 : 0.1
-        )} 100%)`
-      : transparent.main,
-    color: () => {
-      let result = dark.main;
-
-      if ((active && sidenavColor) || (active && darkSidenav) || darkSidenav) {
-        result = white.main;
-      } else if (active) {
-        result = dark.main;
-      }
-
-      return result;
-    },
+    background: active ? "#f0f2f5" : transparent.main,
+    color: dark.main,
     display: miniSidenav ? "block" : "flex",
     alignItems: "center",
     width: "100%",
-    padding: `${pxToRem(9)} ${pxToRem(16)}`,
-    margin: `${pxToRem(1)} ${pxToRem(10)}`,
-    borderRadius: borderRadius.md,
-    borderLeft: `${pxToRem(3)} solid ${active ? accentColor : "transparent"}`,
+    padding: `${pxToRem(8)} ${pxToRem(14)}`,
+    margin: `${pxToRem(1)} ${pxToRem(6)}`,
+    borderRadius: 0,
+    borderLeft: `${pxToRem(3)} solid ${active ? "#0d1b2a" : "transparent"}`,
     cursor: "pointer",
     userSelect: "none",
     whiteSpace: "nowrap",
-    boxShadow: active ? (darkSidenav ? xxl : `0 8px 20px ${rgba(accentColor, 0.2)}`) : "none",
-    transform: "translateX(0)",
-    transition: transitions.create(["background-color", "box-shadow", "transform", "border-color"], {
+    boxShadow: "none",
+    transform: "none",
+    transition: transitions.create(["background-color", "border-color"], {
       easing: transitions.easing.easeInOut,
       duration: transitions.duration.shorter,
     }),
 
     "&:hover": {
-      background: `linear-gradient(90deg, ${rgba(accentColor, darkSidenav ? 0.34 : 0.16)} 0%, ${rgba(
-        accentColor,
-        darkSidenav ? 0.16 : 0.08
-      )} 100%)`,
-      transform: "translateX(2px)",
-      boxShadow: darkSidenav ? xxl : `0 8px 18px ${rgba(accentColor, 0.16)}`,
+      background: "#f0f2f5",
+      transform: "none",
+      boxShadow: "none",
     },
 
     [breakpoints.up("xl")]: {
-      boxShadow: () => {
-        if (active) {
-          return darkSidenav ? xxl : "none";
-        }
-
-        return "none";
-      },
+      boxShadow: "none",
     },
   };
 }
@@ -75,14 +51,14 @@ function itemIconBox(theme, ownerState) {
   const accentColor = palette[sidenavColor ?? "info"].main;
 
   return {
-    color: "inherit",
-    minWidth: pxToRem(32),
-    minHeight: pxToRem(32),
-    background: active ? rgba(accentColor, darkSidenav ? 0.36 : 0.2) : rgba(accentColor, 0.08),
-    borderRadius: borderRadius.md,
+    color: active ? "#0d1b2a" : "#6b7280",
+    minWidth: pxToRem(30),
+    minHeight: pxToRem(30),
+    background: "transparent",
+    borderRadius: 0,
     display: "grid",
     placeItems: "center",
-    transition: transitions.create(["margin", "background-color", "transform"], {
+    transition: transitions.create(["color"], {
       easing: transitions.easing.easeInOut,
       duration: transitions.duration.standard,
     }),
@@ -92,11 +68,11 @@ function itemIconBox(theme, ownerState) {
     },
 
     "& i": {
-      color: active && (darkSidenav || sidenavColor) ? "inherit" : null,
+      color: "inherit",
     },
 
     "&:hover": {
-      transform: "scale(1.04)",
+      transform: "none",
     },
   };
 }

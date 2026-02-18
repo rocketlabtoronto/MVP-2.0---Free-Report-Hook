@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import AuthPageLayout from "components/AuthPageLayout";
@@ -79,13 +79,16 @@ export default function SendPasswordReset() {
 
   return (
     <AuthPageLayout showLogo={false}>
-      <CustomTypography variant="h4" fontWeight="bold" color="text" sx={{ mb: 2 }}>
+      <CustomTypography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: "#6b7280", textTransform: "uppercase", mb: 1 }}>
+        Password Reset
+      </CustomTypography>
+      <CustomTypography sx={{ fontSize: 15, fontWeight: 600, color: "#0d1b2a", mb: 1.5 }}>
         Request a Password Reset
       </CustomTypography>
       <CustomTypography
         variant="caption"
         color="text"
-        sx={{ fontSize: 15, mb: 2.25, textAlign: "left", lineHeight: 1.6, display: "block" }}
+        sx={{ fontSize: 13, mb: 2.5, color: "#5a6473", textAlign: "left", lineHeight: 1.7, display: "block" }}
       >
         Enter the email address associated with your account. If an account exists, we’ll send you an
         email with a link to reset your password. Please check your inbox and follow the instructions
@@ -105,9 +108,7 @@ export default function SendPasswordReset() {
         variant="outlined"
         sx={{
           mb: 1.5,
-          "& .MuiOutlinedInput-root": {
-            minHeight: 46,
-          },
+          "& .MuiOutlinedInput-root": { minHeight: 44, borderRadius: 0, "& fieldset": { borderColor: "#d6d9de" }, "&:hover fieldset": { borderColor: "#8c98a8" }, "&.Mui-focused fieldset": { borderColor: "#0d1b2a", borderWidth: 1.5 } },
           "& .MuiInputBase-input": {
             fontSize: "1.1rem",
             lineHeight: 1.5,
@@ -129,7 +130,7 @@ export default function SendPasswordReset() {
         <Button
           variant="contained"
           fullWidth
-          sx={{ py: 1.1, fontWeight: 700 }}
+          sx={{ py: 1.2, fontWeight: 700, borderRadius: 0, backgroundColor: "#0d1b2a", boxShadow: "none", textTransform: "uppercase", letterSpacing: 1.5, fontSize: 12, "&:hover": { backgroundColor: "#1a3a5c", boxShadow: "none" }, "&:disabled": { backgroundColor: "#9ca3af", color: "#fff" } }}
           onClick={handleSend}
           disabled={loading}
         >

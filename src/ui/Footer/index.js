@@ -26,7 +26,7 @@ function Footer({ company = { href: "#", name: "Company" }, links = [] }) {
       flexWrap="wrap"
       gap={1}
     >
-      <CustomTypography variant="button" fontWeight="regular" color="white" sx={{ lineHeight: 1 }}>
+      <CustomTypography variant="button" fontWeight="regular" color="secondary" sx={{ lineHeight: 1, fontSize: 12, color: "#6b7280" }}>
         © {new Date().getFullYear()} LookThroughProfits, Inc. | 169 Madison Ave STE 38180, New York,
         NY 10016 | howard@stockownerreport.com
       </CustomTypography>
@@ -49,8 +49,8 @@ function Footer({ company = { href: "#", name: "Company" }, links = [] }) {
           <CustomTypography
             variant="button"
             fontWeight="regular"
-            color="white"
-            sx={{ lineHeight: 1 }}
+            color="secondary"
+            sx={{ lineHeight: 1, fontSize: 12, color: "#6b7280" }}
           >
             {link.name}
           </CustomTypography>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "@mui/material";
-import Box from "@mui/material/Box";
+import { Card, Box } from "@mui/material";
 import CustomBox from "components/CustomBox";
 import CustomTypography from "components/CustomTypography";
 import DashboardLayout from "ui/LayoutContainers/DashboardLayout";
@@ -37,13 +36,13 @@ function BalanceSheet() {
         <Card
           sx={{
             p: 3,
-            background: "background.paper",
-            overflowX: "hidden",
-            overflowY: "auto",
-            borderRadius: 3,
-            boxShadow: 6,
-            border: "1px solid",
-            borderColor: "divider",
+            background: "#ffffff",
+            overflow: "hidden",
+            borderRadius: 0,
+            boxShadow: "none",
+            border: "none",
+            borderTop: "3px solid #0d1b2a",
+            borderBottom: "1px solid #d6d9de",
             width: "100%",
             maxWidth: "100%",
             height: "calc(100vh - 180px)",
@@ -51,29 +50,19 @@ function BalanceSheet() {
             display: "flex",
             flexDirection: "column",
             position: "relative",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "4px",
-              background: (theme) =>
-                `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
-              borderTopLeftRadius: "12px",
-              borderTopRightRadius: "12px",
-            },
           }}
         >
-            <CustomTypography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 1.5 }}>
+          <Box sx={{ pb: 1.5, mb: 1.5, borderBottom: "1px solid #d6d9de", display: "flex", alignItems: "baseline", gap: 2 }}>
+            <CustomTypography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, color: "#9ca3af", textTransform: "uppercase" }}>
               Balance Sheet
             </CustomTypography>
+          </Box>
 
             {/* Account selector */}
             {allAccountsWithLogos.length > 0 && (
               <CustomBox mb={1.5}>
                 <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
-                  <CustomTypography variant="h6" fontWeight="medium">
+                  <CustomTypography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 2.5, color: "#9ca3af", textTransform: "uppercase" }}>
                     Accounts
                   </CustomTypography>
                   {selectedAcc && (
@@ -109,14 +98,14 @@ function BalanceSheet() {
                         gap={0.75}
                         sx={{
                           border:
-                            selectedAccountId === acc.id ? "2px solid #344767" : "1px solid #eee",
-                          borderRadius: 2,
+                            selectedAccountId === acc.id ? "2px solid #0d1b2a" : "1px solid #d6d9de",
+                          borderRadius: 0,
                           px: 1,
                           py: 0.45,
                           minHeight: 34,
                           minWidth: { xs: "100%", md: 220 },
                           maxWidth: { xs: "100%", md: 420 },
-                          backgroundColor: selectedAccountId === acc.id ? "#eef2ff" : "#fafbfc",
+                          backgroundColor: selectedAccountId === acc.id ? "#f0f2f5" : "#ffffff",
                           cursor: isAvailable ? "pointer" : "not-allowed",
                           opacity: isAvailable ? 1 : 0.6,
                         }}
@@ -172,12 +161,14 @@ function BalanceSheet() {
             )}
 
             <FinancialExplanation />
-            <ProRataTable
-              loading={loading}
-              data={aggregatedData}
-              height="calc(100vh - 420px)"
-              paywall={{ enabled: hasRows && !isLoggedIn, registerPath: "/billing" }}
-            />
+            <Box sx={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+              <ProRataTable
+                loading={loading}
+                data={aggregatedData}
+                height="100%"
+                paywall={{ enabled: hasRows && !isLoggedIn, registerPath: "/billing" }}
+              />
+            </Box>
         </Card>
       </CustomBox>
     </DashboardLayout>

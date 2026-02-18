@@ -13,7 +13,7 @@ import pxToRem from "assets/theme-dark/functions/pxToRem";
 const { dark } = colors;
 
 const baseProperties = {
-  fontFamily: '"Source Serif 4", "Baskerville", "Georgia", "Times New Roman", serif',
+  fontFamily: '"Inter", "Helvetica Neue", "Arial", sans-serif',
   fontWeightLight: 300,
   fontWeightRegular: 400,
   fontWeightMedium: 600,

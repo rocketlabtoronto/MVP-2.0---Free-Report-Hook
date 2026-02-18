@@ -6,23 +6,23 @@ import borders from "assets/theme/base/borders";
 import pxToRem from "assets/theme/functions/pxToRem";
 
 const { white } = colors;
-const { borderRadius } = borders;
 
 const sidenav = {
   styleOverrides: {
     root: {
-  width: pxToRem(284),
+      width: pxToRem(284),
       whiteSpace: "nowrap",
       border: "none",
     },
 
     paper: {
-  width: pxToRem(284),
+      width: pxToRem(284),
       backgroundColor: white.main,
-      height: `calc(100vh - ${pxToRem(32)})`,
-      margin: `${pxToRem(16)} 0 ${pxToRem(16)} ${pxToRem(16)}`,
-  borderRadius: pxToRem(20),
+      height: "100vh",
+      margin: 0,
+      borderRadius: 0,
       border: "none",
+      borderRight: "1px solid #d6d9de",
     },
 
     paperAnchorDockedLeft: {

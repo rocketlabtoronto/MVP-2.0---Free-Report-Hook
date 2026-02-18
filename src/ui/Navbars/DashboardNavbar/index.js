@@ -99,7 +99,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
       position={absolute ? "absolute" : navbarType}
       color="inherit"
       elevation={0}
-      sx={{ zIndex: 1201, background: "#27ae60 !important" }}
+      sx={{ zIndex: 1201, background: "#ffffff !important", borderBottom: "1px solid #d6d9de", boxShadow: "none !important" }}
     >
       <Toolbar
         sx={{
@@ -126,7 +126,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 variant="body2"
                 sx={{
                   fontWeight: 500,
-                  color: "#344767",
+                  color: "#0d1b2a",
                   textAlign: "right",
                   fontSize: 13,
                   lineHeight: 1.2,
@@ -137,16 +137,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <Box sx={{ mt: 0.5 }}>
                 <span
                   style={{
-                    background: "#e3eafc",
-                    color: "#1976d2",
-                    fontWeight: 500,
-                    fontSize: 11,
-                    borderRadius: 8,
+                    background: "#eaecef",
+                    color: "#0d1b2a",
+                    fontWeight: 600,
+                    fontSize: 10,
+                    borderRadius: 0,
                     padding: "2px 8px",
-                    boxShadow: "0 1px 4px rgba(25,118,210,0.08)",
-                    letterSpacing: 0.5,
+                    boxShadow: "none",
+                    letterSpacing: 1,
+                    textTransform: "uppercase",
                     display: "inline-block",
                     verticalAlign: "middle",
+                    border: "1px solid #d6d9de",
                   }}
                 >
                   Logged in
@@ -157,50 +159,22 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <Avatar
                 alt={user.name || user.email}
                 src={user.avatar || user.profile_image || undefined}
+                sx={{
+                  width: 36,
+                  height: 36,
+                  backgroundColor: "#0d1b2a",
+                  color: "#ffffff",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  borderRadius: 0,
+                  border: "1px solid #d6d9de",
+                }}
               >
                 {!(user.avatar || user.profile_image) && (
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <radialGradient id="faceGradient" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="#eafaf1" />
-                        <stop offset="60%" stopColor="#81c784" />
-                        <stop offset="100%" stopColor="#27ae60" />
-                      </radialGradient>
-                      <linearGradient id="bodyGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#a5d6a7" />
-                        <stop offset="100%" stopColor="#27ae60" />
-                      </linearGradient>
-                      <radialGradient id="shine" cx="60%" cy="40%" r="40%">
-                        <stop offset="0%" stopColor="#fff" stopOpacity="0.8" />
-                        <stop offset="100%" stopColor="#27ae60" stopOpacity="0" />
-                      </radialGradient>
-                      <linearGradient id="shadow" x1="0" y1="1" x2="0" y2="0">
-                        <stop offset="0%" stopColor="#27ae60" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#fff" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="16" cy="16" r="16" fill="#eafaf1" />
-                    <ellipse cx="16" cy="12" rx="6.5" ry="6.5" fill="url(#faceGradient)" />
-                    <ellipse cx="16" cy="22" rx="9.5" ry="7" fill="url(#bodyGradient)" />
-                    <ellipse cx="16" cy="12" rx="6.5" ry="6.5" fill="url(#shine)" />
-                    <ellipse cx="16" cy="22" rx="9.5" ry="7" fill="url(#shine)" />
-                    <ellipse cx="16" cy="22" rx="9.5" ry="7" fill="url(#shadow)" />
-                    <ellipse
-                      cx="16"
-                      cy="12"
-                      rx="6.5"
-                      ry="6.5"
-                      fill="none"
-                      stroke="#81c784"
-                      strokeWidth="1.5"
-                    />
-                  </svg>
+                  <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.04em" }}>
+                    {(user.name || user.email || "U").charAt(0).toUpperCase()}
+                  </span>
                 )}
               </Avatar>
             </IconButton>
@@ -229,16 +203,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   <Box sx={{ mt: 0.5 }}>
                     <span
                       style={{
-                        background: "#e3eafc",
-                        color: "#1976d2",
-                        fontWeight: 500,
-                        fontSize: 11,
-                        borderRadius: 8,
+                        background: "#eaecef",
+                        color: "#0d1b2a",
+                        fontWeight: 600,
+                        fontSize: 10,
+                        borderRadius: 0,
                         padding: "2px 8px",
-                        boxShadow: "0 1px 4px rgba(25,118,210,0.08)",
-                        letterSpacing: 0.5,
+                        boxShadow: "none",
+                        letterSpacing: 1,
+                        textTransform: "uppercase",
                         display: "inline-block",
                         verticalAlign: "middle",
+                        border: "1px solid #d6d9de",
                       }}
                     >
                       Logged in

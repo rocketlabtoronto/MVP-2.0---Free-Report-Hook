@@ -69,14 +69,13 @@ export default styled(Drawer)(({ theme, ownerState }) => {
 
   return {
     "& .MuiDrawer-paper": {
-      boxShadow: softShadow,
-      border: `1px solid ${darkSidenav ? "transparent" : "rgba(15, 23, 42, 0.08)"}`,
-      backgroundColor: bgColor,
-      backgroundImage: darkSidenav
-        ? "none"
-        : `linear-gradient(180deg, ${white.main} 0%, rgba(236, 242, 255, 0.45) 100%)`,
-      borderRadius: pxToRem(14),
-      margin: `${pxToRem(16)} 0 ${pxToRem(16)} ${pxToRem(16)}`,
+      boxShadow: "none",
+      border: "none",
+      borderRight: "1px solid #d6d9de",
+      backgroundColor: "#ffffff",
+      backgroundImage: "none",
+      borderRadius: 0,
+      margin: 0,
       overflow: "hidden",
 
       "&::before": {
@@ -85,10 +84,8 @@ export default styled(Drawer)(({ theme, ownerState }) => {
         top: 0,
         left: 0,
         width: "100%",
-        height: pxToRem(3),
-        background: darkSidenav
-          ? "transparent"
-          : `linear-gradient(90deg, ${info.main}, rgba(46, 125, 50, 0.8))`,
+        height: pxToRem(2),
+        background: "#0d1b2a",
         pointerEvents: "none",
       },
 
