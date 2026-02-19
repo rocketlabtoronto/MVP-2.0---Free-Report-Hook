@@ -1,20 +1,49 @@
 import LegalDocumentLayout from "components/LegalDocumentLayout";
-import CustomTypography from "components/CustomTypography";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import PropTypes from "prop-types";
 
-const FS = 13;
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+const NAVY   = "#0d1b2a";
+const BODY   = "#1f2937";
+const SUBTLE = "#4b5563";
+const RULE   = "#e2e5ea";
+const ACCENT = "#c9a84c";   // gold accent — matches masthead rule
+const FS     = 13.5;
 
+/** Body paragraph */
 const P = (props) => (
-  <Box component="p" sx={{ lineHeight: 1.6, fontSize: FS, color: "#4B5563", fontFamily: "inherit", m: 0, mb: 0.6 }} {...props} />
+  <Box
+    component="p"
+    sx={{
+      fontSize: FS,
+      lineHeight: 1.85,
+      color: BODY,
+      fontFamily: "inherit",
+      m: 0,
+      mb: "0.75rem",
+    }}
+    {...props}
+  />
 );
 
 const Bullets = ({ items }) => (
-  <Box component="ul" sx={{ m: 0, pl: 2.5, mb: 0.6 }}>
+  <Box
+    component="ul"
+    sx={{ m: 0, pl: "1.5rem", mb: "0.9rem" }}
+  >
     {items.map((item, i) => (
-      <Box component="li" key={i} sx={{ fontSize: FS, lineHeight: 1.6, color: "#4B5563", fontFamily: "inherit", mb: 0.3 }}>
+      <Box
+        component="li"
+        key={i}
+        sx={{
+          fontSize: FS,
+          lineHeight: 1.85,
+          color: BODY,
+          fontFamily: "inherit",
+          mb: "0.3rem",
+        }}
+      >
         {item}
       </Box>
     ))}
@@ -23,55 +52,85 @@ const Bullets = ({ items }) => (
 
 Bullets.propTypes = { items: PropTypes.arrayOf(PropTypes.node).isRequired };
 
+/** Section heading — navy uppercase label + full-width hairline */
 const SectionHeading = ({ children }) => (
-  <CustomTypography
-    variant="h6"
-    fontWeight={700}
-    sx={{ mt: 1.5, mb: 0.75, fontSize: "0.42rem", textTransform: "uppercase", letterSpacing: 0.8, color: "#111827" }}
-  >
-    {children}
-  </CustomTypography>
+  <Box sx={{ mt: "2rem", mb: "0.75rem" }}>
+    <Box
+      component="h3"
+      sx={{
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: "uppercase",
+        letterSpacing: "0.18em",
+        color: SUBTLE,
+        fontFamily: "inherit",
+        m: 0,
+        mb: "0.45rem",
+      }}
+    >
+      {children}
+    </Box>
+    <Box sx={{ height: "1px", background: RULE, width: "100%" }} />
+  </Box>
 );
 
 SectionHeading.propTypes = { children: PropTypes.node.isRequired };
 
-const D = () => <Divider sx={{ my: 1.5, borderColor: "#d6d9de" }} />;
+/** Between sections — extra breathing room only, no visible rule */
+const D = () => <Box sx={{ mt: "0.25rem" }} />;
+
+/** Inline anchor */
+const A = ({ href, children }) => (
+  <Link
+    href={href}
+    sx={{
+      color: NAVY,
+      fontWeight: 600,
+      fontSize: FS,
+      textDecoration: "none",
+      borderBottom: `1px solid ${ACCENT}`,
+      pb: "1px",
+      "&:hover": { borderBottomColor: NAVY },
+    }}
+  >
+    {children}
+  </Link>
+);
+A.propTypes = { href: PropTypes.string.isRequired, children: PropTypes.node.isRequired };
 
 export default function Privacy() {
   return (
     <LegalDocumentLayout title="Privacy Policy" effectiveDate="February 18, 2026" hideMetadata>
 
       <SectionHeading>Overview</SectionHeading>
-      <P>This Privacy Policy explains how we collect, use, disclose, and protect personal information when you visit our website or use the Service.</P>
-      <P>The Service provides portfolio analytics that translate your brokerage holdings into an &ldquo;owner&rsquo;s view&rdquo; of what you own, including look-through, pro-rata estimates of business-level fundamentals derived from your holdings and public or licensed financial data sources.</P>
-      <P>By accessing or using the Service, you acknowledge that you have read and understood this Privacy Policy.</P>
+      <P>This Privacy Policy explains how LookThroughProfits, Inc. collects, uses, discloses, and protects personal information when you visit our website or use The Stock Owner&rsquo;s Report (the &ldquo;Service&rdquo;). The Service provides portfolio analytics that translate your brokerage holdings into an owner&rsquo;s view of underlying business fundamentals, including look-through, pro-rata estimates derived from your holdings and public or licensed financial data sources. By accessing or using the Service, you acknowledge that you have read and understood this Privacy Policy.</P>
 
       <D />
       <SectionHeading>Definitions</SectionHeading>
       <Bullets items={[
-        <><strong>&ldquo;Personal Information&rdquo;</strong> means information that identifies, relates to, describes, is reasonably capable of being associated with, or could reasonably be linked (directly or indirectly) with you, your household, or your device.</>,
-        <><strong>&ldquo;Brokerage Data&rdquo;</strong> means account and portfolio data made available to us through your authorized connection to your brokerage account (including holdings/positions and related account details).</>,
-        <><strong>&ldquo;Sensitive Personal Information&rdquo;</strong> refers to certain categories of personal information that are treated as sensitive under some laws. We treat Brokerage Data as sensitive as a matter of best practice, even if a particular legal definition does not apply in your jurisdiction.</>,
+        <><strong>&ldquo;Personal Information&rdquo;</strong> &mdash; information that identifies, relates to, or could reasonably be linked (directly or indirectly) with you, your household, or your device.</>,
+        <><strong>&ldquo;Brokerage Data&rdquo;</strong> &mdash; account and portfolio data made available through your authorized brokerage connection (including holdings/positions and related account details).</>,
+        <><strong>&ldquo;Sensitive Personal Information&rdquo;</strong> &mdash; categories of personal information treated as sensitive under applicable laws. We treat Brokerage Data as sensitive as a matter of best practice regardless of jurisdiction.</>,
       ]} />
 
       <D />
       <SectionHeading>Scope</SectionHeading>
-      <P>This Privacy Policy applies to our website and associated pages and forms (the &ldquo;Website&rdquo;); and the Service, including any web app, authenticated product experience, and customer support interactions. It does not apply to third-party websites, brokerages, or third-party services you may access through links or integrations.</P>
+      <P>This Privacy Policy applies to our website and associated pages and forms (the &ldquo;Website&rdquo;), and the Service, including any web app, authenticated product experience, and customer support interactions. It does not apply to third-party websites, brokerages, or integrations you access through the Service — those are governed by their own policies.</P>
 
       <D />
       <SectionHeading>Information We Collect</SectionHeading>
-      <P><strong>Information you provide to us:</strong></P>
+      <P><strong>Information you provide:</strong></P>
       <Bullets items={[
         "Account and profile information — name, email address, password, and basic account preferences.",
-        "Subscription and billing-related information — plan selection, billing contact information, and billing status. Payments are processed by Stripe. We do not store full payment card numbers.",
-        "Communications — email content, support requests, and feedback.",
+        "Subscription and billing information — plan selection, billing contact, and billing status. Payments processed by Stripe; we do not store full card numbers.",
+        "Communications — support requests, email content, and feedback.",
       ]} />
-      <P><strong>Information we collect automatically:</strong></P>
+      <P><strong>Information collected automatically:</strong></P>
       <Bullets items={[
-        "Device and usage data — IP address, device identifiers, browser type, operating system, pages viewed, time spent, referring URLs, and interactions with features.",
-        "Cookies and similar technologies — we may use cookies, SDKs, pixels, local storage, and similar technologies to operate the Website and improve the Service.",
+        "Device and usage data — IP address, device identifiers, browser type, operating system, pages viewed, time spent, referring URLs, and feature interactions.",
+        "Cookies and similar technologies — cookies, SDKs, pixels, local storage, and similar technologies to operate the Website and improve the Service.",
       ]} />
-      <P><strong>Brokerage Data you authorize us to access:</strong> When you connect a brokerage account, the connection flow is handled by SnapTrade. We do not ask for or intentionally collect your brokerage username or password. Once you authorize access, we may receive:</P>
+      <P><strong>Brokerage Data you authorize:</strong> The brokerage connection flow is handled by SnapTrade. We do not request or store your brokerage username or password. Once authorized, we may receive:</P>
       <Bullets items={[
         "Account identifiers and metadata (e.g., institution name, account type, masked account number, and account-level status);",
         "Holdings and positions (e.g., tickers/symbols, quantities, and descriptions);",
@@ -80,135 +139,134 @@ export default function Privacy() {
       ]} />
       <P><strong>Information from third parties:</strong></P>
       <Bullets items={[
-        "Service providers that help us operate (e.g., hosting, email delivery, analytics, customer support, and payment processors);",
-        "Public sources and licensed data providers used to compute business-level fundamentals or generate analytics.",
+        "Service providers (hosting, email delivery, analytics, customer support, payment processors);",
+        "Public sources and licensed data providers used to compute business-level fundamentals or generate analytics — these generally provide company-level information, not personal data.",
       ]} />
 
       <D />
       <SectionHeading>How We Use Information</SectionHeading>
       <Bullets items={[
-        <><strong>Provide and operate the Service</strong> — creating your account, connecting brokerage accounts at your direction, generating reports, and delivering product features.</>,
-        <><strong>Secure the Service</strong> — authentication, access control, monitoring, debugging, preventing abuse, fraud detection, and protecting against malicious activity.</>,
-        <><strong>Improve and develop the Service</strong> — analytics and performance measurement, feature development, and quality assurance.</>,
-        <><strong>Customer support and communications</strong> — responding to inquiries, sending service notices, receipts, security alerts, and administrative messages.</>,
-        <><strong>Billing and accounting</strong> — processing subscriptions, invoices, confirmations, and handling disputes or chargebacks.</>,
-        <><strong>Legal and compliance</strong> — complying with applicable law, responding to lawful requests, enforcing terms, and protecting rights and safety.</>,
+        <><strong>Provide and operate the Service</strong> — account creation, brokerage connections, report generation, and product features.</>,
+        <><strong>Secure the Service</strong> — authentication, access control, monitoring, fraud detection, and abuse prevention.</>,
+        <><strong>Improve and develop the Service</strong> — analytics, performance measurement, and feature development.</>,
+        <><strong>Customer support and communications</strong> — inquiries, service notices, receipts, security alerts, and administrative messages.</>,
+        <><strong>Billing and accounting</strong> — subscriptions, invoices, confirmations, and dispute handling.</>,
+        <><strong>Legal and compliance</strong> — complying with applicable law, responding to lawful requests, and enforcing our terms.</>,
       ]} />
 
       <D />
       <SectionHeading>Legal Bases for Processing</SectionHeading>
-      <P>Where required by applicable law, we process personal information based on one or more of the following:</P>
+      <P>Where required by law, we process personal information on one or more of the following bases:</P>
       <Bullets items={[
-        "Contract performance (to provide the Service you request);",
-        "Legitimate interests (e.g., securing and improving the Service, preventing fraud);",
-        "Consent (e.g., where required for certain cookies/marketing communications);",
-        "Legal obligation (to comply with laws, regulations, or lawful requests).",
+        "Contract performance — to provide the Service you requested;",
+        "Legitimate interests — securing and improving the Service, preventing fraud;",
+        "Consent — where required for certain cookies or marketing communications;",
+        "Legal obligation — to comply with laws, regulations, or lawful requests.",
       ]} />
 
       <D />
       <SectionHeading>How We Disclose Information</SectionHeading>
-      <P>We do not sell personal information in the ordinary sense of &ldquo;selling your data for money.&rdquo; We also do not rent personal information. We may disclose personal information as follows:</P>
-      <P><strong>Service providers and processors</strong> — vendors performing services on our behalf such as:</P>
-      <Bullets items={[
-        "Payment processing;",
-        "Cloud hosting, storage, and databases;",
-        "Security monitoring and fraud prevention;",
-        "Customer support tools;",
-        "Email and communications delivery;",
-        "Analytics and product measurement.",
-      ]} />
-      <P>These service providers are permitted to process personal information only for the services they provide to us, consistent with applicable contracts.</P>
-      <P><strong>Brokerage connection provider</strong> — When you connect your brokerage account, the connection provider facilitates that connection. The connection provider&rsquo;s processing is governed by its own terms and privacy policy.</P>
-      <P><strong>Legal, compliance, and protection of rights</strong> — We may disclose personal information if necessary to:</P>
-      <Bullets items={[
-        "Comply with applicable law, regulation, legal process, or lawful governmental request;",
-        "Protect the rights, security, and safety of our users, our business, or others;",
-        "Detect, prevent, or address fraud, security, or technical issues.",
-      ]} />
-      <P><strong>Business transactions</strong> — If we are involved in a merger, acquisition, financing, restructuring, bankruptcy, or sale of assets, personal information may be disclosed or transferred as part of that transaction, subject to standard confidentiality protections.</P>
-      <P><strong>With your direction</strong> — We may disclose information when you direct us to do so.</P>
+      <P>We do not sell or rent personal information.</P>
+      <P><strong>Service providers</strong> — vendors performing services on our behalf (payment processing, cloud hosting, security monitoring, customer support, email delivery, analytics), permitted to process personal information only for those services under applicable contracts.</P>
+      <P><strong>Brokerage connection provider</strong> — SnapTrade facilitates brokerage connections. Its processing is governed by its own terms and privacy policy.</P>
+      <P><strong>Legal and compliance</strong> — If necessary to comply with applicable law, legal process, or lawful governmental request; or to protect the rights, security, and safety of our users, our business, or others.</P>
+      <P><strong>Business transactions</strong> — In connection with a merger, acquisition, restructuring, or sale of assets, subject to standard confidentiality protections.</P>
+      <P><strong>At your direction</strong> — When you expressly request that we share information with a third party.</P>
 
       <D />
       <SectionHeading>Cookies and Similar Technologies</SectionHeading>
       <P>We use cookies and similar technologies for:</P>
       <Bullets items={[
-        "Strictly necessary purposes (e.g., authentication, security, session management);",
-        "Preferences (e.g., language and settings);",
-        "Analytics (e.g., performance and feature usage).",
+        "Strictly necessary purposes — authentication, security, and session management;",
+        "Preferences — language and settings;",
+        "Analytics — performance and feature usage.",
       ]} />
-      <P>You can manage cookies through your browser settings, but disabling some cookies may limit functionality.</P>
+      <P>You can manage cookies through your browser settings, but disabling certain cookies may limit Service functionality.</P>
 
       <D />
       <SectionHeading>Data Retention</SectionHeading>
-      <P>We retain personal information only as long as reasonably necessary, including for:</P>
+      <P>We retain personal information only as long as reasonably necessary for:</P>
       <Bullets items={[
-        "Maintaining your account;",
-        "Providing the Service and maintaining a historical record of reports;",
+        "Maintaining your account and delivering the Service;",
+        "Maintaining a historical record of reports, if you choose to retain them;",
         "Complying with legal, tax, accounting, and regulatory obligations;",
         "Resolving disputes and enforcing agreements.",
       ]} />
-      <P>Retention periods vary by data type and context, and we may retain certain records for longer where required or permitted by law.</P>
+      <P>Retention periods vary by data type. We may retain certain records for longer where required or permitted by law.</P>
 
       <D />
       <SectionHeading>Disconnection and Deletion</SectionHeading>
-      <P>You can disconnect your brokerage connection through available product controls or by contacting us. If you request account deletion, we will take reasonable steps to delete or de-identify personal information associated with your account, subject to lawful exceptions. Where applicable, we may also delete associated data held by our brokerage connection provider in a manner supported by their platform.</P>
+      <P>You may disconnect your brokerage connection through available product controls or by contacting us. Upon account deletion, we will take reasonable steps to delete or de-identify your personal information, subject to lawful exceptions, including any deletion workflow supported by our brokerage connection provider (which is described as deleting a registered user and all associated data, and being irreversible).</P>
 
       <D />
       <SectionHeading>Security</SectionHeading>
-      <P>We implement administrative, technical, and physical safeguards designed to protect personal information against unauthorized access, disclosure, alteration, or destruction. However, no security program is perfect, and we cannot guarantee absolute security. You are responsible for maintaining the confidentiality of your login credentials and for using appropriate security measures on your devices and accounts.</P>
+      <P>We implement administrative, technical, and physical safeguards to protect personal information against unauthorized access, disclosure, alteration, or destruction. No security program is perfect. You are responsible for maintaining the confidentiality of your login credentials and for using appropriate security measures on your devices and accounts.</P>
 
       <D />
       <SectionHeading>International Transfers</SectionHeading>
-      <P>We are based in the United States and may process and store information in the United States and other jurisdictions where we or our service providers operate. Data protection laws in those jurisdictions may differ from those in your location. Where required by applicable law, we take steps designed to provide an appropriate level of protection for international transfers.</P>
+      <P>We are based in the United States and may process and store information in the U.S. and other jurisdictions where we or our service providers operate. Data protection laws in those jurisdictions may differ from those in your location. Where required by applicable law, we apply appropriate safeguards for international data transfers.</P>
 
       <D />
       <SectionHeading>Your Rights and Choices</SectionHeading>
-      <P>Your rights depend on where you live. You may have the right to:</P>
+      <P>Depending on your jurisdiction, you may have the right to:</P>
       <Bullets items={[
         "Request access to personal information we hold about you;",
         "Request correction of inaccurate or incomplete personal information;",
         "Request deletion of personal information (subject to lawful exceptions);",
-        "Object to or restrict certain processing (in some jurisdictions);",
+        "Object to or restrict certain processing;",
         "Request portability of certain personal information;",
-        "Withdraw consent where we rely on consent.",
+        "Withdraw consent where processing is based on consent.",
       ]} />
-      <P>To exercise rights, contact us at <Link href="mailto:howard@stockownerreport.com" sx={{ color: "#0d1b2a", fontWeight: 600, fontSize: FS }}>howard@stockownerreport.com</Link>. We may need to verify your identity before processing your request.</P>
+      <P>To submit a request, contact <A href="mailto:howard@stockownerreport.com">howard@stockownerreport.com</A>. We may verify your identity before responding.</P>
 
       <D />
       <SectionHeading>California and Certain U.S. Privacy Rights</SectionHeading>
-      <P>If you are a California resident, you may have rights under California privacy law, including rights to know, delete, opt out of sale/sharing (including via a user-enabled global privacy control), non-discrimination, and &mdash; under CPRA amendments &mdash; rights to correct and limit use/disclosure of sensitive personal information.</P>
-      <P>If we are required to recognize an opt-out preference signal (such as the Global Privacy Control), we will treat it as a valid opt-out request for the browser/device that sends the signal, consistent with applicable requirements.</P>
+      <P>California residents may have rights under California privacy law, including rights to know, delete, correct, opt out of sale/sharing (including via a user-enabled global privacy control), non-discrimination, and — under CPRA amendments — rights to limit use/disclosure of sensitive personal information. If we are required to recognize an opt-out preference signal (such as the Global Privacy Control), we will treat it as a valid opt-out request for the browser/device that sends the signal.</P>
 
       <D />
       <SectionHeading>Canada</SectionHeading>
-      <P>If you are in Canada, you may have rights of access and correction and the right to challenge compliance, consistent with Canadian privacy laws and principles-based frameworks (including PIPEDA&rsquo;s fair information principles). If a breach of security safeguards creates a real risk of significant harm, mandatory reporting/notification obligations may apply, and breach records may be required.</P>
-      <P>For Qu&eacute;bec residents, our Privacy Officer can be reached at <Link href="mailto:howard@stockownerreport.com" sx={{ color: "#0d1b2a", fontWeight: 600, fontSize: FS }}>howard@stockownerreport.com</Link>. Qu&eacute;bec law requires enterprises to publish the title and contact information of the person in charge on the enterprise&rsquo;s website, and also contemplates governance policies/practices and handling of &ldquo;confidentiality incidents.&rdquo;</P>
+      <P>Canadian users have rights of access and correction under PIPEDA and applicable provincial law. If a breach of security safeguards creates a real risk of significant harm, mandatory reporting and notification obligations may apply. For Qu&eacute;bec residents, our Privacy Officer can be reached at <A href="mailto:howard@stockownerreport.com">howard@stockownerreport.com</A>.</P>
 
       <D />
-      <SectionHeading>United Kingdom and Other Jurisdictions with Similar Rights</SectionHeading>
-      <P>If you are located in the United Kingdom, privacy rights and notice expectations generally arise under the UK GDPR and the Data Protection Act 2018. Some jurisdictions require regulator notification for certain personal data breaches within specific timeframes (for example, UK guidance describes notifying the regulator within 72 hours in applicable cases).</P>
+      <SectionHeading>United Kingdom</SectionHeading>
+      <P>If you are in the United Kingdom, privacy rights and notice expectations arise under the UK GDPR and the Data Protection Act 2018. Applicable personal data breaches must be notified to the relevant regulator within required timeframes (e.g., within 72 hours where required).</P>
 
       <D />
       <SectionHeading>Marketing Communications</SectionHeading>
-      <P>If we send promotional communications, you can opt out by using the unsubscribe mechanism included in those messages or by contacting us. We may still send you non-promotional administrative or service-related messages. If you are in Canada, commercial electronic messaging rules may require consent and specific unsubscribe handling timelines; we design our email practices to be consistent with those expectations.</P>
+      <P>If we send promotional communications, you may opt out via the unsubscribe link in any message or by contacting us. We will continue to send non-promotional service messages. For Canadian users, our email practices are designed to comply with applicable commercial electronic messaging requirements.</P>
 
       <D />
       <SectionHeading>Children&rsquo;s Privacy</SectionHeading>
-      <P>The Service is not directed to children, and we do not knowingly collect personal information from individuals under 18. If you believe a child has provided personal information, contact us and we will take appropriate steps.</P>
+      <P>The Service is not directed to individuals under 18. We do not knowingly collect personal information from children. If you believe a child has provided information, contact us and we will take appropriate steps.</P>
 
       <D />
       <SectionHeading>Changes to This Privacy Policy</SectionHeading>
-      <P>We may update this Privacy Policy from time to time. The &ldquo;Last Updated&rdquo; date at the top indicates when it was most recently revised. If we make material changes, we will take reasonable steps to provide notice, such as by posting a notice on the Website or emailing account holders.</P>
+      <P>We may update this Privacy Policy from time to time. The &ldquo;Last Updated&rdquo; date reflects the most recent revision. We will provide reasonable notice of material changes, such as by Website notice or email to account holders.</P>
 
       <D />
       <SectionHeading>Contact Us</SectionHeading>
-      <P>
-        LookThroughProfits, Inc. &mdash; Attn: Privacy Officer<br />
-        169 Madison Ave STE 38180, New York, NY 10016, United States<br />
-        <Link href="mailto:howard@stockownerreport.com" sx={{ color: "#0d1b2a", fontWeight: 600, fontSize: FS }}>
-          howard@stockownerreport.com
-        </Link>
-      </P>
+      {/* Formal address block */}
+      <Box
+        sx={{
+          mt: "1rem",
+          p: "1.25rem 1.5rem",
+          background: "#f8f9fb",
+          border: "1px solid #dde1e7",
+          borderLeft: `4px solid ${NAVY}`,
+          fontStyle: "normal",
+        }}
+      >
+        <Box sx={{ fontSize: FS - 0.5, fontWeight: 700, color: NAVY, letterSpacing: "0.02em", mb: "0.35rem" }}>
+          LookThroughProfits, Inc. &mdash; Privacy Officer
+        </Box>
+        <Box sx={{ fontSize: FS - 0.5, color: SUBTLE, lineHeight: 1.8 }}>
+          169 Madison Ave STE 38180<br />
+          New York, NY 10016, United States
+        </Box>
+        <Box sx={{ mt: "0.6rem" }}>
+          <A href="mailto:howard@stockownerreport.com">howard@stockownerreport.com</A>
+        </Box>
+      </Box>
     </LegalDocumentLayout>
   );
 }
