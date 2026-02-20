@@ -8,6 +8,15 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+const agGridOverrides = {
+  "& .ag-header-cell-text": { fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "#374151" },
+  "& .ag-header-cell": { paddingLeft: "12px", paddingRight: "12px" },
+  "& .ag-cell": { paddingLeft: "12px", paddingRight: "12px", fontSize: 12.5 },
+  "& .ag-row": { borderColor: "#f0f2f5" },
+  "& .ag-header": { borderBottom: "2px solid #0d1b2a", background: "#f8f9fb" },
+  "& .ag-pinned-bottom-floating-bottom": { borderTop: "2px solid #0d1b2a" },
+};
+
 function parseMoney(str) {
   // Parses strings like "$1,234" to 1234 (number)
   if (typeof str !== "string") return 0;
@@ -114,13 +123,13 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
           background: "#fff9c4",
           fontWeight: "bold",
           textAlign: moneyColumnNames.includes(col.name) ? "right" : undefined,
-          fontSize: 14,
+          fontSize: 12.5,
         };
       }
       if (moneyColumnNames.includes(col.name)) {
-        return { textAlign: "right", fontSize: 14 };
+        return { textAlign: "right", fontSize: 12.5 };
       }
-      return { fontSize: 14 };
+      return { fontSize: 12.5 };
     },
   }));
 
@@ -156,7 +165,7 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
   const shouldApplyPaywall = Boolean(paywall?.enabled);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", flex: 1, height: 0, minHeight: 0, width: "100%" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", flex: 1, height: 0, minHeight: 0, width: "100%", ...agGridOverrides }}>
       {shouldApplyPaywall && (
         <Box
           sx={{
@@ -197,14 +206,17 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
         </Box>
       )}
 
-      <div className="ag-theme-alpine" style={{ flex: 1, minHeight: 0, width: "100%", height: "100%" }}>
+      <div
+        className="ag-theme-alpine"
+        style={{ flex: 1, minHeight: 0, width: "100%", height: "100%" }}
+      >
         <AgGridReact
           domLayout="normal"
           rowData={rowData}
           columnDefs={columnDefs}
           pagination={false}
           pinnedBottomRowData={[totalRow]}
-          rowHeight={38}
+          rowHeight={34}
           tooltipShowDelay={200}
           tooltipHideDelay={2000}
           enableBrowserTooltips
@@ -226,12 +238,12 @@ function ProRataTable({ loading, data, height = 400, paywall }) {
           }}
           onFirstDataRendered={autoSizeAllColumns}
           onGridSizeChanged={scheduleResize}
-          headerHeight={40}
+          headerHeight={36}
           defaultColDef={{
             wrapHeaderText: false,
             autoHeaderHeight: false,
             suppressMenu: true,
-            cellStyle: { fontSize: 14 },
+            cellStyle: { fontSize: 12.5 },
           }}
         />
       </div>
