@@ -80,8 +80,7 @@ function IncomeStatement() {
                       alignItems="center"
                       gap={0.75}
                       sx={{
-                        border:
-                          selectedAccountId === acc.id ? "2px solid #0d1b2a" : "1px solid #d6d9de",
+                        border: "none",
                         borderRadius: 0,
                         px: 1,
                         py: 0.45,
@@ -89,6 +88,7 @@ function IncomeStatement() {
                         minWidth: { xs: "100%", md: 220 },
                         maxWidth: { xs: "100%", md: 420 },
                         backgroundColor: selectedAccountId === acc.id ? "#f0f2f5" : "#ffffff",
+                        boxShadow: selectedAccountId === acc.id ? "inset 0 -2px 0 #0d1b2a" : "none",
                         cursor: isAvailable ? "pointer" : "not-allowed",
                         opacity: isAvailable ? 1 : 0.6,
                       }}

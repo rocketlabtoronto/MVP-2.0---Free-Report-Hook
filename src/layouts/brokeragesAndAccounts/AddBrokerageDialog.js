@@ -230,22 +230,33 @@ export default function AddBrokerageDialog({ open, onClose, onSnapTradeSuccess }
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center",
-                    border: "1px solid #d6d9de",
+                    justifyContent: "flex-start",
+                    border: "none",
+                    outline: "1px solid #d6d9de",
+                    outlineOffset: "-1px",
                     borderRadius: 0,
                     background: requiresManual ? "#F9FAFB" : "#fff",
                     cursor: "pointer",
                     opacity: requiresManual ? 0.7 : 1,
-                    transition: "background 0.15s, border-color 0.15s",
+                    overflow: "hidden",
+                    boxSizing: "border-box",
+                    paddingTop: 10,
+                    transition: "background 0.15s, outline-color 0.15s",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#0d1b2a"; e.currentTarget.style.background = "#F9FAFB"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#d6d9de"; e.currentTarget.style.background = requiresManual ? "#F9FAFB" : "#fff"; }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#FCFDFE";
+                    e.currentTarget.style.outlineColor = "#c7ccd3";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = requiresManual ? "#F9FAFB" : "#fff";
+                    e.currentTarget.style.outlineColor = "#d6d9de";
+                  }}
                   title={requiresManual ? "Manual upload required" : "Connect via API"}
                 >
                   <img
                     src={broker.logo}
                     alt={broker.name}
-                    style={{ width: 100, height: 100, objectFit: "contain", marginBottom: 4 }}
+                    style={{ width: 90, height: 72, objectFit: "contain", marginBottom: 6 }}
                   />
                   <span style={{ fontSize: 11, textAlign: "center", color: "#4B5563", fontWeight: 500 }}>
                     {broker.name}
